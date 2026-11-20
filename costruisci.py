@@ -156,8 +156,11 @@ SEZIONI = [
              dict(slug="svuota-e-sorridi", voce="Gli Svuota e Sorridi", titolo="Gli Svuota e Sorridi", riga="", hero="tavola", testata="interno", leggera=True),
              dict(slug="io-sono-qui-per-te", voce="Io sono qui per te", titolo="Io sono qui per te", riga="Accompagnamento nel fine vita", hero="lemniscata"),
              # la bibliografia di Francesca Zanuttini (Dacia, 13.11): i temi sono quelli della sezione, la morte, il lutto e l’accompagnamento
-             # la voce «Letture e film consigliati» (Dacia, 14.11): la filmografia di Francesca arriverà con «Petali & Pellicole»
+             # la voce «Letture e film consigliati» (Dacia, 14.11) porta ai libri; i film di Francesca sono la pagina dopo
              dict(slug="petali-di-carta", voce="Letture e film consigliati", titolo="Petali di carta", riga="Letture consigliate, a cura di Francesca Zanuttini", hero="tavola", testata="biblioteca"),
+             # i film di Francesca Zanuttini (Dacia ed Elias, 18-20.11): pagina sua con la stessa tavola, fuori dal menu in alto
+             # (la voce resta una), raggiunta dai rimandi con «Petali di carta», dal menu di lato e dalla pagina «In memoria»
+             dict(slug="fotogrammi-sulla-soglia", voce="Film consigliati", titolo="Fotogrammi sulla soglia", riga="Film consigliati, a cura di Francesca Zanuttini", hero="tavola", testata="biblioteca", fuori_menu=True),
              dict(slug="elaborare-il-lutto", voce="Elaborare il lutto", titolo="Elaborare il lutto", riga="", nascosta=True),
          ]),
     dict(chiave="lasciti", voce="Lasciti", titolo="Lasciti", hero="rosa", tavola="interno", casa="rosa",
@@ -382,7 +385,7 @@ def visibili(s):
 def sottomenu(s, da):
     righe = []
     for p in visibili(s):
-        if p.get("nascosta"):
+        if p.get("nascosta") or p.get("fuori_menu"):
             continue
         if p.get("separa"):
             righe.append('<li class="separa" role="separator" aria-hidden="true"></li>')
@@ -402,7 +405,7 @@ def header(da, pagina):
             classi.append("pro")
         if pagina.get("sezione") == s["chiave"]:
             classi.append("attiva")
-        if not any(not q.get("separa") and not q.get("nascosta") for q in visibili(s)):
+        if not any(not q.get("separa") and not q.get("nascosta") and not q.get("fuori_menu") for q in visibili(s)):
             classi.append("sola")                  # nessuna pagina accesa (Servizi, per ora): la voce porta solo alla sezione
             voci.append('<li class="%s" data-voce="%s"><a href="%s"%s>%s</a></li>'
                         % (" ".join(classi), s["chiave"], verso(da, s["chiave"]),
@@ -1180,7 +1183,7 @@ def corpo_home(da, p):
     for s in SEZIONI:
         voci = []
         for q in visibili(s):
-            if q.get("nascosta"):
+            if q.get("nascosta") or q.get("fuori_menu"):
                 continue
             if q.get("separa"):
                 voci.append('<li class="separa" aria-hidden="true"></li>')
