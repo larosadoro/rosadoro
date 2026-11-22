@@ -381,7 +381,8 @@ TESTI["in-memoria/petali-di-carta"] = dict(
 """)
 
 # ------------------------------------------------------- i film di Francesca Zanuttini (Dacia ed Elias, 18-20.11.2026)
-# il testo è di Francesca, con le correzioni approvate da Dacia il 20.11; gli ultimi film di alcuni argomenti li ha aggiunti lei il 20.11
+# il testo è di Francesca, con le correzioni approvate da Dacia il 20.11; gli ultimi film di alcuni argomenti li ha aggiunti lei il 20.11;
+# «The Others» sta vicino a «Il sesto senso» e non sotto «Sul suicidio», che ne svelerebbe il finale (Dacia, 22.11)
 TESTI["in-memoria/fotogrammi-sulla-soglia"] = dict(
     sotto="A cura di Francesca Zanuttini",
     corpo="""
@@ -391,6 +392,7 @@ TESTI["in-memoria/fotogrammi-sulla-soglia"] = dict(
 <p>I libri consigliati da Francesca sono in <a class="link" href="{→in-memoria/petali-di-carta}">«Petali di carta»</a>. Per informazioni, consigli, condivisioni e approfondimenti scrivi a <a class="link" href="mailto:segreteria@larosadoro.org">segreteria@larosadoro.org</a>.</p>
 <h3 class="argomento">Sulla comunicazione con i defunti</h3>
 <div class="libro"><p class="dati"><strong>Il sesto senso</strong> · M. Night Shyamalan · 1999</p><p>Bellissimo film che affronta il tema dei defunti che non si rendono conto di essere morti e il tema della medianicità con le sue difficoltà di gestione. Da vedere assolutamente.</p></div>
+<div class="libro"><p class="dati"><strong>The Others</strong> · Alejandro Amenábar · 2001</p><p>Storia cupa e triste di una madre e dei suoi figli, sospesi tra aldiqua e aldilà. Interessante e fatto molto bene.</p></div>
 <div class="libro"><p class="dati"><strong>Dragonfly - Il segno della libellula</strong> · Tom Shadyac · 2002</p><p>Film meraviglioso; il tema principale è la comunicazione dei defunti con i vivi. Assolutamente da vedere.</p></div>
 <div class="libro"><p class="dati"><strong>Amabili resti</strong> · Peter Jackson · 2009</p><p>Film a tratti crudo, che affronta il tema del defunto che ha qualcosa in sospeso che lo trattiene. Bellissime le immagini sull’aldilà, vale la pena vederlo anche solo per queste.</p></div>
 <div class="libro"><p class="dati"><strong>Endless</strong> · Scott Speer · 2020</p><p>Storia d’amore tra due giovani, lui muore e resta bloccato cercando di comunicare con lei, lei lo vede e non vuole staccarsi e lasciarlo andare. Molto interessante per l’aspetto della comunicazione con i defunti. Da vedere.</p></div>
@@ -483,7 +485,6 @@ TESTI["in-memoria/fotogrammi-sulla-soglia"] = dict(
 <h3 class="argomento">Sul suicidio</h3>
 <div class="libro"><p class="dati"><strong>Wristcutters - Una storia d’amore</strong> · Goran Dukic · 2006</p><p>È la storia di un suicida e del suo percorso nell’aldilà insieme ad altri suicidi. Interessante osservare l’ambientazione, che rimanda ad uno stato di desolazione. Può essere interessante per fare delle riflessioni su che sentimenti possano vivere i suicidi dopo la morte.</p></div>
 <div class="libro"><p class="dati"><strong>La vita è meravigliosa</strong> · Frank Capra · 1946</p><p>Bellissimo vecchio film che racconta la storia di un uomo che vuole suicidarsi, perché ingabbiato in una vita che non vuole. Un intervento angelico lo aiuta a vedere il senso della sua vita. Da vedere.</p></div>
-<div class="libro"><p class="dati"><strong>The Others</strong> · Alejandro Amenábar · 2001</p><p>Storia cupa e triste di una madre e dei suoi figli, sospesi tra aldiqua e aldilà. Interessante e fatto molto bene.</p></div>
 <div class="libro"><p class="dati"><strong>Il primo giorno della mia vita</strong> · Paolo Genovese · 2023</p><p>Film particolarissimo: quattro suicidi ricevono nell’aldilà il dono di sette giorni sospesi per cambiare idea. Nonostante la storia appaia irreale, offre molti spunti di riflessione ed è un bel film. Da vedere.</p></div>
 <h3 class="argomento">Per bambini</h3>
 <div class="libro"><p class="dati"><strong>Un ponte per Terabithia</strong> · Gábor Csupó · 2007</p><p>Tratto da un libro scritto da una mamma per il figlio che ha perso un’amica. Dolce, tranquillo, bello per come viene ritratta l’amicizia e per riflettere su cosa una relazione importante può lasciare dopo la morte per la vita di chi resta. Carino da vedere. Anche per adulti.</p></div>
