@@ -22,6 +22,9 @@ from html import unescape
 # --------------------------------------------------------------------------
 DOMINIO = "https://larosadoro.org"      # [VERIFICARE] il dominio definitivo
 ANTEPRIMA = False                         # False dal 26.10.2026 (Elias): il sito è aperto ai motori di ricerca. True: le pagine chiedono di non indicizzarle
+INDEXNOW = "9a130315d86c3ab4cb4f128d4aaeebfb"  # la chiave di IndexNow (23.11.2026): la costruzione la mette online in sito/<chiave>.txt, e dopo ogni
+                                          # pubblicazione sorgenti/indexnow.py dice a Bing (DuckDuckGo, Yahoo, Ecosia, Copilot), Yandex, Seznam e
+                                          # Naver quali pagine della mappa sono nuove o cambiate. Non è un segreto. Vuota: nessun avviso.
 TESTATA_CENTRATA = True                   # prova del 15.9 (Dacia, ok Elias): logo e nome sopra, menu sotto; False = una riga
 LINK_PULITI = True                        # False: i collegamenti finiscono in «index.html», così il sito
                                           #        funziona anche aperto da una cartella sul computer.
@@ -1441,6 +1444,10 @@ def costruisci():
     with open(os.path.join(USCITA, "404.html"), "w", encoding="utf-8") as f:
         f.write(apostrofi(pagina_html("", p404, extra_head="\n" + base)))
     open(os.path.join(USCITA, ".nojekyll"), "w").close()
+    if INDEXNOW:
+        # la chiave di IndexNow accanto alle pagine: i motori la leggono per sapere che l’avviso viene da qui
+        with open(os.path.join(USCITA, INDEXNOW + ".txt"), "w", encoding="utf-8") as f:
+            f.write(INDEXNOW)
     conteggio = 0
     for cartella, p in PAGINE.items():
         dove = os.path.join(USCITA, cartella) if cartella else USCITA

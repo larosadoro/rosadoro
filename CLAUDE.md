@@ -29,6 +29,10 @@ Prima di tutto leggi `LEGGIMI.txt` e `REGOLE-DI-QUALITA.txt`.
 - La costruzione aggiorna da sola le date in `sito/sitemap.xml`. Le pagine che
   mostrano ancora un segnaposto restano fuori dalla mappa e chiedono ai motori
   di non indicizzarle; la costruzione le elenca alla fine.
+- IndexNow (23.11, per Bing e quindi DuckDuckGo, Yahoo, Ecosia, Copilot; anche Yandex, Seznam, Naver): `INDEXNOW` in
+  `costruisci.py` è la chiave (non segreta), che la costruzione mette in `sito/<chiave>.txt`. Dopo ogni pubblicazione da un
+  invio, `sorgenti/indexnow.py` manda le pagine della mappa cambiate (tutte, la prima volta che la chiave va online); se
+  l’avviso non parte la pubblicazione resta buona. Controllo: `sorgenti/controlla-indexnow.py`.
 - Il titolo della scheda (e di Google) viene da `TITOLI` in `testi_pagine.py`
   quando la pagina ha un titolo evocativo; altrimenti è il titolo della pagina.
 - Il modulo della pagina Contatti scrive nel foglio Google «Contatti della
