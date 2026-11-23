@@ -12,6 +12,11 @@
 # spuntate e, se sono cambiate, il sito si ripubblica con il loro elenco (dediche.json accanto alla pagina).
 # Le dediche non entrano mai nel repository. GitHub sospende i lavori di ogni ora se il repository
 # resta fermo per sessanta giorni: si riaccendono dalla scheda Actions.
+#
+# Dopo ogni pubblicazione venuta da un invio (non nel giro di ogni ora), sorgenti/indexnow.py dice a Bing
+# (e con lui a DuckDuckGo, Yahoo, Ecosia, Copilot), a Yandex, a Seznam e a Naver quali pagine della mappa sono
+# nuove o cambiate (IndexNow, dal 23.11.2026). Se l’avviso non parte, la pubblicazione resta buona lo stesso:
+# le pagine si troveranno dalla mappa, solo più tardi.
 name: Pubblica il sito
 
 on:
@@ -37,6 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       pubblica: ${{ steps.giardino.outputs.pubblica }}
+      avviso: ${{ steps.indexnow.outputs.avviso }}
     steps:
       - name: Scarica il repository
         uses: actions/checkout@v4
@@ -50,6 +56,14 @@ jobs:
       - name: Raccogli le dediche del giardino
         id: giardino
         run: python3 sorgenti/giardino.py "${{ steps.pages.outputs.base_url }}" "${{ github.sha }}" "${{ github.event_name }}"
+      - name: Prepara l’avviso ai motori di ricerca (IndexNow)
+        id: indexnow
+        if: github.event_name == 'push' && steps.giardino.outputs.pubblica == 'true'
+        continue-on-error: true
+        env:
+          PRIMA: ${{ github.event.before }}
+          DOPO: ${{ github.sha }}
+        run: python3 sorgenti/indexnow.py prepara "$PRIMA" "$DOPO"
       - name: Impacchetta la cartella sito/
         if: steps.giardino.outputs.pubblica == 'true'
         uses: actions/upload-pages-artifact@v3
@@ -67,3 +81,14 @@ jobs:
       - name: Pubblica
         id: deploy
         uses: actions/deploy-pages@v4
+      - name: Scarica l’avviso ai motori
+        if: needs.prepara.outputs.avviso != ''
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: sorgenti
+      - name: Avvisa Bing e gli altri motori delle pagine cambiate (IndexNow)
+        if: needs.prepara.outputs.avviso != ''
+        continue-on-error: true
+        env:
+          AVVISO: ${{ needs.prepara.outputs.avviso }}
+        run: python3 sorgenti/indexnow.py manda

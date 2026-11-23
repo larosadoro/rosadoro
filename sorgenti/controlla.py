@@ -24,6 +24,8 @@ se un controllo fallisce non si pubblica niente e online resta la versione di pr
     Turnstile e lo script del foglio e ammettono con l'impronta il solo script scritto dentro la pagina «non trovata»;
   - lo script del foglio fa quello che deve, provato con un foglio finto (sorgenti/controlla-foglio.js);
   - giardino.py porta nel giardino le dediche giuste, provato con un foglio e un sito finti (sorgenti/controlla-giardino.py);
+  - l’avviso ai motori (IndexNow) nomina solo le pagine della mappa cambiate, e la sua chiave è accanto alle pagine
+    (sorgenti/controlla-indexnow.py);
   - i moduli delle pagine mandano allo script quello che devono e rispondono bene, provati in un browser
     (sorgenti/controlla-moduli.js: solo dove c’è Playwright, cioè nel cantiere di Claude; altrove si salta).
 
@@ -681,6 +683,15 @@ def controlla_giardino():
         print((uscita.splitlines() or ["(nessuna risposta)"])[-1])
 
 
+def controlla_indexnow():
+    esito = subprocess.run([sys.executable, os.path.join(RADICE, "sorgenti", "controlla-indexnow.py")], capture_output=True, text=True)
+    uscita = (esito.stdout + esito.stderr).strip()
+    if esito.returncode != 0:
+        problemi.append("L’avviso ai motori di ricerca non va come deve (python3 sorgenti/controlla-indexnow.py):\n" + uscita[-2500:])
+    else:
+        print((uscita.splitlines() or ["(nessuna risposta)"])[-1])
+
+
 def controlla_moduli():
     if not shutil.which("node"):
         problemi.append("Manca node: i moduli delle pagine non si possono controllare")
@@ -799,6 +810,7 @@ def main():
         controlla_sicurezza(pagine)
         controlla_script_del_foglio()
         controlla_giardino()
+        controlla_indexnow()
         controlla_moduli()
     for a in avvisi:
         print("Da guardare: " + a)
