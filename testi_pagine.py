@@ -296,7 +296,7 @@ TESTI["in-memoria/io-sono-qui-per-te"] = dict(
     sotto="Sarai sostenuto in tutti i passaggi verso il futuro, per ricominciare a vivere.",
     corpo="""
 <p>Stai attraversando la fase più delicata della vita e hai bisogno di una persona che ti aiuti? Accompagni un familiare al passaggio della soglia?</p>
-<p><strong>Siamo qui per sostenere le persone nel fine vita, le loro famiglie e i loro cari, in modo concreto e spirituale, prendendo in considerazione tutto quanto è attorno a te.</strong> Contattaci per conoscere la possibilità di attivare un’équipe di terapeuti o un <em>quietude practitioner</em> vicino a dove vivi. Questo accompagnamento può affiancare anche le cure mediche, senza sostituirle, aiutando con delicatezza e presenza alcuni passaggi, e infondendo fiducia e forze spirituali.</p>
+<p><strong>Siamo qui per sostenere le persone nel fine vita, le loro famiglie e i loro cari, in modo concreto e spirituale, prendendo in considerazione tutto quanto è attorno a te.</strong> Contattaci per conoscere la possibilità di attivare un’équipe di terapeuti, come quella del <a class="link" href="{→progetti/da-sostenere}#ponte-arcobaleno">Ponte Arcobaleno</a>, o un <em>quietude practitioner</em> vicino a dove vivi. Questo accompagnamento può affiancare anche le cure mediche, senza sostituirle, aiutando con delicatezza e presenza alcuni passaggi, e infondendo fiducia e forze spirituali.</p>
 <p>Siamo qui per orientarti tra le decisioni e le scelte della fase finale della vita: dal funerale al testamento, fino a decidere chi si occuperà del tuo cane e del tuo gatto. La figura del <em>quietude practitioner</em> fa anche questo: la racconta la pagina della <a class="link" href="{→eventi-e-formazione/formazione-accompagnamento}#quietude-italia-2027">formazione all’accompagnamento al morire</a>.</p>
 <p>Hai voglia di liberare casa, destinare i vari oggetti, ma non ne hai la forza? Siamo qui per aiutarti a svuotare casa: il «riordino svedese» (Margareta Magnusson, <em>The Gentle Art of Swedish Death Cleaning</em>) accompagna un distacco graduale e sereno, e gli <a class="link" href="{→in-memoria/svuota-e-sorridi}">Svuota e Sorridi</a> possono darti una mano concreta.</p>
 <h3>Un percorso con un counselor</h3>
@@ -898,7 +898,7 @@ TESTI["lasciti/la-liberta-del-come"] = dict(
 <p>Consigliamo inoltre di specificare:</p>
 <ul class="stelle">
 <li>dove desideri soggiornare durante le cure di fine vita: in un hospice (puoi scrivere anche quale), in una struttura di cure palliative, a casa con o senza cure palliative, o in un altro luogo — per esempio quanto previsto dal progetto «Pianeta Verde», quando sarà attivo;</li>
-<li>se richiedi un'assistenza spirituale: puoi indicare anche la Fondazione, e l'équipe del Pianeta Verde quando sarà attiva;</li>
+<li>se richiedi un'assistenza spirituale: puoi indicare anche la Fondazione, e l’équipe del <a class="link" href="{→progetti/da-sostenere}#ponte-arcobaleno">Ponte Arcobaleno</a> quando sarà attiva;</li>
 <li>se consenti qualsiasi visitatore, o limiti l'accesso ad alcuni cari o a nessuno, nel momento del passaggio della soglia e nelle settimane che lo precedono.</li>
 </ul>
 <p>Se una malattia cronica, progressiva e invalidante è già presente, lo strumento complementare è la <strong>Pianificazione condivisa delle cure</strong> (art. 5 della stessa legge): un dialogo continuativo tra il paziente, il medico curante e, se lo desidera, i familiari o il fiduciario, per definire insieme un percorso di cura proporzionato alle fasi della malattia.</p>
@@ -1811,7 +1811,7 @@ TESTI["progetti"] = dict(
     corpo="""
 <p>La Rosa d’Oro è una fondazione del Terzo settore, nata il 26 febbraio 2026. Lo statuto la costituisce per avere progetti propri e per sostenere quelli di altre realtà che ne condividono la visione: nella cura delle persone, nel lavoro della terra, nell’accompagnamento al fine vita, nel sostegno ai giovani.</p>
 <p>Qui i progetti sono ordinati secondo il loro cammino: da avviare, quando cercano persone e competenze; da sostenere, quando raccolgono i fondi o cercano collaboratori; in corso, quando sono finanziati e già al lavoro; realizzati, quando sono conclusi e operativi.</p>
-<p>Tra i progetti della Fondazione c’è già Lux, per un uso consapevole del digitale, dei social e dell’intelligenza artificiale, con il suo sito: <a class="link" href="https://lux.larosadoro.org/" rel="noopener">lux.larosadoro.org</a>. Gli altri li presenteremo qui a mano a mano che prendono forma. Se ne porti avanti uno che va nella nostra direzione, <a class="link" href="{→progetti/presenta-il-tuo-progetto}">presentacelo</a>.</p>
+<p>Tra i progetti della Fondazione c’è già Lux, per un uso consapevole del digitale, dei social e dell’intelligenza artificiale, con il suo sito: <a class="link" href="https://lux.larosadoro.org/" rel="noopener">lux.larosadoro.org</a>. Sta nascendo <a class="link" href="{→progetti/da-sostenere}#ponte-arcobaleno">il Ponte Arcobaleno</a>, per accompagnare a casa propria chi si avvicina al fine vita. Gli altri li presenteremo qui a mano a mano che prendono forma. Se ne porti avanti uno che va nella nostra direzione, <a class="link" href="{→progetti/presenta-il-tuo-progetto}">presentacelo</a>.</p>
 """)
 
 TESTI["progetti/da-avviare"] = dict(
@@ -1821,6 +1821,10 @@ TESTI["progetti/da-avviare"] = dict(
 <p>Accompagnare un progetto nei primi passi è uno dei compiti per cui la Fondazione è nata, insieme ai partner che servono. I primi da avviare li presenteremo qui. Se vuoi dare una mano a un progetto che parte, o ne hai uno tu, <a class="link" href="{→contatti}">scrivici</a>.</p>
 """)
 
+# Il Ponte Arcobaleno: il testo è di Dacia (PDF del 20.11.2026, mail «progetto»), con le correzioni della tabella mandata
+# a lei e a Elias il 23.11: refusi, «équipe» sempre con l’accento, i massaggi «per dare conforto» (un terapeuta olistico non è una
+# professione sanitaria e non può promettere di togliere il dolore) e le DAT che la persona scrive per sé (legge 219/2017).
+# Le risposte di Dacia del 24.11: «Da sostenere» (ha già persone pronte), la frase prudente sui costi, i due riquadri suoi.
 TESTI["progetti/da-sostenere"] = dict(
     sotto="Progetti pronti a partire, che raccolgono i fondi per farlo.",
     corpo="""
@@ -1832,6 +1836,35 @@ TESTI["progetti/da-sostenere"] = dict(
 <p>Crediamo che la tecnologia sia una risorsa preziosa, ma solo se bilanciata da esperienze autentiche: per questo il programma della Fondazione valorizza il lavoro manuale, la natura, i ritmi lenti e gli incontri reali.</p>
 <p>Le donazioni a Lux confluiscono in un fondo della Fondazione con una contabilità separata, perché restino tracciabili. Chi dona accende una luce simbolica, senza premi, classifiche né inviti a donare di nuovo. Si dona dal sito dedicato, <a class="link" href="https://lux.larosadoro.org/" rel="noopener">lux.larosadoro.org</a>, dove trovi tutte le informazioni aggiuntive.</p>
 <p>Se sei un esperto del settore (psicologo, docente universitario, informatico, formatore interessato al sociale), <a class="link" href="{→contatti}">scrivici</a> per un’eventuale collaborazione: siamo aperti a colloqui e interazioni.</p>
+<h3 id="ponte-arcobaleno">Il Ponte Arcobaleno: accompagnare a casa nel fine vita</h3>
+<p><strong>A chi si rivolge.</strong> Questo progetto è pensato per sostenere ed accompagnare persone che si stanno avvicinando al fine vita e che scelgono liberamente di vivere questo passaggio a casa propria.</p>
+<p><strong>Obiettivo.</strong> Fornire al paziente presso il suo domicilio un’équipe multidisciplinare per offrire aiuto nel fine vita, che comprenda un sostegno a corpo, anima e spirito. L’équipe è composta da un medico, da terapeuti olistici e da volontari formati, che si rendono disponibili ad andare a casa della persona che si trova nelle fasi terminali della malattia, a partire dai mesi o settimane precedenti e nel momento del passaggio. Il progetto prevede che la Fondazione si faccia carico dei costi dei professionisti.</p>
+<p><strong>In cosa consiste il sostegno offerto.</strong> Il gruppo si occupa dei bisogni esistenziali, emotivi e religiosi dei pazienti e delle loro famiglie, che affrontano la fase finale della vita. Tali équipe sostengono chiunque — credente o non credente — nel trovare pace, senso e una conclusione serena e degna del proprio percorso di vita.</p>
+<p>Le équipe di assistenza spirituale adattano il proprio approccio ai valori personali di ogni individuo, concentrandosi sulla sofferenza fisica, emotiva, sociale e spirituale. Gli interventi più comuni includono:</p>
+<ul>
+<li>Aiutare i pazienti a condividere la propria storia, la biografia della propria vita, a riflettere su ciò che conferisce senso alla loro esistenza e a decidere come desiderano essere ricordati.</li>
+<li>Riconciliazione e ritorno alla serenità con l’ambiente: favorire conversazioni incentrate sulla risoluzione di questioni emotive rimaste in sospeso.</li>
+<li>Massaggi per dare conforto e favorire il lasciar andare (per esempio la ‘M’ Technique® o il trattamento alle mani dell’ayurveda).</li>
+<li>Rituali e pratiche di conforto, in particolare la meditazione, la mindfulness, la preghiera o la musicoterapia.</li>
+<li>Offrire consulenza alle famiglie in merito alle tradizioni da seguire dopo il decesso.</li>
+<li>Aiutare i pazienti a esprimere i propri valori ideali e spirituali, nonché pratici, anche con le <a class="link" href="{→lasciti/la-liberta-del-come}">DAT</a>, affinché l’équipe medica e la famiglia possano orientare le decisioni relative al fine vita in coerenza con le convinzioni personali del paziente.</li>
+</ul>
+<p>A differenza dell’assistenza spirituale in ospedale, l’assistenza spirituale domiciliare è integrata nel ritmo della vita quotidiana con:</p>
+<ul>
+<li>Visite domiciliari programmate. Un membro dell’équipe a rotazione o su esigenza si reca a casa del paziente con cadenza regolare (settimanale o bisettimanale) per stare con lui, ascoltarlo e offrirgli sostegno emotivo. O anche solo per leggergli un libro o una poesia.</li>
+<li>Supporto in situazioni di crisi e di transizione. Le équipe sono generalmente reperibili durante le fasi terminali della malattia o in caso di improvvisi peggioramenti delle condizioni di salute, per fornire conforto immediato, preghiere o una presenza discreta alla famiglia.</li>
+<li>Supporto e guida per chi si prende cura di un malato. Poiché chi assiste un familiare a casa spesso sperimenta un’intensa stanchezza e isolamento, gli specialisti dell’assistenza spirituale dedicano del tempo specifico a verificare la resilienza emotiva e spirituale della famiglia.</li>
+<li>Personalizzazione dello spazio del paziente — inserendo fotografie, oggetti e libri significativi, la sua musica preferita, profumi rilassanti, immagini sacre o colori adatti, e altri oggetti sacri, inclusa eventualmente la pulizia, al fine di creare un rifugio tranquillo e pulito tra le mura domestiche.</li>
+<li>Se necessario è possibile occuparsi della nutrizione del paziente dal punto di vista fisico, ma soprattutto animico-spirituale.</li>
+</ul>
+<div class="invito">
+<p>Vuoi offrire il tuo aiuto?</p>
+<p>Il Ponte Arcobaleno sta cercando altre mani e altri cuori che collaborino. Sei un medico, un infermiere, un OSS o un terapeuta esperto nell’accompagnamento al fine vita, oppure desideri metterti in gioco come volontario? Raccontaci di te, <a class="link" href="{→contatti}">scrivici</a>. Se senti di voler acquisire gli strumenti giusti prima di iniziare, manda una mail a <a class="link" href="mailto:pontearcobaleno@larosadoro.org">pontearcobaleno@larosadoro.org</a> o consulta la pagina della <a class="link" href="{→eventi-e-formazione/formazione-accompagnamento}">formazione</a>.</p>
+</div>
+<div class="invito">
+<p>Hai bisogno di supporto?</p>
+<p>Non restare solo. Se in questo momento sei tu ad aver bisogno di una presenza amica accanto, per te o per una persona cara, visita la pagina <a class="link" href="{→in-memoria/io-sono-qui-per-te}">Io sono qui per te</a> o manda una mail a <a class="link" href="mailto:pontearcobaleno@larosadoro.org">pontearcobaleno@larosadoro.org</a>.</p>
+</div>
 <p>In questa sezione verranno presentati progetti da sostenere, a mano a mano che saranno pronti. Intanto puoi sostenere la Fondazione e i suoi progetti dalla pagina <a class="link" href="{→dona}">Dona</a>.</p>
 """)
 
