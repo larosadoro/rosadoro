@@ -1511,6 +1511,106 @@ controllo('il biglietto di soli auguri, senza donazione: l’indirizzo del sito 
   } finally { await p.chiudi(); }
 });
 
+/* il biglietto anche da piegare e quattro per foglio (Elias, 25.11.2026: «il buone feste si stampa in A4, possibile anche in
+   formato biglietto auguri classico?», poi «dare anche più scelte»). Il PDF da piegare è un A4 verticale da stampare su un lato
+   solo e piegare in quattro: in basso a destra la facciata davanti (l’immagine e il saluto), in basso a sinistra il retro (il
+   nome della Fondazione), in alto, capovolto, l’interno: a destra le parole, a sinistra uno spazio libero per scrivere a mano.
+   Quello con quattro per foglio è un A4 orizzontale con il biglietto quattro volte e le linee dove tagliare, come la pergamena */
+
+/* l’immagine JPEG dentro un PDF del sito */
+function jpegDelPdf(dati) {
+  const testo = dati.toString('latin1');
+  const inizio = testo.indexOf('stream\n', testo.indexOf('/Subtype /Image')) + 7;
+  const fine = testo.indexOf('\nendstream', inizio);
+  return dati.subarray(inizio, fine);
+}
+/* le quattro facce del foglio da piegare: quanto è stampato in ognuna (pixel non bianchi) e dove sta l’oro scuro pieno
+   (quello del codice QR) fra la metà di sopra e quella di sotto della faccia */
+async function facceDelFoglio(page, jpg) {
+  return page.evaluate(async byte => {
+    const immagine = await createImageBitmap(new Blob([new Uint8Array(byte)], { type: 'image/jpeg' }));
+    const t = document.createElement('canvas');
+    t.width = immagine.width; t.height = immagine.height;
+    const c = t.getContext('2d');
+    c.drawImage(immagine, 0, 0);
+    const l = t.width / 2, a = t.height / 2, facce = {};
+    for (const [nome, x, y] of [['interno-destra', 0, 0], ['interno-sinistra', l, 0], ['retro', 0, a], ['davanti', l, a]]) {
+      const d = c.getImageData(x, y, l, a).data;
+      let stampato = 0, oroSopra = 0, oroSotto = 0;
+      for (let i = 0; i < d.length; i += 4) {
+        if (d[i] + d[i + 1] + d[i + 2] < 690) stampato++;
+        if (Math.abs(d[i] - 141) <= 14 && Math.abs(d[i + 1] - 110) <= 14 && Math.abs(d[i + 2] - 42) <= 16) {
+          if ((i / 4) / l < a / 2) oroSopra++; else oroSotto++;
+        }
+      }
+      facce[nome] = { stampato: stampato / (l * a), oroSopra, oroSotto };
+    }
+    return facce;
+  }, Array.from(jpg));
+}
+
+controllo('il biglietto anche da piegare e quattro per foglio: due fogli A4, con le facce al posto giusto', async () => {
+  const p = await apri(REGALO);
+  try {
+    await p.page.locator(BIGLIETTO).waitFor({ state: 'visible', timeout: 5000 });
+    await p.page.fill('#mb-per', 'Anna');
+    await p.page.fill('#mb-da', 'Marco');
+    await p.page.fill('#mb-messaggio', 'Un abbraccio');
+    await p.page.selectOption('#mb-occasione', 'feste');
+    await p.page.waitForFunction(s => /Buone feste/.test(document.querySelector(s + ' canvas').getAttribute('aria-label')), BIGLIETTO);
+    const nota = (await p.page.textContent(BIGLIETTO + ' p.nota.formati')).replace(/\s+/g, ' ');
+    assert.ok(/un lato solo/.test(nota) && /pieg/.test(nota) && /tagli/.test(nota), 'manca la riga che dice come stampare, piegare e tagliare: ' + nota);
+
+    /* da piegare: un A4 verticale */
+    const piegato = await scarica(p.page, BIGLIETTO + ' button[data-formato="piegato"]');
+    assert.strictEqual(piegato.nome, 'regalo-solidale-per-anna-da-piegare.pdf');
+    let testo = piegato.dati.toString('latin1');
+    assert.ok(testo.startsWith('%PDF-1.') && testo.trimEnd().endsWith('%%EOF'), 'il PDF da piegare non è un PDF intero');
+    assert.ok(testo.includes('/MediaBox [0 0 595.28 841.89]'), 'il foglio da piegare non è un A4 verticale');
+    const [, largo, alto] = testo.match(/\/Width (\d+) \/Height (\d+)/).map(Number);
+    assert.ok(largo >= 1600 && Math.abs(alto / largo - 297 / 210) < 0.01, 'l’immagine del foglio da piegare non è un A4: ' + largo + '×' + alto);
+    let facce = await facceDelFoglio(p.page, jpegDelPdf(piegato.dati));
+    assert.ok(facce['interno-sinistra'].stampato < 0.002, 'dentro, a sinistra, lo spazio per scrivere a mano deve restare libero: ' + JSON.stringify(facce));
+    assert.ok(facce.davanti.stampato > 0.01, 'davanti mancano l’immagine e il saluto: ' + JSON.stringify(facce));
+    assert.ok(facce['interno-destra'].stampato > 0.01, 'dentro, a destra, mancano le parole: ' + JSON.stringify(facce));
+    assert.ok(facce.retro.stampato > 0 && facce.retro.stampato < facce['interno-destra'].stampato, 'sul retro solo il nome della Fondazione: ' + JSON.stringify(facce));
+
+    /* di soli auguri: il codice QR è dentro, in fondo alle parole; nel foglio l’interno è capovolto, quindi il codice sta in alto */
+    await p.page.$eval(BIGLIETTO + ' input[name="tipo"][value="auguri"]', e => e.click());
+    await p.page.waitForFunction(s => /Scopri i nostri progetti/.test(document.querySelector(s + ' canvas').getAttribute('aria-label')), BIGLIETTO);
+    const auguri = await scarica(p.page, BIGLIETTO + ' button[data-formato="piegato"]');
+    assert.strictEqual(auguri.nome, 'auguri-per-anna-da-piegare.pdf');
+    facce = await facceDelFoglio(p.page, jpegDelPdf(auguri.dati));
+    const dentro = facce['interno-destra'];
+    assert.ok(dentro.oroSopra + dentro.oroSotto > 6000, 'dentro manca il codice QR: ' + JSON.stringify(facce));
+    assert.ok(dentro.oroSopra > 2 * dentro.oroSotto, 'l’interno deve essere capovolto, perché si legga dopo le due pieghe: ' + JSON.stringify(facce));
+    assert.ok(facce['interno-sinistra'].stampato < 0.002 && facce.davanti.oroSopra + facce.davanti.oroSotto < 6000,
+              'il codice QR va soltanto dentro: ' + JSON.stringify(facce));
+
+    /* quattro per foglio: un A4 orizzontale con il biglietto quattro volte e le linee dove tagliare */
+    const quattro = await scarica(p.page, BIGLIETTO + ' button[data-formato="quattro"]');
+    assert.strictEqual(quattro.nome, 'auguri-per-anna-quattro-per-foglio.pdf');
+    testo = quattro.dati.toString('latin1');
+    assert.ok(testo.includes('/MediaBox [0 0 841.89 595.28]'), 'il foglio con quattro biglietti non è un A4 orizzontale');
+    assert.strictEqual(testo.split('/Im1 Do').length - 1, 4, 'sul foglio ci vogliono quattro biglietti');
+    assert.strictEqual((testo.match(/ re\b/g) || []).length, 4, 'mancano le linee dove tagliare');
+    const [, l4, a4] = testo.match(/\/Width (\d+) \/Height (\d+)/).map(Number);
+    assert.ok(Math.abs(l4 / a4 - 210 / 148) < 0.01, 'ogni biglietto del foglio è il biglietto di sempre: ' + l4 + '×' + a4);
+
+    assert.deepStrictEqual(p.allo, [], 'niente deve partire verso lo script del foglio');
+    assert.deepStrictEqual(p.fuori, [], 'niente deve partire verso altri siti');
+    assert.deepStrictEqual(p.errori, []);
+    assert.deepStrictEqual(await p.violazioni(), [], 'i biglietti da piegare e da tagliare violano la regola di sicurezza della pagina');
+  } finally { await p.chiudi(); }
+  /* la cartolina di condoglianze dei funerali resta com’è: per molte copie c’è la pergamena */
+  const f = await apri(FUNERALI);
+  try {
+    await f.page.locator(BIGLIETTO).waitFor({ state: 'visible', timeout: 5000 });
+    assert.strictEqual(await f.page.locator(BIGLIETTO + ' [data-formato="piegato"], ' + BIGLIETTO + ' [data-formato="quattro"]').count(), 0,
+                       'la cartolina dei funerali non ha i formati dei biglietti');
+  } finally { await f.chiudi(); }
+});
+
 /* la cartolina di condoglianze dei funerali non ha la scelta dei soli auguri: è sempre una donazione in memoria */
 controllo('la cartolina di condoglianze non diventa mai un biglietto di soli auguri', async () => {
   const p = await apri(FUNERALI);

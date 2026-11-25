@@ -776,6 +776,14 @@ def biglietto(da, in_ricordo=False):
     # codice QR dei progetti, che sito.js disegna; la cartolina di condoglianze dei funerali non ce l’ha
     a = BIGLIETTO["auguri"]
     tipo, dati_auguri = "", ""
+    # il biglietto anche da piegare e quattro per foglio (Elias, 25.11): i due pulsanti e la riga che dice come stamparli
+    f = BIGLIETTO["formati"]
+    formati, nota_formati = "", ""
+    if not in_ricordo:
+        formati = ('<button type="button" class="scelta" data-formato="piegato" data-file="%s">%s</button>'
+                   '<button type="button" class="scelta" data-formato="quattro" data-file="%s">%s</button>'
+                   % (sfuggi(f["file_piegato"]), sfuggi(f["piegato"]), sfuggi(f["file_quattro"]), sfuggi(f["quattro"])))
+        nota_formati = '<p class="nota formati">%s</p>\n' % sfuggi(f["nota"])
     if not in_ricordo:
         tipo = ('<fieldset class="scelta tipo"><legend>%s</legend>'
                 '<label class="consenso"><input type="radio" name="tipo" value="dono" checked> <span>%s</span></label>'
@@ -804,14 +812,15 @@ def biglietto(da, in_ricordo=False):
 <textarea id="mb-messaggio" name="messaggio" class="breve" rows="3" maxlength="160"></textarea>
 </div>
 <figure class="anteprima"><canvas width="1800" height="1269" role="img" aria-label=""></canvas></figure>
-<p class="pulsanti"><button type="submit" class="invia">Scarica il PDF</button><button type="button" class="scelta" data-formato="jpg">Scarica l’immagine</button><button type="button" class="scelta" data-formato="condividi" hidden>Manda</button></p>
-<p class="nota">%s</p>
+<p class="pulsanti"><button type="submit" class="invia">Scarica il PDF</button>%s<button type="button" class="scelta" data-formato="jpg">Scarica l’immagine</button><button type="button" class="scelta" data-formato="condividi" hidden>Manda</button></p>
+%s<p class="nota">%s</p>
 <p class="esito" role="status" tabindex="-1" hidden></p>
 </form>""" % (nome, sfuggi(BIGLIETTO["corpo_te"]), sfuggi(BIGLIETTO["corpo_voi"]), sfuggi(BIGLIETTO["piede"]), dati_auguri,
                tipo, nascosta, nascosta, occasioni, immagini,
                "" if in_ricordo else " hidden", sfuggi(ricordo["campo"]), sfuggi(ricordo["segnaposto"]), "" if in_ricordo else " hidden",
                sfuggi(ricordo["segnaposto_per"] if in_ricordo else "Per esempio: Anna, oppure i nostri clienti"),
                "La cartolina" if in_ricordo else "Il biglietto", "" if in_ricordo else " checked", " checked" if in_ricordo else "",
+               formati, nota_formati,
                "Sulla cartolina non c’è la cifra. La prepara il tuo browser: i nomi e le parole che scrivi non arrivano a noi."
                if in_ricordo else "Sul biglietto non c’è la cifra. Lo prepara il tuo browser: i nomi e le parole che scrivi non arrivano a noi.")
 

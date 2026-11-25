@@ -983,11 +983,130 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
         catch (e) { errore(e); }
       });
     }
+    /* il biglietto da piegare (Elias, 25.11.2026: «formato biglietto auguri classico»): un A4 verticale di 1800 × 2546 pixel,
+       da stampare su un lato solo e piegare in quattro (prima a metà portando dietro la parte di sopra, poi ancora a metà con
+       l’immagine davanti). Quattro facce di 900 × 1273 pixel, 10,5 × 14,8 cm: in basso a destra la facciata davanti
+       (l’immagine e il saluto), in basso a sinistra il retro (il nome della Fondazione), in alto l’interno, capovolto perché
+       dopo le due pieghe si legga diritto: a destra le parole di chi regala e la frase sul dono (o il codice QR dei progetti),
+       a sinistra lo spazio per scrivere a mano. Il fondo resta il bianco della carta, e tutto sta ad almeno 9 mm dai bordi,
+       dove anche le stampanti di casa arrivano. Si disegna in una tela che non si vede; con la stessa misura dei caratteri
+       del biglietto (8,57 pixel per millimetro in tutti e due) */
+    var PL = 900, PA = 1273, telaPiegata = null;
+    function faccia(x, y, capovolta, disegno) {
+      ctx.save();
+      if (capovolta) { ctx.translate(x + PL, y + PA); ctx.rotate(Math.PI); } else ctx.translate(x, y);
+      disegno();
+      ctx.restore();
+    }
+    function spaziatoCentrato(testo, cx, y, spazio) {
+      var w = 0;
+      for (var i = 0; i < testo.length; i++) w += ctx.measureText(testo[i]).width + (i ? spazio : 0);
+      ctx.textAlign = 'left';
+      spaziato(testo, cx - w / 2, y, spazio);
+    }
+    function davanti(t) {
+      ctx.fillStyle = AVORIO;                      /* dentro la cornice l’avorio del biglietto, come le tavole incise */
+      ctx.fillRect(78, 78, PL - 156, PA - 156);
+      ctx.strokeStyle = ORO;
+      ctx.globalAlpha = 0.75; ctx.lineWidth = 2; ctx.strokeRect(78, 78, PL - 156, PA - 156);
+      ctx.globalAlpha = 0.35; ctx.lineWidth = 1; ctx.strokeRect(92, 92, PL - 184, PA - 184);
+      ctx.globalAlpha = 1;
+      var immagine = modulo.querySelector('input[name="immagine"]:checked + img');
+      var foto = immagine && immagine.previousElementSibling && immagine.previousElementSibling.hasAttribute('data-foto');
+      if (!foto && immagine && immagine.complete && immagine.naturalWidth) {
+        var w = Number(immagine.getAttribute('width')), h = Number(immagine.getAttribute('height'));
+        var scala = Math.min(520 / w, 600 / h);
+        ctx.drawImage(immagine, PL / 2 - w * scala / 2, 500 - h * scala / 2, w * scala, h * scala);
+      }
+      ctx.font = STILE.saluto[0]; ctx.fillStyle = ANTRACITE; ctx.textAlign = 'center';
+      var r = righe(t.saluto, 660), y = 1000 - (r.length - 1) * STILE.saluto[1] / 2;
+      r.forEach(function (riga) { ctx.fillText(riga, PL / 2, y); y += STILE.saluto[1]; });
+    }
+    function retro(t) {
+      ctx.font = STILE.piede[0]; ctx.fillStyle = ORO_SCURO;
+      var parti = t.piede.toUpperCase().split(' · '), y = PA - 160 - (parti.length - 1) * 36;
+      parti.forEach(function (parte) { spaziatoCentrato(parte, PL / 2, y, 3); y += 36; });
+    }
+    function dentro(t) {
+      var cx = PL / 2, largo = 660, blocchi = [];
+      function aggiungi(nome, testo, colore) {
+        ctx.font = STILE[nome][0];
+        righe(testo, largo).forEach(function (r) { blocchi.push({ font: STILE[nome][0], colore: colore, testo: r, alto: STILE[nome][1] }); });
+      }
+      if (t.per) aggiungi('per', t.per, ORO_SCURO);
+      if (t.messaggio) {
+        var corpo = 52, fatte;
+        do {
+          ctx.font = STILE.messaggio[0].replace('%', corpo);
+          fatte = righe(t.messaggio, largo);
+          corpo -= 4;
+        } while (fatte.length > 5 && corpo >= 36);
+        if (blocchi.length) blocchi.push({ spazio: 36 });
+        fatte.slice(0, 6).forEach(function (r) { blocchi.push({ font: ctx.font, colore: ANTRACITE, testo: r, alto: Math.round((corpo + 4) * 1.22) }); });
+      }
+      if (t.firma) {
+        if (blocchi.length) blocchi.push({ spazio: 34 });
+        aggiungi('firma', t.firma, ORO_SCURO);
+      }
+      /* le parole di chi regala, al centro della parte di sopra */
+      var totale = blocchi.reduce(function (s, b) { return s + (b.spazio || b.alto); }, 0);
+      var y = 130 + Math.max(0, (660 - totale) / 2);
+      ctx.textAlign = 'center';
+      blocchi.forEach(function (b) {
+        if (b.spazio) { y += b.spazio; return; }
+        ctx.font = b.font; ctx.fillStyle = b.colore;
+        ctx.fillText(b.testo, cx, y + b.alto * 0.78);
+        y += b.alto;
+      });
+      /* in fondo, la frase sul dono; nel biglietto di soli auguri il codice QR, «Scopri i nostri progetti» e l’indirizzo */
+      if (t.auguri) {
+        var qy = 850;
+        if (qr && qr.complete && qr.naturalWidth) {
+          ctx.imageSmoothingEnabled = false;
+          ctx.drawImage(qr, cx - QR_LATO / 2, qy, QR_LATO, QR_LATO);
+          ctx.imageSmoothingEnabled = true;
+        }
+        ctx.font = STILE.invito[0]; ctx.fillStyle = ANTRACITE;
+        ctx.fillText(t.auguri.riga, cx, qy + QR_LATO + 66);
+        ctx.font = STILE.sito[0]; ctx.fillStyle = ORO_SCURO;
+        spaziatoCentrato(t.auguri.sito, cx, qy + QR_LATO + 118, 2);
+      } else if (t.corpo) {
+        ctx.font = STILE.corpo[0];
+        var r = righe(t.corpo, 620), ry = PA - 150 - (r.length - 1) * STILE.corpo[1];
+        ctx.strokeStyle = ORO; ctx.globalAlpha = 0.6; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(cx - 40, ry - STILE.corpo[1] - 22); ctx.lineTo(cx + 40, ry - STILE.corpo[1] - 22); ctx.stroke();
+        ctx.globalAlpha = 1; ctx.fillStyle = 'rgba(28,28,28,.8)';
+        r.forEach(function (riga) { ctx.fillText(riga, cx, ry); ry += STILE.corpo[1]; });
+      }
+    }
+    function disegnaPiegato() {
+      var t = testi(), principale = ctx;
+      if (!telaPiegata) {
+        telaPiegata = document.createElement('canvas');
+        telaPiegata.width = 2 * PL; telaPiegata.height = 2 * PA;
+      }
+      ctx = telaPiegata.getContext('2d');
+      try {
+        ctx.fillStyle = '#FFFFFF';                 /* la carta */
+        ctx.fillRect(0, 0, 2 * PL, 2 * PA);
+        ctx.textBaseline = 'alphabetic';
+        faccia(PL, PA, false, function () { davanti(t); });
+        faccia(0, PA, false, function () { retro(t); });
+        faccia(0, 0, true, function () { dentro(t); });
+      } finally { ctx = principale; }
+      return new Promise(function (fatto, errore) {
+        try { telaPiegata.toBlob(function (b) { if (b) fatto(b); else errore(new Error('vuoto')); }, 'image/jpeg', 0.9); }
+        catch (e) { errore(e); }
+      });
+    }
+
     /* il foglio e il disegno che ci stende l’immagine. Il biglietto: un A5 orizzontale (595,28 × 419,53 punti), tutto.
-       La pergamena: un A4 orizzontale (841,89 × 595,28) con quattro copie, un margine di 8 mm che ogni stampante lascia
-       e le linee grigie dove tagliare */
-    function foglio() {
-      if (!pergamena) return { misura: '595.28 419.53', disegno: 'q 595.28 0 0 419.53 0 0 cm /Im1 Do Q' };
+       La pergamena, e il biglietto «quattro per foglio» (Elias, 25.11): un A4 orizzontale (841,89 × 595,28) con quattro copie,
+       un margine di 8 mm che ogni stampante lascia e le linee grigie dove tagliare. Il biglietto da piegare: un A4 verticale
+       (595,28 × 841,89), tutto, con l’immagine del foglio disegnato da disegnaPiegato */
+    function foglio(come) {
+      if (come === 'piegato') return { misura: '595.28 841.89', disegno: 'q 595.28 0 0 841.89 0 0 cm /Im1 Do Q', largo: 2 * PL, alto: 2 * PA };
+      if (!pergamena && come !== 'quattro') return { misura: '595.28 419.53', disegno: 'q 595.28 0 0 419.53 0 0 cm /Im1 Do Q' };
       var margine = 22.68, alto = (595.28 - 2 * margine) / 2, largo = alto * L / A, x0 = (841.89 - 2 * largo) / 2;
       var copie = [], linee = [];
       function n(v) { return v.toFixed(2); }
@@ -999,7 +1118,7 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
       return { misura: '841.89 595.28', disegno: copie.join('\n') + '\nq 0.75 G 0.4 w ' + linee.join(' ') + ' S Q' };
     }
     /* il PDF: catalogo, pagine, una pagina, l’immagine, il disegno che la stende e le informazioni sul documento */
-    function pdf(immagine) {
+    function pdf(immagine, come) {
       return immagine.arrayBuffer().then(function (dati) {
         var parti = [], scritti = 0, dove = [];
         function aggiungi(x) {
@@ -1007,14 +1126,14 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
           parti.push(b); scritti += b.length;
         }
         function oggetto(n, testo) { dove[n] = scritti; aggiungi(n + ' 0 obj\n' + testo + '\nendobj\n'); }
-        var jpg = new Uint8Array(dati), f = foglio();
+        var jpg = new Uint8Array(dati), f = foglio(come), largo = f.largo || L, alto = f.alto || A;
         aggiungi('%PDF-1.4\n');
         aggiungi(new Uint8Array([37, 226, 227, 207, 211, 10]));   /* la riga che dice ai programmi che il file contiene dati binari */
         oggetto(1, '<< /Type /Catalog /Pages 2 0 R >>');
         oggetto(2, '<< /Type /Pages /Kids [3 0 R] /Count 1 >>');
         oggetto(3, '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ' + f.misura + '] /Resources << /XObject << /Im1 4 0 R >> >> /Contents 5 0 R >>');
         dove[4] = scritti;
-        aggiungi('4 0 obj\n<< /Type /XObject /Subtype /Image /Width ' + L + ' /Height ' + A +
+        aggiungi('4 0 obj\n<< /Type /XObject /Subtype /Image /Width ' + largo + ' /Height ' + alto +
                  ' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ' + jpg.length + ' >>\nstream\n');
         aggiungi(jpg);
         aggiungi('\nendstream\nendobj\n');
@@ -1044,6 +1163,16 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
       e.preventDefault();
       esito.hidden = true;
       jpeg().then(pdf).then(function (b) { scarica(b, nomeFile('pdf')); }, nonRiesce);
+    });
+    /* il biglietto da piegare e quello quattro per foglio (Elias, 25.11): «regalo-solidale-per-anna-da-piegare.pdf» */
+    [['piegato', disegnaPiegato], ['quattro', jpeg]].forEach(function (c) {
+      var pulsante = modulo.querySelector('[data-formato="' + c[0] + '"]');
+      if (!pulsante) return;
+      pulsante.addEventListener('click', function () {
+        esito.hidden = true;
+        c[1]().then(function (b) { return pdf(b, c[0]); })
+          .then(function (b) { scarica(b, nomeFile('pdf').replace(/\.pdf$/, pulsante.getAttribute('data-file') + '.pdf')); }, nonRiesce);
+      });
     });
     modulo.querySelector('[data-formato="jpg"]').addEventListener('click', function () {
       esito.hidden = true;
