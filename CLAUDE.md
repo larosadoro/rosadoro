@@ -153,6 +153,9 @@ Prima di tutto leggi `LEGGIMI.txt` e `REGOLE-DI-QUALITA.txt`.
   (`sorgenti/qr-progetti.py`, verso /progetti/, in oro scuro). Oltre al PDF A5 si scarica «da piegare» (un A4 su un lato,
   piegato in quattro: 10,5 × 14,8 cm, l’interno capovolto sul foglio) e «quattro per foglio», come la pergamena; la cartolina
   dei funerali no. Lo controlla `controlla-moduli.js`, anche guardando dove cadono le facce del foglio da piegare.
+  A Natale, dopo l’abete, il biglietto offre i sei disegni di Natale chiesti da Dacia (presepe, renna, Babbo Natale, fiocco
+  di neve, stella di Natale, orsetto, 25.11), incisi come l’abete; sono in `DISEGNI_DELLE_FESTE` e per un’occasione che non è
+  delle feste lasciano il posto alla candela. Si rifanno con `/mnt/project-files/natale-2026/disegni/disegna.py`.
 - «Sostieni» per progetto (Dacia ed Elias, 25.11): nei «Progetti da sostenere» `{stripe-progetto:nome}` porta allo stesso
   link Stripe di Dona con `client_reference_id=sito-progetto-<nome>` (`SEGNO_PROGETTO`); `{senza-stripe}` mostra il bonifico
   quando `STRIPE` è vuoto. Lux porta al suo sito. LUX riconosce queste donazioni dal Payment Link: ricevuta e foglio dello

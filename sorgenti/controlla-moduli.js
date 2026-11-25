@@ -1326,7 +1326,10 @@ controllo('il regalo solidale: il biglietto si prepara nella pagina e si scarica
     assert.strictEqual(await p.page.inputValue('#mb-occasione'), 'natale', 'l’occasione già scelta è il Natale');
     /* a Natale l’abete al posto dell’albero tondo, già scelto (Elias, 9.11) */
     const tavole = await p.page.$$eval(BIGLIETTO + ' input[name="immagine"]:not([data-foto])', l => l.map(x => x.value));
-    assert.deepStrictEqual(tavole, ['abete', 'candela', 'fiore', 'rosa'], 'a Natale il biglietto ha l’abete al posto dell’albero tondo: ' + tavole);
+    /* e i sei disegni di Natale di Dacia (25.11), dopo l’abete e prima della candela */
+    assert.deepStrictEqual(tavole, ['abete', 'presepe', 'renna', 'babbo-natale', 'neve', 'stella-di-natale', 'orsetto', 'candela', 'fiore', 'rosa'],
+                           'a Natale il biglietto ha l’abete al posto dell’albero tondo e i disegni di Natale: ' + tavole);
+    await p.page.waitForFunction(s => [...document.querySelectorAll(s + ' input[name="immagine"] + img')].every(i => i.complete && i.naturalWidth > 0), BIGLIETTO);
     assert.strictEqual(await p.page.inputValue(BIGLIETTO + ' input[name="immagine"]:checked'), 'abete', 'a Natale l’immagine già scelta è l’abete');
     await p.page.fill('#mb-per', 'Anna');
     await p.page.fill('#mb-da', 'Marco');
@@ -1448,6 +1451,16 @@ controllo('i biglietti delle feste: Buone feste e Felice anno nuovo, con l’abe
     await p.page.waitForFunction(s => /Buon compleanno/.test(document.querySelector(s + ' canvas').getAttribute('aria-label')), BIGLIETTO);
     assert.strictEqual(await p.page.inputValue(BIGLIETTO + ' input[name="immagine"]:checked'), 'candela',
                        'per un compleanno l’abete lascia il posto alla candela');
+    /* così anche gli altri disegni di Natale (Dacia, 25.11): l’orsetto col cappello non va per un compleanno */
+    for (const disegno of ['presepe', 'renna', 'babbo-natale', 'neve', 'stella-di-natale', 'orsetto']) {
+      await p.page.selectOption('#mb-occasione', 'natale');
+      await p.page.check(BIGLIETTO + ' input[name="immagine"][value="' + disegno + '"]', { force: true });
+      await p.page.selectOption('#mb-occasione', 'feste');
+      assert.strictEqual(await p.page.inputValue(BIGLIETTO + ' input[name="immagine"]:checked'), disegno, 'per le feste resta ' + disegno);
+      await p.page.selectOption('#mb-occasione', 'compleanno');
+      assert.strictEqual(await p.page.inputValue(BIGLIETTO + ' input[name="immagine"]:checked'), 'candela',
+                         'per un compleanno ' + disegno + ' lascia il posto alla candela');
+    }
     assert.deepStrictEqual(p.errori, []);
   } finally { await p.chiudi(); }
 });

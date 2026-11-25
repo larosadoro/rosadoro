@@ -693,13 +693,19 @@ def secondo_natale(testo):
 
 IMMAGINI_BIGLIETTO = {"candela": ("azione-candela.svg", 200, 240), "albero": ("azione-albero.svg", 200, 240),   # le tavole incise del biglietto
                       "fiore": ("azione-fiore.svg", 200, 240), "rosa": ("tavola-rosa.svg", 240, 240),          # e della pergamena,
-                      "clessidra": ("azione-clessidra.svg", 200, 240), "abete": ("azione-abete.svg", 200, 240)}   # con le loro proporzioni
+                      "clessidra": ("azione-clessidra.svg", 200, 240), "abete": ("azione-abete.svg", 200, 240),   # con le loro proporzioni;
+                      "presepe": ("azione-presepe.svg", 200, 240), "renna": ("azione-renna.svg", 200, 240),        # i disegni di Natale
+                      "babbo-natale": ("azione-babbo-natale.svg", 200, 240), "neve": ("azione-neve.svg", 200, 240),  # (Dacia, 25.11)
+                      "stella-di-natale": ("azione-stella-di-natale.svg", 200, 240), "orsetto": ("azione-orsetto.svg", 200, 240)}
+# i disegni delle feste: per un’occasione che non è delle feste lasciano il posto alla candela (data-feste, in sito.js)
+DISEGNI_DELLE_FESTE = ("abete", "presepe", "renna", "babbo-natale", "neve", "stella-di-natale", "orsetto")
 
 def scelta_immagini(da, immagini):
     """le tavole fra cui si sceglie, nel biglietto e nella pergamena: la prima è già scelta"""
-    return "".join('<label class="immagine"><input type="radio" name="immagine" value="%s"%s>'
+    return "".join('<label class="immagine"><input type="radio" name="immagine" value="%s"%s%s>'
                    '<img src="%s" alt="" width="%d" height="%d"><span>%s</span></label>'
-                   % ((v, " checked" if i == 0 else "", risorsa(da, "img/" + IMMAGINI_BIGLIETTO[v][0])) + IMMAGINI_BIGLIETTO[v][1:] + (sfuggi(voce),))
+                   % ((v, " checked" if i == 0 else "", " data-feste" if v in DISEGNI_DELLE_FESTE else "",
+                       risorsa(da, "img/" + IMMAGINI_BIGLIETTO[v][0])) + IMMAGINI_BIGLIETTO[v][1:] + (sfuggi(voce),))
                    for i, (v, voce) in enumerate(immagini))
 
 def misure_foto(percorso):

@@ -935,10 +935,10 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
       };
       occasione.addEventListener('change', function () {
         if (opzione().getAttribute('data-persone') === 'voi') modulo.querySelector('input[name="persone"][value="voi"]').checked = true;
-        /* l’abete è delle feste (Natale 9.11; le feste e l’anno nuovo, Dacia 25.11): per un’altra occasione, se era già
-           scelto, lascia il posto alla candela */
-        var abete = modulo.querySelector('input[name="immagine"][value="abete"]');
-        if (abete && abete.checked && !opzione().hasAttribute('data-abete')) modulo.querySelector('input[name="immagine"][value="candela"]').checked = true;
+        /* l’abete e gli altri disegni di Natale (data-feste) sono delle feste (Natale 9.11; le feste e l’anno nuovo, Dacia
+           25.11): per un’altra occasione, se uno era già scelto, lascia il posto alla candela */
+        var scelta = modulo.querySelector('input[name="immagine"]:checked');
+        if (scelta && scelta.hasAttribute('data-feste') && !opzione().hasAttribute('data-abete')) modulo.querySelector('input[name="immagine"][value="candela"]').checked = true;
         campoRicordo();
       });
       campoRicordo();

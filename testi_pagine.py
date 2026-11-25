@@ -1470,7 +1470,10 @@ BIGLIETTO = dict(
     ),
     immagini=(("candela", "La candela"), ("albero", "L’albero"), ("fiore", "Il fiore"), ("rosa", "La rosa")),
     # da novembre all’Epifania (NATALE acceso) l’abete con la stella al posto dell’albero tondo, già scelto (Elias, 9.11)
-    immagini_natale=(("abete", "L’abete"), ("candela", "La candela"), ("fiore", "Il fiore"), ("rosa", "La rosa")),
+    # e dopo l’abete i disegni di Natale che Dacia ha chiesto (25.11), nello stesso stile inciso
+    immagini_natale=(("abete", "L’abete"), ("presepe", "Il presepe"), ("renna", "La renna"), ("babbo-natale", "Babbo Natale"),
+                     ("neve", "Il fiocco di neve"), ("stella-di-natale", "La stella di Natale"), ("orsetto", "L’orsetto"),
+                     ("candela", "La candela"), ("fiore", "Il fiore"), ("rosa", "La rosa")),
     # le occasioni in cui l’abete resta scelto; per le altre lascia il posto alla candela
     con_abete=("natale", "feste", "anno-nuovo"),
     # il biglietto di soli auguri, senza donazione (Dacia, 25.11: «ci servono per pubblicità»; bozza di Claude, da approvare):
