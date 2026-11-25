@@ -1454,13 +1454,13 @@ controllo('i biglietti delle feste: Buone feste e Felice anno nuovo, con l’abe
 
 /* il biglietto di soli auguri, senza donazione (Dacia, 25.11.2026: «ci servono per pubblicità»): tutto uguale, ma al posto della
    frase sulla donazione l’indirizzo del sito e il codice QR che porta ai progetti, con «Scopri i nostri progetti».
-   Il codice QR si disegna senza sfumature, in antracite pieno: si contano i pixel antracite nella metà destra del biglietto
-   (le lettere, con i bordi sfumati, ne hanno pochi) */
-async function scuriNellaTela(page) {
+   Il codice QR si disegna senza sfumature, in oro scuro pieno come «Per Anna» (Elias, 25.11): si contano i pixel di quell’oro
+   nella metà destra del biglietto (le lettere, con i bordi sfumati, ne hanno pochi) */
+async function oroNellaTela(page) {
   return page.evaluate(s => {
     const t = document.querySelector(s + ' canvas'), d = t.getContext('2d').getImageData(t.width / 2, 0, t.width / 2, t.height).data;
     let n = 0;
-    for (let i = 0; i < d.length; i += 4) if (Math.abs(d[i] - 28) <= 4 && Math.abs(d[i + 1] - 28) <= 4 && Math.abs(d[i + 2] - 28) <= 4) n++;
+    for (let i = 0; i < d.length; i += 4) if (Math.abs(d[i] - 141) <= 4 && Math.abs(d[i + 1] - 110) <= 4 && Math.abs(d[i + 2] - 42) <= 4) n++;
     return n;
   }, BIGLIETTO);
 }
@@ -1474,8 +1474,9 @@ controllo('il biglietto di soli auguri, senza donazione: l’indirizzo del sito 
     await p.page.fill('#mb-da', 'Marco');
     await p.page.fill('#mb-messaggio', 'Un abbraccio');
     await p.page.waitForFunction(s => /Marco/.test(document.querySelector(s + ' canvas').getAttribute('aria-label')), BIGLIETTO);
-    const scuriDono = await scuriNellaTela(p.page);
-    await p.page.check(BIGLIETTO + ' input[name="tipo"][value="auguri"]', { force: true });
+    const oroDono = await oroNellaTela(p.page);
+    /* la scelta in cima al modulo può stare sotto la testata fissa: si sceglie come farebbe la tastiera, senza mirare col mouse */
+    await p.page.$eval(BIGLIETTO + ' input[name="tipo"][value="auguri"]', e => e.click());
     await p.page.waitForFunction(s => /Scopri i nostri progetti/.test(document.querySelector(s + ' canvas').getAttribute('aria-label')), BIGLIETTO);
     const qr = p.page.locator(BIGLIETTO + ' img.qr');
     assert.ok(await qr.evaluate(i => i.complete && i.naturalWidth > 0), 'l’immagine del codice QR non si carica');
@@ -1485,7 +1486,7 @@ controllo('il biglietto di soli auguri, senza donazione: l’indirizzo del sito 
       assert.ok(detto.includes(parte), 'il biglietto di auguri non dice «' + parte + '»: ' + detto);
     assert.ok(!/donazione|regalo/i.test(detto), 'il biglietto di soli auguri non parla di donazione né di regalo: ' + detto);
     assert.strictEqual(detto.split('larosadoro.org').length - 1, 1, 'l’indirizzo del sito una volta sola: ' + detto);
-    assert.ok(await scuriNellaTela(p.page) > scuriDono + 8000, 'il codice QR non è disegnato sul biglietto');
+    assert.ok(await oroNellaTela(p.page) > oroDono + 6000, 'il codice QR non è disegnato sul biglietto');
     const pdf = await scarica(p.page, BIGLIETTO + ' button[type="submit"]');
     assert.strictEqual(pdf.nome, 'auguri-per-anna.pdf');
     assert.strictEqual(pdf.dati.toString('latin1').match(/\/Title \(([^)]*)\)/)[1], 'Biglietto di auguri');
@@ -1522,11 +1523,13 @@ controllo('la cartolina di condoglianze non diventa mai un biglietto di soli aug
 });
 
 /* ---- il pulsante di Natale nella home (Dacia, 25.11.2026): porta ai regali solidali e ai biglietti; le palline dell’abete
-        luccicano quando si apre la pagina e poi si fermano da sole (mai elementi insistenti: Elias, 4.11), di nuovo quando
-        ci si passa sopra; per chi chiede al telefono o al computer meno movimento, niente luccichio ---- */
+        si accendono quando si apre la pagina, luccicano piano per una dozzina di secondi (Dacia le voleva sempre accese,
+        Elias: «12 secondi come via di mezzo», 25.11) e poi si fermano da sole (mai elementi insistenti: Elias, 4.11), di nuovo
+        quando ci si passa sopra; mai più di un luccichio al secondo per pallina; per chi chiede al telefono o al computer meno
+        movimento, niente luccichio ---- */
 const HOME = 'index.html';
 
-controllo('il pulsante di Natale in home: porta ai regali solidali, luccica poco e si ferma da solo, e sul telefono sta nello schermo', async () => {
+controllo('il pulsante di Natale in home: porta ai regali solidali, luccica piano una dozzina di secondi e si ferma da solo, e sul telefono sta nello schermo', async () => {
   for (const schermo of [{ width: 320, height: 640 }, { width: 390, height: 844 }, { width: 1280, height: 800 }]) {
     const p = await apri(HOME, { schermo });
     try {
@@ -1539,7 +1542,7 @@ controllo('il pulsante di Natale in home: porta ai regali solidali, luccica poco
         const r = document.querySelector('a.natale').getBoundingClientRect();
         const animazioni = document.querySelector('a.natale').getAnimations({ subtree: true }).map(a => {
           const t = a.effect.getComputedTiming();
-          return { fine: t.endTime, volte: t.iterations };
+          return { fine: t.endTime, volte: t.iterations, giro: t.duration };
         });
         return { largo: document.documentElement.scrollWidth, basso: r.bottom, alto: r.height, animazioni };
       });
@@ -1549,12 +1552,17 @@ controllo('il pulsante di Natale in home: porta ai regali solidali, luccica poco
       assert.ok(m.animazioni.length > 0, 'le palline dell’abete non luccicano');
       for (const a of m.animazioni) {
         assert.ok(Number.isFinite(a.volte) && Number.isFinite(a.fine), 'il luccichio non si deve ripetere all’infinito');
-        assert.ok(a.fine <= 5000, 'il luccichio deve finire entro cinque secondi, non dura ' + a.fine + ' ms');
+        assert.ok(a.fine <= 12500, 'il luccichio deve finire entro una dozzina di secondi, non dura ' + a.fine + ' ms');
+        if (a.volte > 1) assert.ok(a.giro >= 1000, 'una pallina luccica più di una volta al secondo (un giro dura ' + a.giro + ' ms)');
       }
+      assert.ok(Math.max(...m.animazioni.map(a => a.fine)) >= 10000, 'le palline devono luccicare per una dozzina di secondi, non soltanto mentre si accendono');
       if (schermo.width === 1280) {
         await p.page.waitForTimeout(5200);
+        const accese = await p.page.evaluate(() => document.querySelector('a.natale .palline').getAnimations({ subtree: true }).filter(a => a.playState === 'running').length);
+        assert.ok(accese > 0, 'dopo cinque secondi le palline luccicano ancora');
+        await p.page.waitForTimeout(7500);
         const ferme = await p.page.evaluate(() => document.querySelector('a.natale').getAnimations({ subtree: true }).filter(a => a.playState === 'running').length);
-        assert.strictEqual(ferme, 0, 'dopo cinque secondi il luccichio è ancora acceso');
+        assert.strictEqual(ferme, 0, 'dopo una dozzina di secondi il luccichio è ancora acceso');
         await pulsante.hover();
         const ancora = await p.page.evaluate(() => document.querySelector('a.natale').getAnimations({ subtree: true }).filter(a => a.playState === 'running').length);
         assert.ok(ancora > 0, 'passandoci sopra, le palline luccicano di nuovo');

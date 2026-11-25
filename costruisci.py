@@ -574,8 +574,9 @@ PALLINE_NATALE = ((104, 66), (93, 85), (97, 101), (116, 108), (74, 126), (96, 12
 
 def pulsante_natale(da):
     """il pulsante di Natale nella home (Dacia, 25.11.2026), con NATALE acceso: l’abete inciso del biglietto, con la stella e le
-    dodici palline d’oro, e accanto le parole. Le palline si accendono una dopo l’altra quando si apre la pagina e poi restano
-    ferme; passandoci sopra luccicano ancora una volta. Niente che lampeggi o si ripeta: lo fa stile.css, e con «riduci il
+    dodici palline d’oro, e accanto le parole. Le palline si accendono una dopo l’altra quando si apre la pagina, luccicano piano
+    per una dozzina di secondi (Dacia le voleva sempre accese, Elias: «12 secondi come via di mezzo», 25.11) e poi restano ferme;
+    passandoci sopra luccicano ancora una volta. Niente che lampeggi o si ripeta senza fine: lo fa stile.css, e con «riduci il
     movimento» l’abete è fermo. Il pulsante sparisce con NATALE spento"""
     if not NATALE:
         return ""
@@ -671,12 +672,18 @@ def gettoni(html, da):
 SEGNO_SITO = "?locale=it&client_reference_id=sito-dona"   # la pagina di Stripe in italiano, e le donazioni del sito separate da quelle di Lux
 SEGNO_REGALO = "?locale=it&client_reference_id=sito-regalo"   # lo stesso link, dalla pagina dei regali solidali: nel conto si contano a parte
 SEGNO_BOMBONIERA = "?locale=it&client_reference_id=sito-bomboniera"   # e dalla pagina delle bomboniere solidali (7.11)
+# e dal pulsante «Sostieni» di ogni progetto da sostenere (Dacia ed Elias, 25.11): {stripe-progetto:la-via-delle-erbe} segna il
+# link con il nome del progetto, così nel pannello di Stripe si vede per quale progetto è arrivata la donazione
+SEGNO_PROGETTO = "?locale=it&client_reference_id=sito-progetto-"
 
 def secondo_stripe(testo):
-    """ciò che sta tra {se-stripe} e {/se-stripe} resta solo con STRIPE; {stripe} è l'indirizzo del pagamento con la carta"""
+    """ciò che sta tra {se-stripe} e {/se-stripe} resta solo con STRIPE, ciò che sta tra {senza-stripe} e {/senza-stripe} solo senza;
+    {stripe} è l'indirizzo del pagamento con la carta"""
     testo = re.sub(r"\{se-stripe\}(.*?)\{/se-stripe\}", lambda m: m.group(1) if STRIPE else "", testo, flags=re.S)
+    testo = re.sub(r"\{senza-stripe\}(.*?)\{/senza-stripe\}", lambda m: "" if STRIPE else m.group(1), testo, flags=re.S)
     testo = testo.replace("{stripe-regalo}", sfuggi(STRIPE + SEGNO_REGALO) if STRIPE else "")
     testo = testo.replace("{stripe-bomboniera}", sfuggi(STRIPE + SEGNO_BOMBONIERA) if STRIPE else "")
+    testo = re.sub(r"\{stripe-progetto:([a-z0-9-]+)\}", lambda m: sfuggi(STRIPE + SEGNO_PROGETTO + m.group(1)) if STRIPE else "", testo)
     return testo.replace("{stripe}", sfuggi(STRIPE + SEGNO_SITO) if STRIPE else "")
 
 def secondo_natale(testo):

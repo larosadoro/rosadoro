@@ -1916,13 +1916,17 @@ TESTI["progetti/da-sostenere"] = dict(
 <p>Nella Fondazione alcuni membri lavorano nell’agricoltura sociale e ne conoscono per esperienza diretta il valore: chi ne prende parte impara un mestiere, trova un ritmo e una comunità, e al contempo la fattoria si apre al territorio e alla popolazione locale creando un ponte di collaborazione e aiuto.</p>
 <p>Una fattoria di piante medicinali si presta bene a questo scopo: richiede cura, attenzione e molte mani, sia forti che delicate; segue le stagioni e offre compiti diversi, dalla semina alla raccolta, dall’essiccazione alla preparazione delle tisane. Accanto alla coltivazione possono nascere percorsi di lavoro, laboratori, attività didattiche e di formazione.</p>
 <p>In quale modo e con quale ampiezza la fattoria agrisociale lavorerà dipenderà da te e dalla raccolta fondi dedicata, dall’azienda e dal terreno che si potranno acquistare e dalla loro dimensione. Non è inoltre escluso che la fattoria agrisociale possa vivere contemporaneamente in diversi appezzamenti in differenti luoghi, connessi.</p>
-<h3 class="progetto" id="lux">Lux: abitare il digitale, riscoprire il reale</h3>
+{se-stripe}<p><a class="invia" href="{stripe-progetto:la-via-delle-erbe}" target="_blank" rel="noopener">Sostieni La Via delle Erbe</a></p>
+<p class="nota">La cifra la scegli tu, e la donazione va a questo progetto. Con un bonifico usa le coordinate della pagina <a class="link" href="{→dona}">Dona</a>, con la causale «La Via delle Erbe».</p>
+{/se-stripe}{senza-stripe}<p>Per sostenerlo dona con un bonifico, con le coordinate della pagina <a class="link" href="{→dona}">Dona</a> e la causale «La Via delle Erbe».</p>
+{/senza-stripe}<h3 class="progetto" id="lux">Lux: abitare il digitale, riscoprire il reale</h3>
 {foto:LUX MARCHIO|Il marchio di Lux, un progetto della Fondazione La Rosa d’Oro ETS|ritratto}
 <p>Lux è il progetto della Fondazione per educare ad un uso più consapevole del digitale (i social, i giochi, l’intelligenza artificiale).</p>
 <p>È utile per le persone di ogni età, a cominciare dai più giovani, cui non si può negare l’accesso al digitale, ma si può facilitare un uso più sano e critico dello stesso. Tuttavia, a differenza di ciò che si pensa, la «pericolosità» e l’abuso del digitale non sono un tema esclusivamente adolescenziale: riguardano anche la fascia di età fra i 50 e gli 80 anni. Per questo desideriamo contribuire tramite corsi alla <em>media literacy</em>, ovvero la capacità di orientarsi tra servizi complessi, riconoscere le fake news ed evitare le truffe online (come il phishing bancario o i falsi messaggi), al fine di evitare quel divario di competenze (<em>digital divide</em>) che rende la realtà del virtuale non solo poco inclusiva, ma fonte di stress.</p>
 <p>Con un gruppo di esperti del settore vorremmo aiutarti a formarti un’opinione consapevole sull’IA e sulle sue implicazioni sociali ed etiche, partendo dalla sua storia e dalla sua evoluzione, per formulare previsioni pertinenti sulla sua traiettoria futura. Inoltre, secondo le tue necessità, potrai avere informazioni su quanto oggi si sa nelle neuroscienze sulle implicazioni dell’IA per l’apprendimento e per le facoltà cognitive.</p>
 <p>Crediamo che la tecnologia sia una risorsa preziosa, ma solo se bilanciata da esperienze autentiche: per questo il programma della Fondazione valorizza il lavoro manuale, la natura, i ritmi lenti e gli incontri reali.</p>
 <p>Le donazioni a Lux confluiscono in un fondo della Fondazione con una contabilità separata, perché restino tracciabili. Chi dona accende una luce simbolica, senza premi, classifiche né inviti a donare di nuovo. Si dona dal sito dedicato, <a class="link" href="https://lux.larosadoro.org/" rel="noopener">lux.larosadoro.org</a>, dove trovi tutte le informazioni aggiuntive.</p>
+<p><a class="invia" href="https://lux.larosadoro.org/" rel="noopener">Sostieni Lux</a></p>
 <p>Se sei un esperto del settore (psicologo, docente universitario, informatico, formatore interessato al sociale), <a class="link" href="{→contatti}">scrivici</a> per un’eventuale collaborazione: siamo aperti a colloqui e interazioni.</p>
 <h3 class="progetto" id="ponte-arcobaleno">Il Ponte Arcobaleno: accompagnamento al morire a casa propria</h3>
 {foto:PONTE ARCOBALENO|Un doppio arcobaleno sul lago, fra le montagne|cielo}
@@ -1946,7 +1950,10 @@ TESTI["progetti/da-sostenere"] = dict(
 <li>Personalizzazione dello spazio del paziente — inserendo fotografie, oggetti e libri significativi, la sua musica preferita, profumi rilassanti, immagini sacre o colori adatti, e altri oggetti sacri, inclusa eventualmente la pulizia, al fine di creare un rifugio tranquillo e pulito tra le mura domestiche.</li>
 <li>Se necessario è possibile occuparsi della nutrizione del paziente dal punto di vista fisico, ma soprattutto animico-spirituale.</li>
 </ul>
-<div class="invito">
+{se-stripe}<p><a class="invia" href="{stripe-progetto:ponte-arcobaleno}" target="_blank" rel="noopener">Sostieni il Ponte Arcobaleno</a></p>
+<p class="nota">La cifra la scegli tu, e la donazione va a questo progetto. Con un bonifico usa le coordinate della pagina <a class="link" href="{→dona}">Dona</a>, con la causale «Ponte Arcobaleno».</p>
+{/se-stripe}{senza-stripe}<p>Per sostenerlo dona con un bonifico, con le coordinate della pagina <a class="link" href="{→dona}">Dona</a> e la causale «Ponte Arcobaleno».</p>
+{/senza-stripe}<div class="invito">
 <p>Vuoi offrire il tuo aiuto?</p>
 <p>Il Ponte Arcobaleno sta cercando altre mani e altri cuori che collaborino. Sei un medico, un infermiere, un OSS o un terapeuta esperto nell’accompagnamento al fine vita, oppure desideri metterti in gioco come volontario? Raccontaci di te, <a class="link" href="{→contatti}">scrivici</a>. Se senti di voler acquisire gli strumenti giusti prima di iniziare, manda una mail a <a class="link" href="mailto:pontearcobaleno@larosadoro.org">pontearcobaleno@larosadoro.org</a> o consulta la pagina della <a class="link" href="{→eventi-e-formazione/formazione-accompagnamento}">formazione</a>.</p>
 </div>

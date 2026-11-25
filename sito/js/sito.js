@@ -816,7 +816,7 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
 
     /* il codice QR (img/qr-progetti.svg, un quadratino per modulo) con un numero intero di pixel per modulo, così resta nitido
        anche stampato o mandato come immagine compressa; accanto, «Scopri i nostri progetti» e l’indirizzo del sito */
-    var QR_MODULO = 7, QR_LATO = 29 * QR_MODULO;
+    var QR_MODULO = 6, QR_LATO = 29 * QR_MODULO;
     function codiceQR(a, x, y) {
       if (qr && qr.complete && qr.naturalWidth) {
         ctx.imageSmoothingEnabled = false;
