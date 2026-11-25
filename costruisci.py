@@ -784,6 +784,8 @@ def biglietto(da, in_ricordo=False):
                    '<button type="button" class="scelta" data-formato="quattro" data-file="%s">%s</button>'
                    % (sfuggi(f["file_piegato"]), sfuggi(f["piegato"]), sfuggi(f["file_quattro"]), sfuggi(f["quattro"])))
         nota_formati = '<p class="nota formati">%s</p>\n' % sfuggi(f["nota"])
+        r = BIGLIETTO["auguri"]["ricambia"]       # la frase di Dacia sui biglietti di soli auguri (25.11)
+        nota_formati += '<p class="nota">%s<a class="link" href="%s">%s</a>%s</p>\n' % (sfuggi(r[0]), verso(da, "dona"), sfuggi(r[1]), sfuggi(r[2]))
     if not in_ricordo:
         tipo = ('<fieldset class="scelta tipo"><legend>%s</legend>'
                 '<label class="consenso"><input type="radio" name="tipo" value="dono" checked> <span>%s</span></label>'

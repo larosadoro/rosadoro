@@ -1486,6 +1486,9 @@ BIGLIETTO = dict(
         piede="Fondazione La Rosa d’Oro ETS",
         file="auguri",
         titolo="Biglietto di auguri",
+        # sotto il biglietto, la frase di Dacia (25.11): «una piccola donazione» porta a Dona
+        ricambia=("I biglietti di soli auguri sono gratuiti. Se vuoi, puoi fare anche ", "una piccola donazione",
+                  " alla Fondazione, della cifra che vuoi, di riconoscenza."),
     ),
     # il biglietto anche da piegare e quattro per foglio (Elias, 25.11.2026: «formato biglietto auguri classico», «dare anche più
     # scelte»), accanto a «Scarica il PDF»; non nella cartolina dei funerali, dove per molte copie c’è la pergamena
