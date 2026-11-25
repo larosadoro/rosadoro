@@ -1832,55 +1832,18 @@ TESTI["progetti/da-avviare"] = dict(
 # e, per La Via delle Erbe, il prato scelto da Elias (25.11, «questa.jpg», senza i dati della fotocamera).
 # La Via delle Erbe (testo di Dacia, rivisto da Elias e Dacia il 25.11; titolo di Dacia, prima «Dall’alba al tramonto»): le proprietà delle piante restano finché la Fondazione
 # non vende prodotti (Elias). Quando tisane e preparati saranno in vendita, questa scheda si rilegge insieme alle etichette.
+# Dacia (25.11 sera): La Via delle Erbe è il primo progetto della pagina, e i titoli dei progetti sono più grandi (h3.progetto).
 TESTI["progetti/da-sostenere"] = dict(
     sotto="Progetti che cercano fondi, persone e competenze per nascere e per durare.",
     corpo="""
 <p>Qui trovi i progetti che raccolgono i fondi per realizzarsi e per continuare nel tempo. Per ognuno diciamo che cosa fa, di che cosa ha bisogno e come puoi sostenerlo: con una donazione, un fondo di memoria, un lascito o, per un’azienda, con una parte delle vendite o degli utili.</p>
 <p>In questa pagina:</p>
 <ul class="stelle">
+<li><strong><a class="link" href="#la-via-delle-erbe">La Via delle Erbe</a></strong>: una fattoria agrisociale dove coltivare con la biodinamica le piante medicinali d’Oriente e d’Occidente;</li>
 <li><strong><a class="link" href="#lux">Lux</a></strong>: per un uso più consapevole del digitale, dei social e dell’intelligenza artificiale, a ogni età;</li>
-<li><strong><a class="link" href="#ponte-arcobaleno">Il Ponte Arcobaleno</a></strong>: un’équipe di medico, terapeuti olistici e volontari che accompagna a casa propria chi si avvicina al fine vita;</li>
-<li><strong><a class="link" href="#la-via-delle-erbe">La Via delle Erbe</a></strong>: una fattoria agrisociale dove coltivare con la biodinamica le piante medicinali d’Oriente e d’Occidente.</li>
+<li><strong><a class="link" href="#ponte-arcobaleno">Il Ponte Arcobaleno</a></strong>: un’équipe di medico, terapeuti olistici e volontari che accompagna a casa propria chi si avvicina al fine vita.</li>
 </ul>
-<h3 id="lux">Lux: abitare il digitale, riscoprire il reale</h3>
-{foto:LUX MARCHIO|Il marchio di Lux, un progetto della Fondazione La Rosa d’Oro ETS|ritratto}
-<p>Lux è il progetto della Fondazione per educare ad un uso più consapevole del digitale (i social, i giochi, l’intelligenza artificiale).</p>
-<p>È utile per le persone di ogni età, a cominciare dai più giovani, cui non si può negare l’accesso al digitale, ma si può facilitare un uso più sano e critico dello stesso. Tuttavia, a differenza di ciò che si pensa, la «pericolosità» e l’abuso del digitale non sono un tema esclusivamente adolescenziale: riguardano anche la fascia di età fra i 50 e gli 80 anni. Per questo desideriamo contribuire tramite corsi alla <em>media literacy</em>, ovvero la capacità di orientarsi tra servizi complessi, riconoscere le fake news ed evitare le truffe online (come il phishing bancario o i falsi messaggi), al fine di evitare quel divario di competenze (<em>digital divide</em>) che rende la realtà del virtuale non solo poco inclusiva, ma fonte di stress.</p>
-<p>Con un gruppo di esperti del settore vorremmo aiutarti a formarti un’opinione consapevole sull’IA e sulle sue implicazioni sociali ed etiche, partendo dalla sua storia e dalla sua evoluzione, per formulare previsioni pertinenti sulla sua traiettoria futura. Inoltre, secondo le tue necessità, potrai avere informazioni su quanto oggi si sa nelle neuroscienze sulle implicazioni dell’IA per l’apprendimento e per le facoltà cognitive.</p>
-<p>Crediamo che la tecnologia sia una risorsa preziosa, ma solo se bilanciata da esperienze autentiche: per questo il programma della Fondazione valorizza il lavoro manuale, la natura, i ritmi lenti e gli incontri reali.</p>
-<p>Le donazioni a Lux confluiscono in un fondo della Fondazione con una contabilità separata, perché restino tracciabili. Chi dona accende una luce simbolica, senza premi, classifiche né inviti a donare di nuovo. Si dona dal sito dedicato, <a class="link" href="https://lux.larosadoro.org/" rel="noopener">lux.larosadoro.org</a>, dove trovi tutte le informazioni aggiuntive.</p>
-<p>Se sei un esperto del settore (psicologo, docente universitario, informatico, formatore interessato al sociale), <a class="link" href="{→contatti}">scrivici</a> per un’eventuale collaborazione: siamo aperti a colloqui e interazioni.</p>
-<h3 id="ponte-arcobaleno">Il Ponte Arcobaleno: accompagnamento al morire a casa propria</h3>
-{foto:PONTE ARCOBALENO|Un doppio arcobaleno sul lago, fra le montagne|cielo}
-<p><strong>A chi si rivolge.</strong> Questo progetto è pensato per sostenere ed accompagnare persone che si stanno avvicinando al fine vita e che scelgono liberamente di vivere questo passaggio a casa propria.</p>
-<p><strong>Obiettivo.</strong> Fornire al paziente presso il suo domicilio un’équipe multidisciplinare per offrire aiuto nel fine vita, che comprenda un sostegno a corpo, anima e spirito. L’équipe è composta da un medico, da terapeuti olistici e da volontari formati, che si rendono disponibili ad andare a casa della persona che si trova nelle fasi terminali della malattia, a partire dai mesi o settimane precedenti e nel momento del passaggio. Il progetto prevede che la Fondazione si faccia carico dei costi dei professionisti.</p>
-<p><strong>In cosa consiste il sostegno offerto.</strong> Il gruppo si occupa dei bisogni esistenziali, emotivi e religiosi dei pazienti e delle loro famiglie, che affrontano la fase finale della vita. Tali équipe sostengono chiunque — credente o non credente — nel trovare pace, senso e una conclusione serena e degna del proprio percorso di vita.</p>
-<p>Le équipe di assistenza spirituale adattano il proprio approccio ai valori personali di ogni individuo, concentrandosi sulla sofferenza fisica, emotiva, sociale e spirituale. Gli interventi più comuni includono:</p>
-<ul>
-<li>Aiutare i pazienti a condividere la propria storia, la biografia della propria vita, a riflettere su ciò che conferisce senso alla loro esistenza e a decidere come desiderano essere ricordati.</li>
-<li>Riconciliazione e ritorno alla serenità con l’ambiente: favorire conversazioni incentrate sulla risoluzione di questioni emotive rimaste in sospeso.</li>
-<li>Massaggi per dare conforto e favorire il lasciar andare (per esempio la ‘M’ Technique® o il trattamento alle mani dell’ayurveda).</li>
-<li>Rituali e pratiche di conforto, in particolare la meditazione, la mindfulness, la preghiera o la musicoterapia.</li>
-<li>Offrire consulenza alle famiglie in merito alle tradizioni da seguire dopo il decesso.</li>
-<li>Aiutare i pazienti a esprimere i propri valori ideali e spirituali, nonché pratici, anche con le <a class="link" href="{→lasciti/la-liberta-del-come}">DAT</a>, affinché l’équipe medica e la famiglia possano orientare le decisioni relative al fine vita in coerenza con le convinzioni personali del paziente.</li>
-</ul>
-<p>A differenza dell’assistenza spirituale in ospedale, l’assistenza spirituale domiciliare è integrata nel ritmo della vita quotidiana con:</p>
-<ul>
-<li>Visite domiciliari programmate. Un membro dell’équipe a rotazione o su esigenza si reca a casa del paziente con cadenza regolare (settimanale o bisettimanale) per stare con lui, ascoltarlo e offrirgli sostegno emotivo. O anche solo per leggergli un libro o una poesia.</li>
-<li>Supporto in situazioni di crisi e di transizione. Le équipe sono generalmente reperibili durante le fasi terminali della malattia o in caso di improvvisi peggioramenti delle condizioni di salute, per fornire conforto immediato, preghiere o una presenza discreta alla famiglia.</li>
-<li>Supporto e guida per chi si prende cura di un malato. Poiché chi assiste un familiare a casa spesso sperimenta un’intensa stanchezza e isolamento, gli specialisti dell’assistenza spirituale dedicano del tempo specifico a verificare la resilienza emotiva e spirituale della famiglia.</li>
-<li>Personalizzazione dello spazio del paziente — inserendo fotografie, oggetti e libri significativi, la sua musica preferita, profumi rilassanti, immagini sacre o colori adatti, e altri oggetti sacri, inclusa eventualmente la pulizia, al fine di creare un rifugio tranquillo e pulito tra le mura domestiche.</li>
-<li>Se necessario è possibile occuparsi della nutrizione del paziente dal punto di vista fisico, ma soprattutto animico-spirituale.</li>
-</ul>
-<div class="invito">
-<p>Vuoi offrire il tuo aiuto?</p>
-<p>Il Ponte Arcobaleno sta cercando altre mani e altri cuori che collaborino. Sei un medico, un infermiere, un OSS o un terapeuta esperto nell’accompagnamento al fine vita, oppure desideri metterti in gioco come volontario? Raccontaci di te, <a class="link" href="{→contatti}">scrivici</a>. Se senti di voler acquisire gli strumenti giusti prima di iniziare, manda una mail a <a class="link" href="mailto:pontearcobaleno@larosadoro.org">pontearcobaleno@larosadoro.org</a> o consulta la pagina della <a class="link" href="{→eventi-e-formazione/formazione-accompagnamento}">formazione</a>.</p>
-</div>
-<div class="invito">
-<p>Hai bisogno di supporto?</p>
-<p>Non restare solo. Se in questo momento sei tu ad aver bisogno di una presenza amica accanto, per te o per una persona cara, visita la pagina <a class="link" href="{→in-memoria/io-sono-qui-per-te}">Io sono qui per te</a> o manda una mail a <a class="link" href="mailto:pontearcobaleno@larosadoro.org">pontearcobaleno@larosadoro.org</a>.</p>
-</div>
-<h3 id="la-via-delle-erbe">La Via delle Erbe</h3>
+<h3 class="progetto" id="la-via-delle-erbe">La Via delle Erbe</h3>
 {foto:LA VIA DELLE ERBE|Un prato verde sotto il cielo, con due alberi in cima alla collina|cielo}
 <p class="citazione">Dall’alba al tramonto e dal tramonto a una nuova alba: dall’est all’ovest e ritorno.</p>
 <p>Nelle medicine orientali si dice che l’essere umano è un riflesso dell’universo. Attraverso l’equilibrio degli elementi interni (i Cinque Elementi) e dei canali energetici (Nadi o Meridiani), l’uomo mantiene la salute e si connette più facilmente alla realizzazione del proprio dharma (missione di vita). Similmente, nella visione antroposofica occidentale, l’uomo è un essere in evoluzione, dotato di quattro corpi (Fisico, Eterico, Astrale e l’Io), con il compito di redimere la materia e trasformarla attraverso la coscienza e l’azione nel mondo fisico. Le piante sono la manifestazione terrestre delle forze dei pianeti e delle costellazioni. Nell’Antroposofia e nella Biodinamica, la Terra è considerata un grande organismo vivente, così come nelle antiche medicine tradizionali, un organismo che abbisogna di cure. Tale cura giunge dai preparati biodinamici: grazie allo studio e all’utilizzo consapevole degli stessi, si può facilitare la riconnessione delle piante, in particolare delle piante considerate medicinali, alle forze macrocosmiche (Solari, Lunari e Planetarie). Così, non solo si risveglia la vitalità del suolo, ma anche la qualità ed efficacia delle piante atte a curare l’uomo e i suoi squilibri, insieme a dei vegetali sani e ricchi di forze vitali (detto prana nelle medicine tradizionali). Si possono inoltre sfruttare gli effetti sinergici dei preparati sulla pianta, al fine di incrementare la sua virya (potenza legata a caldo/freddo), in altre parole portare le forze del pianeta caratterizzante il preparato ad influire sulla natura della pianta e dunque sulle sue capacità terapeutiche. La devozione che intesse in colui che coltiva influisce essa stessa sulla qualità della pianta, inserita in un organismo agricolo vivente.</p>
@@ -1927,6 +1890,44 @@ TESTI["progetti/da-sostenere"] = dict(
 <p>Nella Fondazione alcuni membri lavorano nell’agricoltura sociale e ne conoscono per esperienza diretta il valore: chi ne prende parte impara un mestiere, trova un ritmo e una comunità, e al contempo la fattoria si apre al territorio e alla popolazione locale creando un ponte di collaborazione e aiuto.</p>
 <p>Una fattoria di piante medicinali si presta bene a questo scopo: richiede cura, attenzione e molte mani, sia forti che delicate; segue le stagioni e offre compiti diversi, dalla semina alla raccolta, dall’essiccazione alla preparazione delle tisane. Accanto alla coltivazione possono nascere percorsi di lavoro, laboratori, attività didattiche e di formazione.</p>
 <p>In quale modo e con quale ampiezza la fattoria agrisociale lavorerà dipenderà da te e dalla raccolta fondi dedicata, dall’azienda e dal terreno che si potranno acquistare e dalla loro dimensione. Non è inoltre escluso che la fattoria agrisociale possa vivere contemporaneamente in diversi appezzamenti in differenti luoghi, connessi.</p>
+<h3 class="progetto" id="lux">Lux: abitare il digitale, riscoprire il reale</h3>
+{foto:LUX MARCHIO|Il marchio di Lux, un progetto della Fondazione La Rosa d’Oro ETS|ritratto}
+<p>Lux è il progetto della Fondazione per educare ad un uso più consapevole del digitale (i social, i giochi, l’intelligenza artificiale).</p>
+<p>È utile per le persone di ogni età, a cominciare dai più giovani, cui non si può negare l’accesso al digitale, ma si può facilitare un uso più sano e critico dello stesso. Tuttavia, a differenza di ciò che si pensa, la «pericolosità» e l’abuso del digitale non sono un tema esclusivamente adolescenziale: riguardano anche la fascia di età fra i 50 e gli 80 anni. Per questo desideriamo contribuire tramite corsi alla <em>media literacy</em>, ovvero la capacità di orientarsi tra servizi complessi, riconoscere le fake news ed evitare le truffe online (come il phishing bancario o i falsi messaggi), al fine di evitare quel divario di competenze (<em>digital divide</em>) che rende la realtà del virtuale non solo poco inclusiva, ma fonte di stress.</p>
+<p>Con un gruppo di esperti del settore vorremmo aiutarti a formarti un’opinione consapevole sull’IA e sulle sue implicazioni sociali ed etiche, partendo dalla sua storia e dalla sua evoluzione, per formulare previsioni pertinenti sulla sua traiettoria futura. Inoltre, secondo le tue necessità, potrai avere informazioni su quanto oggi si sa nelle neuroscienze sulle implicazioni dell’IA per l’apprendimento e per le facoltà cognitive.</p>
+<p>Crediamo che la tecnologia sia una risorsa preziosa, ma solo se bilanciata da esperienze autentiche: per questo il programma della Fondazione valorizza il lavoro manuale, la natura, i ritmi lenti e gli incontri reali.</p>
+<p>Le donazioni a Lux confluiscono in un fondo della Fondazione con una contabilità separata, perché restino tracciabili. Chi dona accende una luce simbolica, senza premi, classifiche né inviti a donare di nuovo. Si dona dal sito dedicato, <a class="link" href="https://lux.larosadoro.org/" rel="noopener">lux.larosadoro.org</a>, dove trovi tutte le informazioni aggiuntive.</p>
+<p>Se sei un esperto del settore (psicologo, docente universitario, informatico, formatore interessato al sociale), <a class="link" href="{→contatti}">scrivici</a> per un’eventuale collaborazione: siamo aperti a colloqui e interazioni.</p>
+<h3 class="progetto" id="ponte-arcobaleno">Il Ponte Arcobaleno: accompagnamento al morire a casa propria</h3>
+{foto:PONTE ARCOBALENO|Un doppio arcobaleno sul lago, fra le montagne|cielo}
+<p><strong>A chi si rivolge.</strong> Questo progetto è pensato per sostenere ed accompagnare persone che si stanno avvicinando al fine vita e che scelgono liberamente di vivere questo passaggio a casa propria.</p>
+<p><strong>Obiettivo.</strong> Fornire al paziente presso il suo domicilio un’équipe multidisciplinare per offrire aiuto nel fine vita, che comprenda un sostegno a corpo, anima e spirito. L’équipe è composta da un medico, da terapeuti olistici e da volontari formati, che si rendono disponibili ad andare a casa della persona che si trova nelle fasi terminali della malattia, a partire dai mesi o settimane precedenti e nel momento del passaggio. Il progetto prevede che la Fondazione si faccia carico dei costi dei professionisti.</p>
+<p><strong>In cosa consiste il sostegno offerto.</strong> Il gruppo si occupa dei bisogni esistenziali, emotivi e religiosi dei pazienti e delle loro famiglie, che affrontano la fase finale della vita. Tali équipe sostengono chiunque — credente o non credente — nel trovare pace, senso e una conclusione serena e degna del proprio percorso di vita.</p>
+<p>Le équipe di assistenza spirituale adattano il proprio approccio ai valori personali di ogni individuo, concentrandosi sulla sofferenza fisica, emotiva, sociale e spirituale. Gli interventi più comuni includono:</p>
+<ul>
+<li>Aiutare i pazienti a condividere la propria storia, la biografia della propria vita, a riflettere su ciò che conferisce senso alla loro esistenza e a decidere come desiderano essere ricordati.</li>
+<li>Riconciliazione e ritorno alla serenità con l’ambiente: favorire conversazioni incentrate sulla risoluzione di questioni emotive rimaste in sospeso.</li>
+<li>Massaggi per dare conforto e favorire il lasciar andare (per esempio la ‘M’ Technique® o il trattamento alle mani dell’ayurveda).</li>
+<li>Rituali e pratiche di conforto, in particolare la meditazione, la mindfulness, la preghiera o la musicoterapia.</li>
+<li>Offrire consulenza alle famiglie in merito alle tradizioni da seguire dopo il decesso.</li>
+<li>Aiutare i pazienti a esprimere i propri valori ideali e spirituali, nonché pratici, anche con le <a class="link" href="{→lasciti/la-liberta-del-come}">DAT</a>, affinché l’équipe medica e la famiglia possano orientare le decisioni relative al fine vita in coerenza con le convinzioni personali del paziente.</li>
+</ul>
+<p>A differenza dell’assistenza spirituale in ospedale, l’assistenza spirituale domiciliare è integrata nel ritmo della vita quotidiana con:</p>
+<ul>
+<li>Visite domiciliari programmate. Un membro dell’équipe a rotazione o su esigenza si reca a casa del paziente con cadenza regolare (settimanale o bisettimanale) per stare con lui, ascoltarlo e offrirgli sostegno emotivo. O anche solo per leggergli un libro o una poesia.</li>
+<li>Supporto in situazioni di crisi e di transizione. Le équipe sono generalmente reperibili durante le fasi terminali della malattia o in caso di improvvisi peggioramenti delle condizioni di salute, per fornire conforto immediato, preghiere o una presenza discreta alla famiglia.</li>
+<li>Supporto e guida per chi si prende cura di un malato. Poiché chi assiste un familiare a casa spesso sperimenta un’intensa stanchezza e isolamento, gli specialisti dell’assistenza spirituale dedicano del tempo specifico a verificare la resilienza emotiva e spirituale della famiglia.</li>
+<li>Personalizzazione dello spazio del paziente — inserendo fotografie, oggetti e libri significativi, la sua musica preferita, profumi rilassanti, immagini sacre o colori adatti, e altri oggetti sacri, inclusa eventualmente la pulizia, al fine di creare un rifugio tranquillo e pulito tra le mura domestiche.</li>
+<li>Se necessario è possibile occuparsi della nutrizione del paziente dal punto di vista fisico, ma soprattutto animico-spirituale.</li>
+</ul>
+<div class="invito">
+<p>Vuoi offrire il tuo aiuto?</p>
+<p>Il Ponte Arcobaleno sta cercando altre mani e altri cuori che collaborino. Sei un medico, un infermiere, un OSS o un terapeuta esperto nell’accompagnamento al fine vita, oppure desideri metterti in gioco come volontario? Raccontaci di te, <a class="link" href="{→contatti}">scrivici</a>. Se senti di voler acquisire gli strumenti giusti prima di iniziare, manda una mail a <a class="link" href="mailto:pontearcobaleno@larosadoro.org">pontearcobaleno@larosadoro.org</a> o consulta la pagina della <a class="link" href="{→eventi-e-formazione/formazione-accompagnamento}">formazione</a>.</p>
+</div>
+<div class="invito">
+<p>Hai bisogno di supporto?</p>
+<p>Non restare solo. Se in questo momento sei tu ad aver bisogno di una presenza amica accanto, per te o per una persona cara, visita la pagina <a class="link" href="{→in-memoria/io-sono-qui-per-te}">Io sono qui per te</a> o manda una mail a <a class="link" href="mailto:pontearcobaleno@larosadoro.org">pontearcobaleno@larosadoro.org</a>.</p>
+</div>
 <p>In questa sezione verranno presentati progetti da sostenere, a mano a mano che saranno pronti. Intanto puoi sostenere la Fondazione e i suoi progetti dalla pagina <a class="link" href="{→dona}">Dona</a>.</p>
 """)
 
@@ -2077,7 +2078,7 @@ DESCRIZIONI.update({
     "professionisti/vitalizio-filantropico": "Per i professionisti: il vitalizio filantropico, un bene alla Fondazione in cambio di assistenza e cure garantite al cliente per tutta la vita.",
     # Progetti ed Eventi e formazione (21.10, bozza di Claude rivista da Elias)
     "progetti/da-avviare": "I progetti che nascono con la Fondazione La Rosa d’Oro e cercano persone, competenze e luoghi per partire.",
-    "progetti/da-sostenere": "I progetti della Fondazione La Rosa d’Oro che raccolgono i fondi: Lux, il Ponte Arcobaleno nel fine vita, le piante medicinali della Via delle Erbe.",
+    "progetti/da-sostenere": "I progetti della Fondazione La Rosa d’Oro che raccolgono i fondi: le piante medicinali della Via delle Erbe, Lux, il Ponte Arcobaleno nel fine vita.",
     "progetti/in-corso": "I progetti in corso, finanziati o sostenuti dalla Fondazione La Rosa d’Oro, con le notizie su come procedono e su come vengono usati i fondi.",
     "progetti/realizzati": "I progetti conclusi o già operativi della Fondazione La Rosa d’Oro, ciascuno con il suo resoconto.",
     "eventi-e-formazione/eventi": "Incontri, seminari, laboratori e convegni della Fondazione La Rosa d’Oro e dei suoi partner, con la data, il luogo e il modo per partecipare.",
