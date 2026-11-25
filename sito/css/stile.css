@@ -245,6 +245,42 @@ a.scelta:hover,button.scelta:hover{border-color:var(--oro);color:var(--testo)}
 .hero-casa .saluto{font-family:var(--display);font-style:italic;font-weight:400;font-size:21px;line-height:1.3;color:var(--testo-70);margin:0 0 18px}
 .hero-casa .sotto{font-size:31px;line-height:1.35;font-weight:400;color:var(--accento);max-width:30ch}   /* la frase sotto il titolo: la voce calda della home */
 .hero-casa .campo-foto{position:relative;z-index:4;padding:56px;height:100%;display:flex;align-items:center}
+
+/* il pulsante di Natale nella home (Dacia, 25.11.2026), da novembre all’Epifania (NATALE in costruisci.py): l’abete inciso del
+   biglietto e le parole, in una cornice d’oro. Quando si apre la pagina le dodici palline si accendono una dopo l’altra e poi
+   la stella; in meno di quattro secondi tutto è fermo e acceso. Passandoci sopra le palline luccicano ancora una volta.
+   Niente che lampeggi o si ripeta all’infinito (Elias, 4.11: mai elementi insistenti); con «riduci il movimento» nessun
+   luccichio (la regola in fondo al foglio). Solo i colori del sistema */
+.natale{display:inline-flex;align-items:center;gap:18px;margin:0 0 36px;padding:12px 26px 12px 16px;background:var(--carta);border:1px solid var(--filo-forte);transition:border-color .2s,background-color .2s}
+.natale:hover,.natale:focus-visible{border-color:var(--oro)}
+.natale .abete{flex:none;display:block;width:56px;height:80px;overflow:visible}
+.natale .rami{stroke:var(--antracite);stroke-width:2.4}
+.natale .stella{fill:var(--oro);stroke:var(--oro-scuro);stroke-width:1.6;transform-box:fill-box;transform-origin:center;animation:natale-stella 1.2s ease-in-out 2.4s both}
+.natale .palline{fill:var(--oro)}
+.natale .palline g{transform-box:fill-box;transform-origin:center}
+.natale .palline circle{transform-box:fill-box;transform-origin:center;animation:natale-accendi .9s ease-out both}
+.natale .palline g:nth-child(1) circle{animation-delay:.3s}
+.natale .palline g:nth-child(2) circle{animation-delay:.45s}
+.natale .palline g:nth-child(3) circle{animation-delay:.6s}
+.natale .palline g:nth-child(4) circle{animation-delay:.75s}
+.natale .palline g:nth-child(5) circle{animation-delay:.9s}
+.natale .palline g:nth-child(6) circle{animation-delay:1.05s}
+.natale .palline g:nth-child(7) circle{animation-delay:1.2s}
+.natale .palline g:nth-child(8) circle{animation-delay:1.35s}
+.natale .palline g:nth-child(9) circle{animation-delay:1.5s}
+.natale .palline g:nth-child(10) circle{animation-delay:1.65s}
+.natale .palline g:nth-child(11) circle{animation-delay:1.8s}
+.natale .palline g:nth-child(12) circle{animation-delay:1.95s}
+.natale:hover .palline g,.natale:focus-visible .palline g{animation:natale-luccica .6s ease-in-out both}
+.natale:hover .palline g:nth-child(even),.natale:focus-visible .palline g:nth-child(even){animation-delay:.2s}
+.natale:hover .palline g:nth-child(3n),.natale:focus-visible .palline g:nth-child(3n){animation-delay:.4s}
+.natale .parole{display:flex;flex-direction:column;gap:6px}
+.natale .titolo{font-family:var(--display);font-style:italic;font-weight:400;font-size:26px;line-height:1.15;color:var(--testo)}
+.natale .vai{font-size:13px;line-height:20px}
+.natale:hover .vai{color:var(--testo)}
+@keyframes natale-accendi{0%{opacity:.2;transform:scale(.6)}55%{opacity:1;transform:scale(1.5)}100%{opacity:1;transform:scale(1)}}
+@keyframes natale-stella{0%{fill-opacity:0}50%{fill-opacity:1;transform:scale(1.3)}100%{fill-opacity:1;transform:scale(1)}}
+@keyframes natale-luccica{0%,100%{transform:scale(1)}50%{transform:scale(1.5)}}
 .lastra{position:relative;width:100%;max-width:560px;aspect-ratio:1;margin:0 auto;background:#2A2620;background-image:radial-gradient(60% 46% at 38% 30%,rgba(255,232,182,.42),rgba(0,0,0,0) 68%),linear-gradient(168deg,#4A4034 0%,#2A2620 58%,#17140F 100%);border:1px solid rgba(184,143,61,.35);overflow:visible}
 .lastra img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .lastra .emblema{position:absolute;left:50%;top:50%;width:46%;height:46%;transform:translate(-50%,-50%);color:var(--oro);opacity:.35}
@@ -444,6 +480,9 @@ a.scelta:hover,button.scelta:hover{border-color:var(--oro);color:var(--testo)}
   .hero-casa .destra,.hero-casa .taglio{display:none}
   .hero-casa .pagina{grid-template-columns:1fr;min-height:0}
   .hero-casa .dentro{padding:80px 0 56px}
+  .hero-casa .dentro:has(.natale){padding-top:40px}   /* con il pulsante di Natale la hero resta nella prima schermata */
+  .natale{gap:14px;padding:10px 18px 10px 12px;margin-bottom:32px}
+  .natale .titolo{font-size:23px}
   .hero-casa h1{font-size:64px}
   .hero-casa .sotto{font-size:24px}
   .hero-casa .campo-foto{padding:0 0 72px}

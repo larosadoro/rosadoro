@@ -1428,6 +1428,151 @@ controllo('il biglietto in ricordo di una persona: il suo nome, una donazione in
   } finally { await p.chiudi(); }
 });
 
+/* i biglietti delle feste (Dacia, 25.11.2026): oltre al Natale, «Buone feste» e «Felice anno nuovo», subito dopo, con l’abete */
+controllo('i biglietti delle feste: Buone feste e Felice anno nuovo, con l’abete del Natale', async () => {
+  const p = await apri(REGALO);
+  try {
+    await p.page.locator(BIGLIETTO).waitFor({ state: 'visible', timeout: 5000 });
+    const occasioni = await p.page.$$eval('#mb-occasione option', l => l.map(o => o.value));
+    assert.deepStrictEqual(occasioni.slice(0, 3), ['natale', 'feste', 'anno-nuovo'], 'dopo il Natale vengono le feste e l’anno nuovo: ' + occasioni);
+    for (const [occasione, saluto] of [['feste', 'Buone feste'], ['anno-nuovo', 'Felice anno nuovo']]) {
+      await p.page.selectOption('#mb-occasione', occasione);
+      await p.page.waitForFunction(([s, v]) => document.querySelector(s + ' canvas').getAttribute('aria-label').includes(v), [BIGLIETTO, saluto]);
+      assert.strictEqual(await p.page.inputValue(BIGLIETTO + ' input[name="immagine"]:checked'), 'abete',
+                         'per «' + saluto + '» l’abete resta scelto');
+      const detto = await dettoDalBiglietto(p.page);
+      assert.ok(detto.startsWith('Anteprima del biglietto: ' + saluto + '.'), 'il saluto è «' + saluto + '»: ' + detto);
+      assert.ok(detto.includes('Questo regalo è una donazione'), detto);
+    }
+    await p.page.selectOption('#mb-occasione', 'compleanno');
+    await p.page.waitForFunction(s => /Buon compleanno/.test(document.querySelector(s + ' canvas').getAttribute('aria-label')), BIGLIETTO);
+    assert.strictEqual(await p.page.inputValue(BIGLIETTO + ' input[name="immagine"]:checked'), 'candela',
+                       'per un compleanno l’abete lascia il posto alla candela');
+    assert.deepStrictEqual(p.errori, []);
+  } finally { await p.chiudi(); }
+});
+
+/* il biglietto di soli auguri, senza donazione (Dacia, 25.11.2026: «ci servono per pubblicità»): tutto uguale, ma al posto della
+   frase sulla donazione l’indirizzo del sito e il codice QR che porta ai progetti, con «Scopri i nostri progetti».
+   Il codice QR si disegna senza sfumature, in antracite pieno: si contano i pixel antracite nella metà destra del biglietto
+   (le lettere, con i bordi sfumati, ne hanno pochi) */
+async function scuriNellaTela(page) {
+  return page.evaluate(s => {
+    const t = document.querySelector(s + ' canvas'), d = t.getContext('2d').getImageData(t.width / 2, 0, t.width / 2, t.height).data;
+    let n = 0;
+    for (let i = 0; i < d.length; i += 4) if (Math.abs(d[i] - 28) <= 4 && Math.abs(d[i + 1] - 28) <= 4 && Math.abs(d[i + 2] - 28) <= 4) n++;
+    return n;
+  }, BIGLIETTO);
+}
+
+controllo('il biglietto di soli auguri, senza donazione: l’indirizzo del sito e il codice QR dei progetti al posto della frase sul dono', async () => {
+  const p = await apri(REGALO);
+  try {
+    await p.page.locator(BIGLIETTO).waitFor({ state: 'visible', timeout: 5000 });
+    assert.ok(await p.page.isChecked(BIGLIETTO + ' input[name="tipo"][value="dono"]'), 'il biglietto già scelto è quello della donazione');
+    await p.page.fill('#mb-per', 'Anna');
+    await p.page.fill('#mb-da', 'Marco');
+    await p.page.fill('#mb-messaggio', 'Un abbraccio');
+    await p.page.waitForFunction(s => /Marco/.test(document.querySelector(s + ' canvas').getAttribute('aria-label')), BIGLIETTO);
+    const scuriDono = await scuriNellaTela(p.page);
+    await p.page.check(BIGLIETTO + ' input[name="tipo"][value="auguri"]', { force: true });
+    await p.page.waitForFunction(s => /Scopri i nostri progetti/.test(document.querySelector(s + ' canvas').getAttribute('aria-label')), BIGLIETTO);
+    const qr = p.page.locator(BIGLIETTO + ' img.qr');
+    assert.ok(await qr.evaluate(i => i.complete && i.naturalWidth > 0), 'l’immagine del codice QR non si carica');
+    await p.page.waitForTimeout(300);
+    let detto = await dettoDalBiglietto(p.page);
+    for (const parte of ['Buon Natale', 'Per Anna', 'Un abbraccio', 'Marco', 'Scopri i nostri progetti', 'www.larosadoro.org', 'codice QR', 'Fondazione La Rosa d’Oro'])
+      assert.ok(detto.includes(parte), 'il biglietto di auguri non dice «' + parte + '»: ' + detto);
+    assert.ok(!/donazione|regalo/i.test(detto), 'il biglietto di soli auguri non parla di donazione né di regalo: ' + detto);
+    assert.strictEqual(detto.split('larosadoro.org').length - 1, 1, 'l’indirizzo del sito una volta sola: ' + detto);
+    assert.ok(await scuriNellaTela(p.page) > scuriDono + 8000, 'il codice QR non è disegnato sul biglietto');
+    const pdf = await scarica(p.page, BIGLIETTO + ' button[type="submit"]');
+    assert.strictEqual(pdf.nome, 'auguri-per-anna.pdf');
+    assert.strictEqual(pdf.dati.toString('latin1').match(/\/Title \(([^)]*)\)/)[1], 'Biglietto di auguri');
+    const jpg = await scarica(p.page, BIGLIETTO + ' button[data-formato="jpg"]');
+    assert.strictEqual(jpg.nome, 'auguri-per-anna.jpg');
+    /* per le feste e l’anno nuovo lo stesso; in ricordo di una persona no: la scelta sparisce e torna la donazione in memoria */
+    await p.page.selectOption('#mb-occasione', 'anno-nuovo');
+    await p.page.waitForFunction(s => /Felice anno nuovo/.test(document.querySelector(s + ' canvas').getAttribute('aria-label')), BIGLIETTO);
+    assert.ok((await dettoDalBiglietto(p.page)).includes('Scopri i nostri progetti'), 'anche il biglietto dell’anno nuovo può essere di soli auguri');
+    await p.page.selectOption('#mb-occasione', 'ricordo');
+    await p.page.locator(BIGLIETTO + ' fieldset.tipo').waitFor({ state: 'hidden', timeout: 2000 });
+    assert.ok(await p.page.isChecked(BIGLIETTO + ' input[name="tipo"][value="dono"]'), 'in ricordo di una persona il biglietto è una donazione in memoria');
+    await p.page.waitForFunction(s => /donazione in memoria/.test(document.querySelector(s + ' canvas').getAttribute('aria-label')), BIGLIETTO);
+    detto = await dettoDalBiglietto(p.page);
+    assert.ok(!detto.includes('Scopri i nostri progetti'), 'il biglietto in ricordo non porta il codice dei progetti: ' + detto);
+    await p.page.selectOption('#mb-occasione', 'natale');
+    await p.page.locator(BIGLIETTO + ' fieldset.tipo').waitFor({ state: 'visible', timeout: 2000 });
+    assert.deepStrictEqual(p.allo, [], 'niente deve partire verso lo script del foglio');
+    assert.deepStrictEqual(p.fuori, [], 'niente deve partire verso altri siti');
+    assert.deepStrictEqual(p.errori, []);
+    assert.deepStrictEqual(await p.violazioni(), [], 'il biglietto di auguri viola la regola di sicurezza della pagina');
+  } finally { await p.chiudi(); }
+});
+
+/* la cartolina di condoglianze dei funerali non ha la scelta dei soli auguri: è sempre una donazione in memoria */
+controllo('la cartolina di condoglianze non diventa mai un biglietto di soli auguri', async () => {
+  const p = await apri(FUNERALI);
+  try {
+    await p.page.locator(BIGLIETTO).waitFor({ state: 'visible', timeout: 5000 });
+    assert.strictEqual(await p.page.locator(BIGLIETTO + ' input[name="tipo"]').count(), 0, 'ai funerali la scelta dei soli auguri non c’è');
+    assert.ok(!(await dettoDalBiglietto(p.page)).includes('Scopri i nostri progetti'));
+    assert.deepStrictEqual(p.errori, []);
+  } finally { await p.chiudi(); }
+});
+
+/* ---- il pulsante di Natale nella home (Dacia, 25.11.2026): porta ai regali solidali e ai biglietti; le palline dell’abete
+        luccicano quando si apre la pagina e poi si fermano da sole (mai elementi insistenti: Elias, 4.11), di nuovo quando
+        ci si passa sopra; per chi chiede al telefono o al computer meno movimento, niente luccichio ---- */
+const HOME = 'index.html';
+
+controllo('il pulsante di Natale in home: porta ai regali solidali, luccica poco e si ferma da solo, e sul telefono sta nello schermo', async () => {
+  for (const schermo of [{ width: 320, height: 640 }, { width: 390, height: 844 }, { width: 1280, height: 800 }]) {
+    const p = await apri(HOME, { schermo });
+    try {
+      const pulsante = p.page.locator('a.natale');
+      assert.strictEqual(await pulsante.count(), 1, 'in home ci vuole un pulsante di Natale');
+      assert.ok(/(^|\/)dona\/regali-solidali\/(index\.html)?$/.test(await pulsante.getAttribute('href')), 'il pulsante porta ai regali solidali');
+      assert.ok(/Natale/.test(await pulsante.textContent()), 'il pulsante parla di Natale');
+      assert.ok(await pulsante.isVisible(), schermo.width + ' px: il pulsante non si vede');
+      const m = await p.page.evaluate(() => {
+        const r = document.querySelector('a.natale').getBoundingClientRect();
+        const animazioni = document.querySelector('a.natale').getAnimations({ subtree: true }).map(a => {
+          const t = a.effect.getComputedTiming();
+          return { fine: t.endTime, volte: t.iterations };
+        });
+        return { largo: document.documentElement.scrollWidth, basso: r.bottom, alto: r.height, animazioni };
+      });
+      assert.ok(m.largo <= schermo.width, schermo.width + ' px: la pagina si allarga a ' + m.largo);
+      assert.ok(m.basso <= schermo.height, schermo.width + ' px: il pulsante non si vede appena si apre la pagina (finisce a ' + Math.round(m.basso) + ' px)');
+      assert.ok(m.alto >= 44, schermo.width + ' px: il pulsante è troppo piccolo da toccare');
+      assert.ok(m.animazioni.length > 0, 'le palline dell’abete non luccicano');
+      for (const a of m.animazioni) {
+        assert.ok(Number.isFinite(a.volte) && Number.isFinite(a.fine), 'il luccichio non si deve ripetere all’infinito');
+        assert.ok(a.fine <= 5000, 'il luccichio deve finire entro cinque secondi, non dura ' + a.fine + ' ms');
+      }
+      if (schermo.width === 1280) {
+        await p.page.waitForTimeout(5200);
+        const ferme = await p.page.evaluate(() => document.querySelector('a.natale').getAnimations({ subtree: true }).filter(a => a.playState === 'running').length);
+        assert.strictEqual(ferme, 0, 'dopo cinque secondi il luccichio è ancora acceso');
+        await pulsante.hover();
+        const ancora = await p.page.evaluate(() => document.querySelector('a.natale').getAnimations({ subtree: true }).filter(a => a.playState === 'running').length);
+        assert.ok(ancora > 0, 'passandoci sopra, le palline luccicano di nuovo');
+      }
+      assert.deepStrictEqual(p.errori, []);
+      assert.deepStrictEqual(await p.violazioni(), [], 'il pulsante di Natale viola la regola di sicurezza della pagina');
+    } finally { await p.chiudi(); }
+  }
+  /* chi ha chiesto meno movimento vede l’abete fermo */
+  const p = await apri(HOME);
+  try {
+    await p.page.emulateMedia({ reducedMotion: 'reduce' });
+    await p.page.reload();
+    const n = await p.page.evaluate(() => document.querySelector('a.natale').getAnimations({ subtree: true }).length);
+    assert.strictEqual(n, 0, 'con «riduci il movimento» l’abete non luccica');
+  } finally { await p.chiudi(); }
+});
+
 /* ---- la pergamena delle bomboniere solidali, e quella in ricordo nella pagina dei funerali: quattro per foglio A4 ---- */
 
 const BOMBONIERE = 'dona/bomboniere-solidali/index.html';

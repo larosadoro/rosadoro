@@ -722,7 +722,7 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
     if (senza) senza.hidden = true;
     modulo.hidden = false;
 
-    var L = tela.width, A = tela.height;
+    var L = tela.width, A = tela.height, largoTesto = 900;
     var AVORIO = '#FAF6EE', ANTRACITE = '#1C1C1C', ORO = '#B88F3D', ORO_SCURO = '#8D6E2A';
     /* i caratteri e l’altezza delle loro righe; la pergamena si stampa più piccola (quattro per foglio), e ha il corpo più grande */
     var STILE = pergamena
@@ -731,7 +731,8 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
           firma: ['italic 400 60px "Cormorant Garamond"', 70], piede: ['500 24px "Instrument Sans"', 0] }
       : { saluto: ['300 italic 112px "Cormorant Garamond"', 118], per: ['400 66px "Cormorant Garamond"', 76],
           corpo: ['400 35px "Instrument Sans"', 54], messaggio: ['italic 400 %px "Cormorant Garamond"', 0],
-          firma: ['italic 400 60px "Cormorant Garamond"', 70], piede: ['500 21px "Instrument Sans"', 0] };
+          firma: ['italic 400 60px "Cormorant Garamond"', 70], piede: ['500 21px "Instrument Sans"', 0],
+          invito: ['italic 400 54px "Cormorant Garamond"', 60], sito: ['500 32px "Instrument Sans"', 40] };
     var el = modulo.elements;
     var esito = modulo.querySelector('.esito');
     var occasione = el.occasione;
@@ -739,6 +740,10 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
     var ricordo = el.ricordo, etichettaRicordo = modulo.querySelector('label[for="mb-ricordo"]');
     function opzione() { return occasione.options[occasione.selectedIndex]; }
     function inRicordo() { return !pergamena && opzione().hasAttribute('data-saluto-nome'); }
+    /* il biglietto di soli auguri, senza donazione (Dacia, 25.11.2026): al posto della frase sulla donazione «Scopri i nostri
+       progetti», l’indirizzo del sito e il codice QR della pagina dei progetti. In ricordo di una persona non si sceglie */
+    var sceltaTipo = modulo.querySelector('fieldset.tipo'), qr = modulo.querySelector('img.qr');
+    function soloAuguri() { return !!sceltaTipo && !inRicordo() && scelto('tipo') === 'auguri'; }
 
     /* l’apostrofo tipografico anche in ciò che scrive chi prepara il cartoncino (regole di qualità, punto 1) */
     function pulito(v) {
@@ -771,13 +776,15 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
       var corpo = voi ? 'data-corpo-voi' : 'data-corpo-te';
       var per = minuscola(pulito(el.per.value).replace(/^per\s+/i, ''));
       var nome = inRicordo() ? pulito(ricordo.value) : '';
+      var auguri = soloAuguri();
       return {
         saluto: nome ? o.getAttribute('data-saluto-nome').replace('{nome}', nome) : o.getAttribute('data-saluto').replace('{te}', voi ? 'voi' : 'te'),
         per: per ? 'Per ' + per : '',
-        corpo: o.getAttribute(corpo) || modulo.getAttribute(corpo),
+        corpo: auguri ? '' : o.getAttribute(corpo) || modulo.getAttribute(corpo),
+        auguri: auguri ? { riga: modulo.getAttribute('data-auguri-riga'), sito: modulo.getAttribute('data-auguri-sito') } : null,
         messaggio: pulito(el.messaggio.value),
         firma: pulito(el.da.value),
-        piede: modulo.getAttribute('data-piede')
+        piede: modulo.getAttribute(auguri ? 'data-auguri-piede' : 'data-piede')
       };
     }
 
@@ -807,6 +814,27 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
       }
     }
 
+    /* il codice QR (img/qr-progetti.svg, un quadratino per modulo) con un numero intero di pixel per modulo, così resta nitido
+       anche stampato o mandato come immagine compressa; accanto, «Scopri i nostri progetti» e l’indirizzo del sito */
+    var QR_MODULO = 7, QR_LATO = 29 * QR_MODULO;
+    function codiceQR(a, x, y) {
+      if (qr && qr.complete && qr.naturalWidth) {
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(qr, x, y, QR_LATO, QR_LATO);
+        ctx.imageSmoothingEnabled = true;
+      }
+      var tx = x + QR_LATO + 44;
+      ctx.textBaseline = 'alphabetic';
+      ctx.font = STILE.invito[0]; ctx.fillStyle = ANTRACITE;
+      var parole = righe(a.riga, largoTesto - QR_LATO - 44);
+      var alto = parole.length * STILE.invito[1] + 22 + STILE.sito[1];
+      var ty = y + (QR_LATO - alto) / 2;
+      parole.forEach(function (r) { ctx.fillText(r, tx, ty + STILE.invito[1] * 0.78); ty += STILE.invito[1]; });
+      ty += 22;
+      ctx.font = STILE.sito[0]; ctx.fillStyle = ORO_SCURO;
+      spaziato(a.sito, tx, ty + STILE.sito[1] * 0.78, 2);
+    }
+
     function disegna() {
       var t = testi();
       ctx.fillStyle = AVORIO;
@@ -833,7 +861,7 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
         ctx.drawImage(immagine, 380 - w * scala / 2, A / 2 - h * scala / 2, w * scala, h * scala);
       }
       /* il testo, a destra: si misura, poi si centra in altezza */
-      var x = 790, largo = 900, blocchi = [];
+      var x = 790, largo = largoTesto, blocchi = [];
       function aggiungi(nome, testo, colore) {
         ctx.font = STILE[nome][0];
         righe(testo, largo).forEach(function (r) { blocchi.push({ font: STILE[nome][0], colore: colore, testo: r, alto: STILE[nome][1] }); });
@@ -864,7 +892,11 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
         blocchi.push({ spazio: 34 });
         aggiungi('firma', t.firma, ORO_SCURO);
       }
-      if (primaFrase) {
+      if (primaFrase && t.auguri) {
+        /* il biglietto di soli auguri: il codice QR, e accanto «Scopri i nostri progetti» e l’indirizzo del sito */
+        blocchi.push({ spazio: t.messaggio || t.firma ? 50 : 0 });
+        blocchi.push({ qr: true, alto: QR_LATO });
+      } else if (primaFrase) {
         blocchi.push({ spazio: t.messaggio || t.firma ? 44 : 0 });
         aggiungi('corpo', t.corpo, 'rgba(28,28,28,.8)');
       }
@@ -873,6 +905,7 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
       ctx.textBaseline = 'alphabetic';
       blocchi.forEach(function (b) {
         if (b.spazio) { y += b.spazio; return; }
+        if (b.qr) { codiceQR(t.auguri, x, Math.round(y)); y += b.alto; return; }
         ctx.font = b.font; ctx.fillStyle = b.colore;
         ctx.fillText(b.testo, x, y + b.alto * 0.78);
         y += b.alto;
@@ -880,8 +913,9 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
       ctx.font = STILE.piede[0]; ctx.fillStyle = ORO_SCURO;
       spaziato(t.piede.toUpperCase(), x, A - 112, 3);
       /* per chi usa un lettore di schermo, il cartoncino in parole */
+      var invito = t.auguri ? t.auguri.riga + ': ' + t.auguri.sito + ', con il codice QR della pagina dei progetti' : '';
       tela.setAttribute('aria-label', (pergamena ? 'Anteprima della pergamena: ' : 'Anteprima del biglietto: ') +
-        (primaFrase ? [t.saluto, t.per, t.messaggio, t.firma, t.corpo, t.piede] : [t.saluto, t.per, t.corpo, t.messaggio, t.firma, t.piede])
+        (primaFrase ? [t.saluto, t.per, t.messaggio, t.firma, t.corpo || invito, t.piede] : [t.saluto, t.per, t.corpo, t.messaggio, t.firma, t.piede])
         .filter(Boolean).map(function (s) { return /[.!?…»]$/.test(s) ? s : s + '.'; }).join(' '));
     }
 
@@ -892,12 +926,19 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
       (window.requestAnimationFrame || setTimeout)(function () { inAttesa = false; disegna(); });
     }
     if (!pergamena) {
-      var campoRicordo = function () { ricordo.hidden = etichettaRicordo.hidden = !inRicordo(); };
+      var campoRicordo = function () {
+        ricordo.hidden = etichettaRicordo.hidden = !inRicordo();
+        if (sceltaTipo) {
+          sceltaTipo.hidden = inRicordo();
+          if (inRicordo()) modulo.querySelector('input[name="tipo"][value="dono"]').checked = true;
+        }
+      };
       occasione.addEventListener('change', function () {
         if (opzione().getAttribute('data-persone') === 'voi') modulo.querySelector('input[name="persone"][value="voi"]').checked = true;
-        /* l’abete è del Natale (9.11): per un’altra occasione, se era già scelto, lascia il posto alla candela */
+        /* l’abete è delle feste (Natale 9.11; le feste e l’anno nuovo, Dacia 25.11): per un’altra occasione, se era già
+           scelto, lascia il posto alla candela */
         var abete = modulo.querySelector('input[name="immagine"][value="abete"]');
-        if (abete && abete.checked && occasione.value !== 'natale') modulo.querySelector('input[name="immagine"][value="candela"]').checked = true;
+        if (abete && abete.checked && !opzione().hasAttribute('data-abete')) modulo.querySelector('input[name="immagine"][value="candela"]').checked = true;
         campoRicordo();
       });
       campoRicordo();
@@ -910,6 +951,7 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
       Promise.all(Object.keys(STILE).map(function (k) { return document.fonts.load(STILE[k][0].replace('%', '50')); }))
         .then(ridisegna, ridisegna);
     }
+    if (qr && !qr.complete) qr.addEventListener('load', ridisegna);
     var tavole = modulo.querySelectorAll('.immagine img');
     for (var i = 0; i < tavole.length; i++) if (!tavole[i].complete) tavole[i].addEventListener('load', ridisegna);
 
@@ -928,9 +970,10 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
         return opzione().getAttribute('data-file') + (nome ? '-di-' + nome : '') + '.' + estensione;
       }
       var per = corto(pulito(el.per.value).replace(/^per\s+/i, ''));
-      return 'regalo-solidale' + (per ? '-per-' + per : '') + '.' + estensione;
+      return (soloAuguri() ? modulo.getAttribute('data-auguri-file') : 'regalo-solidale') + (per ? '-per-' + per : '') + '.' + estensione;
     }
     function titolo() {
+      if (soloAuguri()) return modulo.getAttribute('data-auguri-titolo');
       return (pergamena ? modulo : opzione()).getAttribute('data-titolo') || 'Regalo solidale';
     }
     function jpeg() {

@@ -28,6 +28,13 @@ NOTIZIE = dict(
     dopo_la_dedica="Se vuoi, possiamo raccontarti ogni tanto che cosa fa la Fondazione: i progetti che nascono, gli incontri, il giardino che cresce.",
 )
 
+# Il pulsante di Natale nella home (Dacia, 25.11.2026: «un pulsante carino tipo abete con palline luccicanti»): c’è con NATALE
+# acceso, prima del «Benvenuti», e porta ai regali solidali e ai biglietti. Bozza di Claude, da approvare con Elias e Dacia.
+PULSANTE_NATALE = dict(
+    titolo="Regali e biglietti di Natale",
+    vai="Scopri",
+)
+
 # ---------------------------------------------------------------- la sezione
 TESTI["in-memoria"] = dict(
     sotto="Modi concreti per onorare chi non c'è più e sostenere chi resta.",
@@ -1378,6 +1385,7 @@ TESTI["dona/regali-solidali"] = dict(
 <p class="nota">Sulla pagina di pagamento la cifra va da 5 a 5.000 euro. Se vuoi, lì scegli anche l’ambito e aggiungi il codice fiscale, per trovare la donazione nella dichiarazione precompilata.</p>
 {/se-stripe}<p>Per il bonifico usa le coordinate della pagina <a class="link" href="{→dona}">Dona</a>, con la causale «Regalo solidale».</p>
 <h3 id="biglietto">Il biglietto</h3>
+<p>Vuoi mandare solo gli auguri, senza donare? Scegli «solo auguri»: al posto della frase sulla donazione il biglietto porta l’indirizzo del sito e un codice QR per scoprire i nostri progetti.</p>
 {biglietto}
 <h3>Che cosa diventa il tuo regalo</h3>
 <p>La Fondazione La Rosa d’Oro è un ente del Terzo settore nato a Milano il 26 febbraio 2026, per coltivare la terra, curare le persone e accompagnarle fino alla fine della vita. Tra i primi progetti avviati ci sono <a class="link" href="{→eventi-e-formazione/formazione-accompagnamento}#quietude-italia-2027">Quietude Italia</a>, la formazione per accompagnare nel fine vita, e <a class="link" href="https://lux.larosadoro.org/" rel="noopener">Lux</a>, per un rapporto consapevole con il digitale.</p>
@@ -1427,6 +1435,8 @@ BIGLIETTO = dict(
     fuori_stagione="compleanno",
     occasioni=(
         ("natale", "Natale", "Buon Natale"),
+        ("feste", "Le feste", "Buone feste"),                       # le feste e l’anno nuovo (Dacia, 25.11), con l’abete
+        ("anno-nuovo", "L’anno nuovo", "Felice anno nuovo"),
         ("compleanno", "Un compleanno", "Buon compleanno"),
         ("nascita", "Una nascita", "Una vita nuova"),
         ("matrimonio", "Un matrimonio", "Viva gli sposi", "voi"),     # il quarto: il biglietto si rivolge già «a più persone»
@@ -1461,6 +1471,22 @@ BIGLIETTO = dict(
     immagini=(("candela", "La candela"), ("albero", "L’albero"), ("fiore", "Il fiore"), ("rosa", "La rosa")),
     # da novembre all’Epifania (NATALE acceso) l’abete con la stella al posto dell’albero tondo, già scelto (Elias, 9.11)
     immagini_natale=(("abete", "L’abete"), ("candela", "La candela"), ("fiore", "Il fiore"), ("rosa", "La rosa")),
+    # le occasioni in cui l’abete resta scelto; per le altre lascia il posto alla candela
+    con_abete=("natale", "feste", "anno-nuovo"),
+    # il biglietto di soli auguri, senza donazione (Dacia, 25.11: «ci servono per pubblicità»; bozza di Claude, da approvare):
+    # tutto uguale, ma al posto della frase sulla donazione «Scopri i nostri progetti», l’indirizzo del sito e il codice QR
+    # che porta alla pagina dei progetti (sito/img/qr-progetti.svg, da sorgenti/qr-progetti.py). In ricordo di una persona
+    # la scelta non c’è: quel biglietto è sempre una donazione in memoria
+    auguri=dict(
+        domanda="Il biglietto",
+        dono="accompagna una donazione",
+        solo="solo auguri, senza donazione",
+        riga="Scopri i nostri progetti",
+        sito="www.larosadoro.org",
+        piede="Fondazione La Rosa d’Oro ETS",
+        file="auguri",
+        titolo="Biglietto di auguri",
+    ),
     corpo_te="Questo regalo è una donazione alla Fondazione La\u00a0Rosa\u00a0d’Oro, fatta pensando a te. Diventerà terra coltivata, cura, accompagnamento.",
     corpo_voi="Questo regalo è una donazione alla Fondazione La\u00a0Rosa\u00a0d’Oro, fatta pensando a voi. Diventerà terra coltivata, cura, accompagnamento.",
     piede="Fondazione La Rosa d’Oro ETS · larosadoro.org",

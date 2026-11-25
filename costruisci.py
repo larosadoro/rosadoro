@@ -13,7 +13,7 @@ pronta. Serve perché un sito di cinquanta pagine senza database ha lo stesso
 header in cinquanta file, e una modifica al menu va fatta una volta sola, qui.
 """
 import os, re, shutil, datetime, subprocess, hashlib, base64
-from testi_pagine import TESTI, DESCRIZIONI, TITOLI, NOTIZIE, BIGLIETTO, PERGAMENA
+from testi_pagine import TESTI, DESCRIZIONI, TITOLI, NOTIZIE, BIGLIETTO, PERGAMENA, PULSANTE_NATALE
 import json
 from html import unescape
 
@@ -569,11 +569,33 @@ def lastra_foto(da):
                 % risorsa(da, "img/foto/tavolo-spighe-rosa.jpg"))
     return emblema() + '<span class="didascalia">La fotografia entra qui</span>'
 
+# le palline dell’abete del pulsante di Natale: le dodici del biglietto (azione-abete.svg, Elias 9.11), più grandi perché si vedano
+PALLINE_NATALE = ((104, 66), (93, 85), (97, 101), (116, 108), (74, 126), (96, 127), (91, 145), (118, 151), (62, 168), (86, 168), (116, 172), (140, 167))
+
+def pulsante_natale(da):
+    """il pulsante di Natale nella home (Dacia, 25.11.2026), con NATALE acceso: l’abete inciso del biglietto, con la stella e le
+    dodici palline d’oro, e accanto le parole. Le palline si accendono una dopo l’altra quando si apre la pagina e poi restano
+    ferme; passandoci sopra luccicano ancora una volta. Niente che lampeggi o si ripeta: lo fa stile.css, e con «riduci il
+    movimento» l’abete è fermo. Il pulsante sparisce con NATALE spento"""
+    if not NATALE:
+        return ""
+    palline = "".join('<g><circle cx="%d" cy="%d" r="5"/></g>' % c for c in PALLINE_NATALE)
+    abete = ('<svg class="abete" viewBox="38 20 124 178" width="56" height="80" aria-hidden="true" focusable="false">'
+             '<path class="stella" d="M100 25l3 8.6 9.1.2-7.3 5.5 2.6 8.7L100 42.8l-7.5 5.2 2.6-8.7-7.3-5.5 9.1-.2z" stroke-linejoin="round"/>'
+             '<g class="rami" fill="none" stroke-linecap="round" stroke-linejoin="round">'
+             '<path d="M100 50c-6 16-14 30-26 44q13 6 26 0q13 6 26 0c-12-14-20-28-26-44"/>'
+             '<path d="M82 94c-6 14-12 26-24 40q15 7 30 0q12 7 24 0q15 7 30 0c-12-14-18-26-24-40"/>'
+             '<path d="M70 136c-6 14-14 26-28 40q15 7 30 0q14 7 28 0q14 7 28 0q15 7 30 0c-14-14-22-26-28-40"/>'
+             '<path d="M95 181v9M105 181v9M64 190h72"/></g>'
+             '<g class="palline">%s</g></svg>' % palline)
+    return ('<a class="natale" href="%s">%s<span class="parole"><span class="titolo">%s</span><span class="vai">%s</span></span></a>'
+            % (verso(da, "dona/regali-solidali"), abete, sfuggi(PULSANTE_NATALE["titolo"]), sfuggi(PULSANTE_NATALE["vai"])))
+
 def hero(da, p, sotto, classe_sotto="sotto"):
     tipo = p["hero"]
     occhiello = '<p class="occhiello">%s</p>' % sfuggi(p["occhiello"])
     if tipo == "casa":                             # la home saluta (Dacia ed Elias, 3.10): un «Benvenuti» discreto al posto della riga istituzionale, senza punto (Dacia, 31.10)
-        occhiello = '<p class="saluto">Benvenuti</p>'
+        occhiello = pulsante_natale(da) + '<p class="saluto">Benvenuti</p>'   # da novembre all’Epifania, prima il pulsante di Natale
     fonte = ('<p class="fonte">%s</p>' % sfuggi(p["art"])) if p.get("art") else ""
     testo = '%s%s<h1>%s</h1><hr class="filo"><p class="%s">%s</p>' % (occhiello, fonte, sfuggi(p["titolo"]), classe_sotto, sotto)
     if tipo == "avorio":
@@ -731,9 +753,11 @@ def biglietto(da, in_ricordo=False):
     tutte = BIGLIETTO["occasioni"]
     if in_ricordo:
         tutte, scelta = [o for o in tutte if o[0] == ricordo["occasione"]], ricordo["occasione"]
-    occasioni = "".join('<option value="%s" data-saluto="%s"%s%s%s>%s</option>'
+    # data-abete: le occasioni delle feste, in cui l’abete resta scelto (Natale, le feste, l’anno nuovo: Dacia, 25.11)
+    occasioni = "".join('<option value="%s" data-saluto="%s"%s%s%s%s>%s</option>'
                         % (o[0], sfuggi(o[2]), ' data-persone="voi"' if o[3:] == ("voi",) else "",
-                           con_nome if o[0] == ricordo["occasione"] else "", " selected" if o[0] == scelta else "", sfuggi(o[1]))
+                           con_nome if o[0] == ricordo["occasione"] else "", " data-abete" if o[0] in BIGLIETTO["con_abete"] else "",
+                           " selected" if o[0] == scelta else "", sfuggi(o[1]))
                         for o in tutte)
     if in_ricordo:
         immagini = scelta_immagini(da, ricordo["immagini"]) + foto_giardino(da, ricordo.get("foto"))
@@ -741,10 +765,22 @@ def biglietto(da, in_ricordo=False):
         immagini = scelta_immagini(da, BIGLIETTO["immagini_natale"] if NATALE else BIGLIETTO["immagini"])   # a Natale l’abete (9.11)
     nome = "la cartolina" if in_ricordo else "il biglietto"
     nascosta = " hidden" if in_ricordo else ""
+    # il biglietto di soli auguri (Dacia, 25.11): la scelta, i testi che prendono il posto della frase sulla donazione e il
+    # codice QR dei progetti, che sito.js disegna; la cartolina di condoglianze dei funerali non ce l’ha
+    a = BIGLIETTO["auguri"]
+    tipo, dati_auguri = "", ""
+    if not in_ricordo:
+        tipo = ('<fieldset class="scelta tipo"><legend>%s</legend>'
+                '<label class="consenso"><input type="radio" name="tipo" value="dono" checked> <span>%s</span></label>'
+                '<label class="consenso"><input type="radio" name="tipo" value="auguri"> <span>%s</span></label>'
+                '</fieldset>\n<img class="qr" src="%s" alt="" width="29" height="29" hidden>\n'
+                % (sfuggi(a["domanda"]), sfuggi(a["dono"]), sfuggi(a["solo"]), risorsa(da, "img/qr-progetti.svg")))
+        dati_auguri = (' data-auguri-riga="%s" data-auguri-sito="%s" data-auguri-piede="%s" data-auguri-file="%s" data-auguri-titolo="%s"'
+                       % tuple(sfuggi(a[k]) for k in ("riga", "sito", "piede", "file", "titolo")))
     return """<p class="nota" id="biglietto-senza-js">Per preparare %s serve un browser con JavaScript acceso.</p>
-<form class="modulo biglietto" id="modulo-biglietto" data-corpo-te="%s" data-corpo-voi="%s" data-piede="%s" hidden>
+<form class="modulo biglietto" id="modulo-biglietto" data-corpo-te="%s" data-corpo-voi="%s" data-piede="%s"%s hidden>
 <div class="campi">
-<label for="mb-occasione"%s>L’occasione</label>
+%s<label for="mb-occasione"%s>L’occasione</label>
 <select id="mb-occasione" name="occasione"%s>%s</select>
 <fieldset class="immagini"><legend>L’immagine</legend>%s</fieldset>
 <label for="mb-ricordo"%s>%s <span>facoltativo</span></label>
@@ -764,8 +800,8 @@ def biglietto(da, in_ricordo=False):
 <p class="pulsanti"><button type="submit" class="invia">Scarica il PDF</button><button type="button" class="scelta" data-formato="jpg">Scarica l’immagine</button><button type="button" class="scelta" data-formato="condividi" hidden>Manda</button></p>
 <p class="nota">%s</p>
 <p class="esito" role="status" tabindex="-1" hidden></p>
-</form>""" % (nome, sfuggi(BIGLIETTO["corpo_te"]), sfuggi(BIGLIETTO["corpo_voi"]), sfuggi(BIGLIETTO["piede"]),
-               nascosta, nascosta, occasioni, immagini,
+</form>""" % (nome, sfuggi(BIGLIETTO["corpo_te"]), sfuggi(BIGLIETTO["corpo_voi"]), sfuggi(BIGLIETTO["piede"]), dati_auguri,
+               tipo, nascosta, nascosta, occasioni, immagini,
                "" if in_ricordo else " hidden", sfuggi(ricordo["campo"]), sfuggi(ricordo["segnaposto"]), "" if in_ricordo else " hidden",
                sfuggi(ricordo["segnaposto_per"] if in_ricordo else "Per esempio: Anna, oppure i nostri clienti"),
                "La cartolina" if in_ricordo else "Il biglietto", "" if in_ricordo else " checked", " checked" if in_ricordo else "",
