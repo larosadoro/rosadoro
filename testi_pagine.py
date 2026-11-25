@@ -1494,7 +1494,7 @@ BIGLIETTO = dict(
         quattro="PDF quattro per foglio",
         file_piegato="-da-piegare",
         file_quattro="-quattro-per-foglio",
-        nota="Il PDF da piegare si stampa su un foglio A4, su un lato solo: piegalo a metà portando dietro la parte di sopra, poi ancora a metà con l’immagine davanti, e diventa un biglietto di 10,5\u00a0×\u00a014,8\u00a0cm, per una busta piccola (C6). Il PDF con quattro biglietti per foglio si taglia lungo le linee grigie.",
+        nota="Il PDF da piegare si stampa su un foglio A4, su un lato solo: piegalo a metà portando dietro la parte di sopra, poi ancora a metà con l’immagine davanti, e diventa un biglietto di 10,5\u00a0×\u00a014,8\u00a0cm, per una busta piccola (C6). Se vuoi scriverci dentro a mano, lascia vuoti «Per chi è», «Da parte di» e «Due righe tue». Il PDF con quattro biglietti per foglio si taglia lungo le linee grigie.",
     ),
     corpo_te="Questo regalo è una donazione alla Fondazione La\u00a0Rosa\u00a0d’Oro, fatta pensando a te. Diventerà terra coltivata, cura, accompagnamento.",
     corpo_voi="Questo regalo è una donazione alla Fondazione La\u00a0Rosa\u00a0d’Oro, fatta pensando a voi. Diventerà terra coltivata, cura, accompagnamento.",
