@@ -898,7 +898,7 @@ TESTI["lasciti/la-liberta-del-come"] = dict(
 <p>Consigliamo inoltre di specificare:</p>
 <ul class="stelle">
 <li>dove desideri soggiornare durante le cure di fine vita: in un hospice (puoi scrivere anche quale), in una struttura di cure palliative, a casa con o senza cure palliative, o in un altro luogo — per esempio quanto previsto dal progetto «Pianeta Verde», quando sarà attivo;</li>
-<li>se richiedi un'assistenza spirituale: puoi indicare anche la Fondazione, e l’équipe del <a class="link" href="{→progetti/da-sostenere}#ponte-arcobaleno">Ponte Arcobaleno</a> quando sarà attiva;</li>
+<li>se richiedi un'assistenza spirituale: puoi indicare anche la Fondazione, e l’équipe del <a class="link" href="{→progetti/da-sostenere}#ponte-arcobaleno">Ponte Arcobaleno</a>;</li>
 <li>se consenti qualsiasi visitatore, o limiti l'accesso ad alcuni cari o a nessuno, nel momento del passaggio della soglia e nelle settimane che lo precedono.</li>
 </ul>
 <p>Se una malattia cronica, progressiva e invalidante è già presente, lo strumento complementare è la <strong>Pianificazione condivisa delle cure</strong> (art. 5 della stessa legge): un dialogo continuativo tra il paziente, il medico curante e, se lo desidera, i familiari o il fiduciario, per definire insieme un percorso di cura proporzionato alle fasi della malattia.</p>
@@ -1811,7 +1811,7 @@ TESTI["progetti"] = dict(
     corpo="""
 <p>La Rosa d’Oro è una fondazione del Terzo settore, nata il 26 febbraio 2026. Lo statuto la costituisce per avere progetti propri e per sostenere quelli di altre realtà che ne condividono la visione: nella cura delle persone, nel lavoro della terra, nell’accompagnamento al fine vita, nel sostegno ai giovani.</p>
 <p>Qui i progetti sono ordinati secondo il loro cammino: da avviare, quando cercano persone e competenze; da sostenere, quando raccolgono i fondi o cercano collaboratori; in corso, quando sono finanziati e già al lavoro; realizzati, quando sono conclusi e operativi.</p>
-<p>Tra i progetti della Fondazione c’è già Lux, per un uso consapevole del digitale, dei social e dell’intelligenza artificiale, con il suo sito: <a class="link" href="https://lux.larosadoro.org/" rel="noopener">lux.larosadoro.org</a>. Sta nascendo <a class="link" href="{→progetti/da-sostenere}#ponte-arcobaleno">il Ponte Arcobaleno</a>, per accompagnare a casa propria chi si avvicina al fine vita. Gli altri li presenteremo qui a mano a mano che prendono forma. Se ne porti avanti uno che va nella nostra direzione, <a class="link" href="{→progetti/presenta-il-tuo-progetto}">presentacelo</a>.</p>
+<p>Tra i progetti della Fondazione c’è già Lux, per un uso consapevole del digitale, dei social e dell’intelligenza artificiale, con il suo sito: <a class="link" href="https://lux.larosadoro.org/" rel="noopener">lux.larosadoro.org</a>. C’è anche <a class="link" href="{→progetti/da-sostenere}#ponte-arcobaleno">il Ponte Arcobaleno</a>, che accompagna a casa propria chi si avvicina al fine vita. Gli altri li presenteremo qui a mano a mano che prendono forma. Se ne porti avanti uno che va nella nostra direzione, <a class="link" href="{→progetti/presenta-il-tuo-progetto}">presentacelo</a>.</p>
 """)
 
 TESTI["progetti/da-avviare"] = dict(
@@ -1825,11 +1825,21 @@ TESTI["progetti/da-avviare"] = dict(
 # a lei e a Elias il 23.11: refusi, «équipe» sempre con l’accento, i massaggi «per dare conforto» (un terapeuta olistico non è una
 # professione sanitaria e non può promettere di togliere il dolore) e le DAT che la persona scrive per sé (legge 219/2017).
 # Le risposte di Dacia del 24.11: «Da sostenere» (ha già persone pronte), la frase prudente sui costi, i due riquadri suoi.
+# L’indice in cima (Elias, 25.11; righe di Claude, provvisorie): una riga per progetto, che porta all’àncora del suo titolo.
+# Un progetto nuovo ci aggiunge la sua riga e il suo id. «Di che cosa ha bisogno» al posto di «quanto serve» (Elias, 25.11): questi progetti
+# restano sempre attivi e non hanno una cifra da raggiungere; per un progetto che ce l’ha, si dice nella sua scheda.
+# Le immagini accanto ai progetti (Dacia, 25.11): il marchio definitivo di Lux (23.11) e il doppio arcobaleno fotografato da Elias.
 TESTI["progetti/da-sostenere"] = dict(
-    sotto="Progetti pronti a partire, che raccolgono i fondi per farlo.",
+    sotto="Progetti che cercano fondi, persone e competenze per nascere e per durare.",
     corpo="""
-<p>Qui trovi i progetti che hanno un business plan e raccolgono i fondi per realizzarsi. Per ognuno diremo che cosa fa, quanto serve e come puoi sostenerlo: con una donazione, un fondo di memoria, un lascito o, per un’azienda, con una parte delle vendite o degli utili.</p>
-<h3>Lux: abitare il digitale, riscoprire il reale</h3>
+<p>Qui trovi i progetti che raccolgono i fondi per realizzarsi e per continuare nel tempo. Per ognuno diciamo che cosa fa, di che cosa ha bisogno e come puoi sostenerlo: con una donazione, un fondo di memoria, un lascito o, per un’azienda, con una parte delle vendite o degli utili.</p>
+<p>In questa pagina:</p>
+<ul class="stelle">
+<li><strong><a class="link" href="#lux">Lux</a></strong>: per un uso più consapevole del digitale, dei social e dell’intelligenza artificiale, a ogni età;</li>
+<li><strong><a class="link" href="#ponte-arcobaleno">Il Ponte Arcobaleno</a></strong>: un’équipe di medico, terapeuti olistici e volontari che accompagna a casa propria chi si avvicina al fine vita.</li>
+</ul>
+<h3 id="lux">Lux: abitare il digitale, riscoprire il reale</h3>
+{foto:LUX MARCHIO|Il marchio di Lux, un progetto della Fondazione La Rosa d’Oro ETS|ritratto}
 <p>Lux è il progetto della Fondazione per educare ad un uso più consapevole del digitale (i social, i giochi, l’intelligenza artificiale).</p>
 <p>È utile per le persone di ogni età, a cominciare dai più giovani, cui non si può negare l’accesso al digitale, ma si può facilitare un uso più sano e critico dello stesso. Tuttavia, a differenza di ciò che si pensa, la «pericolosità» e l’abuso del digitale non sono un tema esclusivamente adolescenziale: riguardano anche la fascia di età fra i 50 e gli 80 anni. Per questo desideriamo contribuire tramite corsi alla <em>media literacy</em>, ovvero la capacità di orientarsi tra servizi complessi, riconoscere le fake news ed evitare le truffe online (come il phishing bancario o i falsi messaggi), al fine di evitare quel divario di competenze (<em>digital divide</em>) che rende la realtà del virtuale non solo poco inclusiva, ma fonte di stress.</p>
 <p>Con un gruppo di esperti del settore vorremmo aiutarti a formarti un’opinione consapevole sull’IA e sulle sue implicazioni sociali ed etiche, partendo dalla sua storia e dalla sua evoluzione, per formulare previsioni pertinenti sulla sua traiettoria futura. Inoltre, secondo le tue necessità, potrai avere informazioni su quanto oggi si sa nelle neuroscienze sulle implicazioni dell’IA per l’apprendimento e per le facoltà cognitive.</p>
@@ -1837,6 +1847,7 @@ TESTI["progetti/da-sostenere"] = dict(
 <p>Le donazioni a Lux confluiscono in un fondo della Fondazione con una contabilità separata, perché restino tracciabili. Chi dona accende una luce simbolica, senza premi, classifiche né inviti a donare di nuovo. Si dona dal sito dedicato, <a class="link" href="https://lux.larosadoro.org/" rel="noopener">lux.larosadoro.org</a>, dove trovi tutte le informazioni aggiuntive.</p>
 <p>Se sei un esperto del settore (psicologo, docente universitario, informatico, formatore interessato al sociale), <a class="link" href="{→contatti}">scrivici</a> per un’eventuale collaborazione: siamo aperti a colloqui e interazioni.</p>
 <h3 id="ponte-arcobaleno">Il Ponte Arcobaleno: accompagnare a casa nel fine vita</h3>
+{foto:PONTE ARCOBALENO|Un doppio arcobaleno sul lago, fra le montagne|cielo}
 <p><strong>A chi si rivolge.</strong> Questo progetto è pensato per sostenere ed accompagnare persone che si stanno avvicinando al fine vita e che scelgono liberamente di vivere questo passaggio a casa propria.</p>
 <p><strong>Obiettivo.</strong> Fornire al paziente presso il suo domicilio un’équipe multidisciplinare per offrire aiuto nel fine vita, che comprenda un sostegno a corpo, anima e spirito. L’équipe è composta da un medico, da terapeuti olistici e da volontari formati, che si rendono disponibili ad andare a casa della persona che si trova nelle fasi terminali della malattia, a partire dai mesi o settimane precedenti e nel momento del passaggio. Il progetto prevede che la Fondazione si faccia carico dei costi dei professionisti.</p>
 <p><strong>In cosa consiste il sostegno offerto.</strong> Il gruppo si occupa dei bisogni esistenziali, emotivi e religiosi dei pazienti e delle loro famiglie, che affrontano la fase finale della vita. Tali équipe sostengono chiunque — credente o non credente — nel trovare pace, senso e una conclusione serena e degna del proprio percorso di vita.</p>
@@ -2015,7 +2026,7 @@ DESCRIZIONI.update({
     "professionisti/vitalizio-filantropico": "Per i professionisti: il vitalizio filantropico, un bene alla Fondazione in cambio di assistenza e cure garantite al cliente per tutta la vita.",
     # Progetti ed Eventi e formazione (21.10, bozza di Claude rivista da Elias)
     "progetti/da-avviare": "I progetti che nascono con la Fondazione La Rosa d’Oro e cercano persone, competenze e luoghi per partire.",
-    "progetti/da-sostenere": "I progetti della Fondazione La Rosa d’Oro che hanno un business plan e raccolgono i fondi per realizzarsi.",
+    "progetti/da-sostenere": "I progetti della Fondazione La Rosa d’Oro che raccolgono i fondi per realizzarsi: Lux, per il digitale consapevole, e il Ponte Arcobaleno, nel fine vita.",
     "progetti/in-corso": "I progetti in corso, finanziati o sostenuti dalla Fondazione La Rosa d’Oro, con le notizie su come procedono e su come vengono usati i fondi.",
     "progetti/realizzati": "I progetti conclusi o già operativi della Fondazione La Rosa d’Oro, ciascuno con il suo resoconto.",
     "eventi-e-formazione/eventi": "Incontri, seminari, laboratori e convegni della Fondazione La Rosa d’Oro e dei suoi partner, con la data, il luogo e il modo per partecipare.",
