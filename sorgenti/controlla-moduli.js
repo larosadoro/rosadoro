@@ -1326,9 +1326,9 @@ controllo('il regalo solidale: il biglietto si prepara nella pagina e si scarica
     assert.strictEqual(await p.page.inputValue('#mb-occasione'), 'natale', 'l’occasione già scelta è il Natale');
     /* a Natale l’abete al posto dell’albero tondo, già scelto (Elias, 9.11) */
     const tavole = await p.page.$$eval(BIGLIETTO + ' input[name="immagine"]:not([data-foto])', l => l.map(x => x.value));
-    /* e i disegni di Natale di Dacia (sei il 25.11, tre il 26.11), dopo l’abete e prima della candela */
+    /* e i disegni di Natale di Dacia (sei il 25.11, due il 26.11: l’albero dei pianeti no, Elias 26.11), dopo l’abete e prima della candela */
     assert.deepStrictEqual(tavole, ['abete', 'presepe', 'renna', 'babbo-natale', 'neve', 'stella-di-natale', 'orsetto',
-                                    'volpe-e-cicogna', 'albero-dei-pianeti', 'happy-new-year', 'candela', 'fiore', 'rosa'],
+                                    'volpe-e-cicogna', 'happy-new-year', 'candela', 'fiore', 'rosa'],
                            'a Natale il biglietto ha l’abete al posto dell’albero tondo e i disegni di Natale: ' + tavole);
     await p.page.waitForFunction(s => [...document.querySelectorAll(s + ' input[name="immagine"] + img')].every(i => i.complete && i.naturalWidth > 0), BIGLIETTO);
     assert.strictEqual(await p.page.inputValue(BIGLIETTO + ' input[name="immagine"]:checked'), 'abete', 'a Natale l’immagine già scelta è l’abete');
@@ -1453,9 +1453,9 @@ controllo('i biglietti delle feste: Buone feste e Felice anno nuovo, con l’abe
     assert.strictEqual(await p.page.inputValue(BIGLIETTO + ' input[name="immagine"]:checked'), 'candela',
                        'per un compleanno l’abete lascia il posto alla candela');
     /* così anche gli altri disegni di Natale (Dacia, 25.11 e 26.11): l’orsetto col cappello non va per un compleanno */
-    for (const disegno of ['presepe', 'renna', 'babbo-natale', 'neve', 'stella-di-natale', 'orsetto', 'volpe-e-cicogna', 'albero-dei-pianeti', 'happy-new-year']) {
+    for (const disegno of ['presepe', 'renna', 'babbo-natale', 'neve', 'stella-di-natale', 'orsetto', 'volpe-e-cicogna', 'happy-new-year']) {
       await p.page.selectOption('#mb-occasione', 'natale');
-      /* si tocca il riquadro del disegno, come chi sceglie: con tredici disegni gli ultimi stanno sotto la barra in fondo
+      /* si tocca il riquadro del disegno, come chi sceglie: con dodici disegni gli ultimi stanno sotto la barra in fondo
          allo schermo, e la casella nascosta, toccata a forza, finirebbe sotto la barra */
       await p.page.locator(BIGLIETTO + ' label.immagine', { has: p.page.locator('input[value="' + disegno + '"]') }).click();
       await p.page.selectOption('#mb-occasione', 'feste');

@@ -154,10 +154,12 @@ Prima di tutto leggi `LEGGIMI.txt` e `REGOLE-DI-QUALITA.txt`.
   piegato in quattro: 10,5 × 14,8 cm, l’interno capovolto sul foglio) e «quattro per foglio», come la pergamena; la cartolina
   dei funerali no. Lo controlla `controlla-moduli.js`, anche guardando dove cadono le facce del foglio da piegare.
   A Natale, dopo l’abete, il biglietto offre i sei disegni di Natale chiesti da Dacia (presepe, renna, Babbo Natale, fiocco
-  di neve, stella di Natale, orsetto, 25.11) e altri tre (26.11: la volpe e la cicogna, l’albero dei pianeti, cioè l’albero di
-  Natale di Steiner con i suoi segni e i pianeti su una mezza lemniscata, «Happy New Year» con pigne, melograni, dodecaedro e pentacolo), incisi come l’abete; sono in `DISEGNI_DELLE_FESTE` e
+  di neve, stella di Natale, orsetto, 25.11) e altri due (26.11: la volpe che guarda la cicogna in cima all’abete, «Happy New Year»
+  con pigne, melograni, dodecaedro e pentacolo), incisi come l’abete; sono in `DISEGNI_DELLE_FESTE` e
   per un’occasione che non è delle feste lasciano il posto alla candela. Si rifanno con `disegna.py` e `disegna2.py` in
-  `/mnt/project-files/natale-2026/disegni/` (con `albero.py`, `volpe.py` con `volpe_profilo.py` e `pezzi.py`; in «Happy New Year» le lettere sono tracciati presi dal Cormorant del sito).
+  `/mnt/project-files/natale-2026/disegni/` (con `volpe.py`, `volpe_profilo.py` e `pezzi.py`; in «Happy New Year» le lettere sono tracciati presi dal Cormorant del sito).
+  L’albero dei pianeti (l’albero di Natale di Steiner, `albero.py`) è stato disegnato ma non va sul sito (Elias, 26.11): tutte le
+  versioni dei tre disegni sono in `/mnt/project-files/natale-2026/archivio/` e in Drive.
 - «Sostieni» per progetto (Dacia ed Elias, 25.11): nei «Progetti da sostenere» `{stripe-progetto:nome}` porta allo stesso
   link Stripe di Dona con `client_reference_id=sito-progetto-<nome>` (`SEGNO_PROGETTO`); `{senza-stripe}` mostra il bonifico
   quando `STRIPE` è vuoto. Lux porta al suo sito. LUX riconosce queste donazioni dal Payment Link: ricevuta e foglio dello

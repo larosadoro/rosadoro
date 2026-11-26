@@ -697,12 +697,11 @@ IMMAGINI_BIGLIETTO = {"candela": ("azione-candela.svg", 200, 240), "albero": ("a
                       "presepe": ("azione-presepe.svg", 200, 240), "renna": ("azione-renna.svg", 200, 240),        # i disegni di Natale
                       "babbo-natale": ("azione-babbo-natale.svg", 200, 240), "neve": ("azione-neve.svg", 200, 240),  # (Dacia, 25.11)
                       "stella-di-natale": ("azione-stella-di-natale.svg", 200, 240), "orsetto": ("azione-orsetto.svg", 200, 240),
-                      "volpe-e-cicogna": ("azione-volpe-e-cicogna.svg", 200, 240),                   # e gli altri tre
-                      "albero-dei-pianeti": ("azione-albero-dei-pianeti.svg", 200, 240),             # (Dacia, 26.11)
-                      "happy-new-year": ("azione-happy-new-year.svg", 200, 240)}
+                      "volpe-e-cicogna": ("azione-volpe-e-cicogna.svg", 200, 240),                   # e gli altri due
+                      "happy-new-year": ("azione-happy-new-year.svg", 200, 240)}                     # (Dacia, 26.11)
 # i disegni delle feste: per un’occasione che non è delle feste lasciano il posto alla candela (data-feste, in sito.js)
 DISEGNI_DELLE_FESTE = ("abete", "presepe", "renna", "babbo-natale", "neve", "stella-di-natale", "orsetto",
-                       "volpe-e-cicogna", "albero-dei-pianeti", "happy-new-year")
+                       "volpe-e-cicogna", "happy-new-year")
 
 def scelta_immagini(da, immagini):
     """le tavole fra cui si sceglie, nel biglietto e nella pergamena: la prima è già scelta"""

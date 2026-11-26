@@ -1473,8 +1473,7 @@ BIGLIETTO = dict(
     # e dopo l’abete i disegni di Natale che Dacia ha chiesto (25.11 e 26.11), nello stesso stile inciso
     immagini_natale=(("abete", "L’abete"), ("presepe", "Il presepe"), ("renna", "La renna"), ("babbo-natale", "Babbo Natale"),
                      ("neve", "Il fiocco di neve"), ("stella-di-natale", "La stella di Natale"), ("orsetto", "L’orsetto"),
-                     ("volpe-e-cicogna", "La volpe e la cicogna"), ("albero-dei-pianeti", "L’albero dei pianeti"),
-                     ("happy-new-year", "Happy New Year"),
+                     ("volpe-e-cicogna", "La volpe e la cicogna"), ("happy-new-year", "Happy New Year"),
                      ("candela", "La candela"), ("fiore", "Il fiore"), ("rosa", "La rosa")),
     # le occasioni in cui l’abete resta scelto; per le altre lascia il posto alla candela
     con_abete=("natale", "feste", "anno-nuovo"),
