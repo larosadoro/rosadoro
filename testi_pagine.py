@@ -1493,6 +1493,8 @@ BIGLIETTO = dict(
         # sotto il biglietto, la frase di Dacia (25.11): «una piccola donazione» porta a Dona
         ricambia=("I biglietti di soli auguri sono gratuiti. Se vuoi, puoi fare anche ", "una piccola donazione",
                   " alla Fondazione, della cifra che vuoi, di riconoscenza."),
+        # e sotto, per le aziende e le istituzioni che vogliono il loro logo sul biglietto (Elias, 26.11): lo aggiunge la segreteria
+        logo=("Sei un’azienda o un’istituzione? Vuoi aggiungere il tuo logo al biglietto? Scrivici a ", "segreteria@larosadoro.org", "."),
     ),
     # il biglietto anche da piegare e quattro per foglio (Elias, 25.11.2026: «formato biglietto auguri classico», «dare anche più
     # scelte»), accanto a «Scarica il PDF»; non nella cartolina dei funerali, dove per molte copie c’è la pergamena
