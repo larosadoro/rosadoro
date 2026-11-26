@@ -866,9 +866,16 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
         ctx.font = STILE[nome][0];
         righe(testo, largo).forEach(function (r) { blocchi.push({ font: STILE[nome][0], colore: colore, testo: r, alto: STILE[nome][1] }); });
       }
+      /* nel biglietto in cima per chi è, sotto l’occasione, poi le due righe e chi lo manda (Dacia, 26.11);
+         nella pergamena in grande i nomi, e sotto l’occasione con la data */
+      var perSopra = !pergamena && t.per;
+      if (perSopra) {
+        aggiungi('per', t.per, ORO_SCURO);
+        blocchi.push({ spazio: 20 });
+      }
       aggiungi('saluto', t.saluto, ANTRACITE);
       blocchi.push({ spazio: 26 });
-      if (t.per) {
+      if (t.per && !perSopra) {
         aggiungi('per', t.per, ORO_SCURO);
         blocchi.push({ spazio: 34 });
       }
@@ -915,7 +922,8 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
       /* per chi usa un lettore di schermo, il cartoncino in parole */
       var invito = t.auguri ? t.auguri.riga + ': ' + t.auguri.sito + ', con il codice QR della pagina dei progetti' : '';
       tela.setAttribute('aria-label', (pergamena ? 'Anteprima della pergamena: ' : 'Anteprima del biglietto: ') +
-        (primaFrase ? [t.saluto, t.per, t.messaggio, t.firma, t.corpo || invito, t.piede] : [t.saluto, t.per, t.corpo, t.messaggio, t.firma, t.piede])
+        (pergamena ? [t.saluto, t.per] : [t.per, t.saluto])
+        .concat(primaFrase ? [t.messaggio, t.firma, t.corpo || invito, t.piede] : [t.corpo, t.messaggio, t.firma, t.piede])
         .filter(Boolean).map(function (s) { return /[.!?…»]$/.test(s) ? s : s + '.'; }).join(' '));
     }
 

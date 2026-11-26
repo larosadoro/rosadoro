@@ -1340,6 +1340,17 @@ controllo('il regalo solidale: il biglietto si prepara nella pagina e si scarica
     for (const parte of ['Buon Natale', 'Per Anna', 'pensando a te', 'Con l’affetto di sempre', 'Marco', 'Fondazione La Rosa d’Oro'])
       assert.ok(detto.includes(parte), 'il biglietto non dice «' + parte + '»: ' + detto);
     assert.ok(!/\d+\s*(euro|€)/.test(detto), 'sul biglietto non va la cifra: ' + detto);
+    /* in cima per chi è, sotto l’occasione, poi le due righe e chi lo manda (Dacia, 26.11) */
+    assert.ok(detto.indexOf('Per Anna') < detto.indexOf('Buon Natale') && detto.indexOf('Buon Natale') < detto.indexOf('Con l’affetto di sempre'),
+              'prima «Per Anna», poi «Buon Natale», poi le due righe: ' + detto);
+    const altezze = await p.page.evaluate(s => {
+      const tela = document.querySelector(s + ' canvas'), ctx = tela.getContext('2d'), scritte = {}, prima = ctx.fillText;
+      ctx.fillText = function (testo, x, y) { if (!(testo in scritte)) scritte[testo] = y; return prima.apply(this, arguments); };
+      document.querySelector('#mb-per').dispatchEvent(new Event('input', { bubbles: true }));
+      return new Promise(r => setTimeout(() => { ctx.fillText = prima; r(scritte); }, 300));
+    }, BIGLIETTO);
+    assert.ok(altezze['Per Anna'] < altezze['Buon Natale'] && altezze['Buon Natale'] < altezze['Marco'],
+              'sul biglietto «Per Anna» sta sopra «Buon Natale» e la firma sotto: ' + JSON.stringify(altezze));
     /* su tutti i biglietti prima la frase di chi regala e la firma, sotto la frase della Fondazione (Dacia, 14.11) */
     assert.ok(detto.indexOf('Con l’affetto di sempre') < detto.indexOf('Marco') && detto.indexOf('Marco') < detto.indexOf('Questo regalo è una donazione'),
               'prima le due righe e la firma, poi la frase della Fondazione: ' + detto);
