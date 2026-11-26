@@ -28,6 +28,13 @@ NOTIZIE = dict(
     dopo_la_dedica="Se vuoi, possiamo raccontarti ogni tanto che cosa fa la Fondazione: i progetti che nascono, gli incontri, il giardino che cresce.",
 )
 
+# Il pulsante di Natale nella home (Dacia, 25.11.2026: «un pulsante carino tipo abete con palline luccicanti»): c’è con NATALE
+# acceso, prima del «Benvenuti», e porta ai regali solidali e ai biglietti. Bozza di Claude, da approvare con Elias e Dacia.
+PULSANTE_NATALE = dict(
+    titolo="Regali e biglietti di Natale",
+    vai="Scopri",
+)
+
 # ---------------------------------------------------------------- la sezione
 TESTI["in-memoria"] = dict(
     sotto="Modi concreti per onorare chi non c'è più e sostenere chi resta.",
@@ -1378,6 +1385,7 @@ TESTI["dona/regali-solidali"] = dict(
 <p class="nota">Sulla pagina di pagamento la cifra va da 5 a 5.000 euro. Se vuoi, lì scegli anche l’ambito e aggiungi il codice fiscale, per trovare la donazione nella dichiarazione precompilata.</p>
 {/se-stripe}<p>Per il bonifico usa le coordinate della pagina <a class="link" href="{→dona}">Dona</a>, con la causale «Regalo solidale».</p>
 <h3 id="biglietto">Il biglietto</h3>
+<p>Vuoi mandare solo gli auguri, senza donare? Scegli «solo auguri»: al posto della frase sulla donazione il biglietto porta l’indirizzo del sito e un codice QR per scoprire i nostri progetti.</p>
 {biglietto}
 <h3>Che cosa diventa il tuo regalo</h3>
 <p>La Fondazione La Rosa d’Oro è un ente del Terzo settore nato a Milano il 26 febbraio 2026, per coltivare la terra, curare le persone e accompagnarle fino alla fine della vita. Tra i primi progetti avviati ci sono <a class="link" href="{→eventi-e-formazione/formazione-accompagnamento}#quietude-italia-2027">Quietude Italia</a>, la formazione per accompagnare nel fine vita, e <a class="link" href="https://lux.larosadoro.org/" rel="noopener">Lux</a>, per un rapporto consapevole con il digitale.</p>
@@ -1427,6 +1435,8 @@ BIGLIETTO = dict(
     fuori_stagione="compleanno",
     occasioni=(
         ("natale", "Natale", "Buon Natale"),
+        ("feste", "Le feste", "Buone feste"),                       # le feste e l’anno nuovo (Dacia, 25.11), con l’abete
+        ("anno-nuovo", "L’anno nuovo", "Felice anno nuovo"),
         ("compleanno", "Un compleanno", "Buon compleanno"),
         ("nascita", "Una nascita", "Una vita nuova"),
         ("matrimonio", "Un matrimonio", "Viva gli sposi", "voi"),     # il quarto: il biglietto si rivolge già «a più persone»
@@ -1460,7 +1470,38 @@ BIGLIETTO = dict(
     ),
     immagini=(("candela", "La candela"), ("albero", "L’albero"), ("fiore", "Il fiore"), ("rosa", "La rosa")),
     # da novembre all’Epifania (NATALE acceso) l’abete con la stella al posto dell’albero tondo, già scelto (Elias, 9.11)
-    immagini_natale=(("abete", "L’abete"), ("candela", "La candela"), ("fiore", "Il fiore"), ("rosa", "La rosa")),
+    # e dopo l’abete i disegni di Natale che Dacia ha chiesto (25.11), nello stesso stile inciso
+    immagini_natale=(("abete", "L’abete"), ("presepe", "Il presepe"), ("renna", "La renna"), ("babbo-natale", "Babbo Natale"),
+                     ("neve", "Il fiocco di neve"), ("stella-di-natale", "La stella di Natale"), ("orsetto", "L’orsetto"),
+                     ("candela", "La candela"), ("fiore", "Il fiore"), ("rosa", "La rosa")),
+    # le occasioni in cui l’abete resta scelto; per le altre lascia il posto alla candela
+    con_abete=("natale", "feste", "anno-nuovo"),
+    # il biglietto di soli auguri, senza donazione (Dacia, 25.11: «ci servono per pubblicità»; bozza di Claude, da approvare):
+    # tutto uguale, ma al posto della frase sulla donazione «Scopri i nostri progetti», l’indirizzo del sito e il codice QR
+    # che porta alla pagina dei progetti (sito/img/qr-progetti.svg, da sorgenti/qr-progetti.py). In ricordo di una persona
+    # la scelta non c’è: quel biglietto è sempre una donazione in memoria
+    auguri=dict(
+        domanda="Il biglietto",
+        dono="accompagna una donazione",
+        solo="solo auguri, senza donazione",
+        riga="Scopri i nostri progetti",
+        sito="www.larosadoro.org",
+        piede="Fondazione La Rosa d’Oro ETS",
+        file="auguri",
+        titolo="Biglietto di auguri",
+        # sotto il biglietto, la frase di Dacia (25.11): «una piccola donazione» porta a Dona
+        ricambia=("I biglietti di soli auguri sono gratuiti. Se vuoi, puoi fare anche ", "una piccola donazione",
+                  " alla Fondazione, della cifra che vuoi, di riconoscenza."),
+    ),
+    # il biglietto anche da piegare e quattro per foglio (Elias, 25.11.2026: «formato biglietto auguri classico», «dare anche più
+    # scelte»), accanto a «Scarica il PDF»; non nella cartolina dei funerali, dove per molte copie c’è la pergamena
+    formati=dict(
+        piegato="PDF da piegare",
+        quattro="PDF quattro per foglio",
+        file_piegato="-da-piegare",
+        file_quattro="-quattro-per-foglio",
+        nota="Il PDF da piegare si stampa su un foglio A4, su un lato solo: piegalo a metà portando dietro la parte di sopra, poi ancora a metà con l’immagine davanti, e diventa un biglietto di 10,5\u00a0×\u00a014,8\u00a0cm, per una busta piccola (C6). Se vuoi scriverci dentro a mano, lascia vuoti «Per chi è», «Da parte di» e «Due righe tue». Il PDF con quattro biglietti per foglio si taglia lungo le linee grigie.",
+    ),
     corpo_te="Questo regalo è una donazione alla Fondazione La\u00a0Rosa\u00a0d’Oro, fatta pensando a te. Diventerà terra coltivata, cura, accompagnamento.",
     corpo_voi="Questo regalo è una donazione alla Fondazione La\u00a0Rosa\u00a0d’Oro, fatta pensando a voi. Diventerà terra coltivata, cura, accompagnamento.",
     piede="Fondazione La Rosa d’Oro ETS · larosadoro.org",
@@ -1890,13 +1931,17 @@ TESTI["progetti/da-sostenere"] = dict(
 <p>Nella Fondazione alcuni membri lavorano nell’agricoltura sociale e ne conoscono per esperienza diretta il valore: chi ne prende parte impara un mestiere, trova un ritmo e una comunità, e al contempo la fattoria si apre al territorio e alla popolazione locale creando un ponte di collaborazione e aiuto.</p>
 <p>Una fattoria di piante medicinali si presta bene a questo scopo: richiede cura, attenzione e molte mani, sia forti che delicate; segue le stagioni e offre compiti diversi, dalla semina alla raccolta, dall’essiccazione alla preparazione delle tisane. Accanto alla coltivazione possono nascere percorsi di lavoro, laboratori, attività didattiche e di formazione.</p>
 <p>In quale modo e con quale ampiezza la fattoria agrisociale lavorerà dipenderà da te e dalla raccolta fondi dedicata, dall’azienda e dal terreno che si potranno acquistare e dalla loro dimensione. Non è inoltre escluso che la fattoria agrisociale possa vivere contemporaneamente in diversi appezzamenti in differenti luoghi, connessi.</p>
-<h3 class="progetto" id="lux">Lux: abitare il digitale, riscoprire il reale</h3>
+{se-stripe}<p><a class="invia" href="{stripe-progetto:la-via-delle-erbe}" target="_blank" rel="noopener">Sostieni La Via delle Erbe</a></p>
+<p class="nota">La cifra la scegli tu, e la donazione va a questo progetto. Con un bonifico usa le coordinate della pagina <a class="link" href="{→dona}">Dona</a>, con la causale «La Via delle Erbe».</p>
+{/se-stripe}{senza-stripe}<p>Per sostenerlo dona con un bonifico, con le coordinate della pagina <a class="link" href="{→dona}">Dona</a> e la causale «La Via delle Erbe».</p>
+{/senza-stripe}<h3 class="progetto" id="lux">Lux: abitare il digitale, riscoprire il reale</h3>
 {foto:LUX MARCHIO|Il marchio di Lux, un progetto della Fondazione La Rosa d’Oro ETS|ritratto}
 <p>Lux è il progetto della Fondazione per educare ad un uso più consapevole del digitale (i social, i giochi, l’intelligenza artificiale).</p>
 <p>È utile per le persone di ogni età, a cominciare dai più giovani, cui non si può negare l’accesso al digitale, ma si può facilitare un uso più sano e critico dello stesso. Tuttavia, a differenza di ciò che si pensa, la «pericolosità» e l’abuso del digitale non sono un tema esclusivamente adolescenziale: riguardano anche la fascia di età fra i 50 e gli 80 anni. Per questo desideriamo contribuire tramite corsi alla <em>media literacy</em>, ovvero la capacità di orientarsi tra servizi complessi, riconoscere le fake news ed evitare le truffe online (come il phishing bancario o i falsi messaggi), al fine di evitare quel divario di competenze (<em>digital divide</em>) che rende la realtà del virtuale non solo poco inclusiva, ma fonte di stress.</p>
 <p>Con un gruppo di esperti del settore vorremmo aiutarti a formarti un’opinione consapevole sull’IA e sulle sue implicazioni sociali ed etiche, partendo dalla sua storia e dalla sua evoluzione, per formulare previsioni pertinenti sulla sua traiettoria futura. Inoltre, secondo le tue necessità, potrai avere informazioni su quanto oggi si sa nelle neuroscienze sulle implicazioni dell’IA per l’apprendimento e per le facoltà cognitive.</p>
 <p>Crediamo che la tecnologia sia una risorsa preziosa, ma solo se bilanciata da esperienze autentiche: per questo il programma della Fondazione valorizza il lavoro manuale, la natura, i ritmi lenti e gli incontri reali.</p>
 <p>Le donazioni a Lux confluiscono in un fondo della Fondazione con una contabilità separata, perché restino tracciabili. Chi dona accende una luce simbolica, senza premi, classifiche né inviti a donare di nuovo. Si dona dal sito dedicato, <a class="link" href="https://lux.larosadoro.org/" rel="noopener">lux.larosadoro.org</a>, dove trovi tutte le informazioni aggiuntive.</p>
+<p><a class="invia" href="https://lux.larosadoro.org/" rel="noopener">Sostieni Lux</a></p>
 <p>Se sei un esperto del settore (psicologo, docente universitario, informatico, formatore interessato al sociale), <a class="link" href="{→contatti}">scrivici</a> per un’eventuale collaborazione: siamo aperti a colloqui e interazioni.</p>
 <h3 class="progetto" id="ponte-arcobaleno">Il Ponte Arcobaleno: accompagnamento al morire a casa propria</h3>
 {foto:PONTE ARCOBALENO|Un doppio arcobaleno sul lago, fra le montagne|cielo}
@@ -1920,7 +1965,10 @@ TESTI["progetti/da-sostenere"] = dict(
 <li>Personalizzazione dello spazio del paziente — inserendo fotografie, oggetti e libri significativi, la sua musica preferita, profumi rilassanti, immagini sacre o colori adatti, e altri oggetti sacri, inclusa eventualmente la pulizia, al fine di creare un rifugio tranquillo e pulito tra le mura domestiche.</li>
 <li>Se necessario è possibile occuparsi della nutrizione del paziente dal punto di vista fisico, ma soprattutto animico-spirituale.</li>
 </ul>
-<div class="invito">
+{se-stripe}<p><a class="invia" href="{stripe-progetto:ponte-arcobaleno}" target="_blank" rel="noopener">Sostieni il Ponte Arcobaleno</a></p>
+<p class="nota">La cifra la scegli tu, e la donazione va a questo progetto. Con un bonifico usa le coordinate della pagina <a class="link" href="{→dona}">Dona</a>, con la causale «Ponte Arcobaleno».</p>
+{/se-stripe}{senza-stripe}<p>Per sostenerlo dona con un bonifico, con le coordinate della pagina <a class="link" href="{→dona}">Dona</a> e la causale «Ponte Arcobaleno».</p>
+{/senza-stripe}<div class="invito">
 <p>Vuoi offrire il tuo aiuto?</p>
 <p>Il Ponte Arcobaleno sta cercando altre mani e altri cuori che collaborino. Sei un medico, un infermiere, un OSS o un terapeuta esperto nell’accompagnamento al fine vita, oppure desideri metterti in gioco come volontario? Raccontaci di te, <a class="link" href="{→contatti}">scrivici</a>. Se senti di voler acquisire gli strumenti giusti prima di iniziare, manda una mail a <a class="link" href="mailto:pontearcobaleno@larosadoro.org">pontearcobaleno@larosadoro.org</a> o consulta la pagina della <a class="link" href="{→eventi-e-formazione/formazione-accompagnamento}">formazione</a>.</p>
 </div>

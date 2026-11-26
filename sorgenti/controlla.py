@@ -246,6 +246,11 @@ SEGNO_REGALO = "?locale=it&client_reference_id=sito-regalo"   # lo stesso link, 
 REGALI = os.path.join("dona", "regali-solidali", "index.html")
 SEGNO_BOMBONIERA = "?locale=it&client_reference_id=sito-bomboniera"   # e dalla pagina delle bomboniere solidali (7.11)
 BOMBONIERE = os.path.join("dona", "bomboniere-solidali", "index.html")
+# il pulsante «Sostieni» di ogni progetto da sostenere (Dacia ed Elias, 25.11.2026): lo stesso link, segnato con il nome del
+# progetto, così nel pannello di Stripe si vede per quale progetto è arrivata la donazione. Lux no: si dona dal suo sito
+SEGNO_PROGETTO = "?locale=it&client_reference_id=sito-progetto-"
+DA_SOSTENERE = os.path.join("progetti", "da-sostenere", "index.html")
+PROGETTI_CON_DONO = ("la-via-delle-erbe", "ponte-arcobaleno")
 PORTALE_VIVO = re.compile(r"^https://billing\.stripe\.com/p/login/[A-Za-z0-9]+$")
 
 
@@ -271,9 +276,16 @@ def controlla_stripe(pagine):
     attesi = {atteso} | ({l + SEGNO_SITO for _, l in impostazione_mensili() if l} if impostazione("MENSILE") else set())
     regalo = stripe + SEGNO_REGALO        # i regali solidali usano il link di «Dona una volta», segnato a parte: solo lì
     bomboniera = stripe + SEGNO_BOMBONIERA
+    progetti = {stripe + SEGNO_PROGETTO + p for p in PROGETTI_CON_DONO}
     for rel, i in verso_stripe:
-        if i not in attesi and not (rel == REGALI and i == regalo) and not (rel == BOMBONIERE and i == bomboniera):
+        if i not in attesi and not (rel == REGALI and i == regalo) and not (rel == BOMBONIERE and i == bomboniera) \
+                and not (rel == DA_SOSTENERE and i in progetti):
             problemi.append("%s porta a Stripe con un indirizzo diverso da quelli di STRIPE e MENSILI: %s" % (rel, i))
+    for p in PROGETTI_CON_DONO:
+        if DA_SOSTENERE in pagine and stripe + SEGNO_PROGETTO + p not in pagine[DA_SOSTENERE].indirizzi:
+            problemi.append("Nei Progetti da sostenere manca il pulsante «Sostieni» di %s, verso Stripe con il segno «sito-progetto-%s»" % (p, p))
+    if DA_SOSTENERE in pagine and "https://lux.larosadoro.org/" not in pagine[DA_SOSTENERE].indirizzi:
+        problemi.append("Nei Progetti da sostenere il pulsante di Lux deve portare al sito di Lux, https://lux.larosadoro.org/")
     if REGALI in pagine and regalo not in pagine[REGALI].indirizzi:
         problemi.append("La pagina dei regali solidali non porta a Stripe con il segno «sito-regalo»: %s" % regalo)
     if BOMBONIERE in pagine and bomboniera not in pagine[BOMBONIERE].indirizzi:
@@ -296,7 +308,8 @@ SEGNI_RICEVUTE = ("{se-ricevute}", "{/se-ricevute}", "{senza-ricevute}", "{/senz
                   "{se-turnstile}", "{/se-turnstile}", "{senza-turnstile}", "{/senza-turnstile}", "{turnstile}", "{trappola}",
                   "{se-google}", "{/se-google}", "{senza-google}", "{/senza-google}",
                   "{se-natale}", "{/se-natale}", "{senza-natale}", "{/senza-natale}", "{biglietto}", "{stripe-regalo}",
-                  "{pergamena}", "{pergamena-ricordo}", "{stripe-bomboniera}", "{biglietto-ricordo}")
+                  "{pergamena}", "{pergamena-ricordo}", "{stripe-bomboniera}", "{biglietto-ricordo}", "{stripe-progetto:",
+                  "{senza-stripe}", "{/senza-stripe}")
 MESI = ("gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre")
 
 

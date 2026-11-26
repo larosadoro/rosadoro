@@ -1326,7 +1326,10 @@ controllo('il regalo solidale: il biglietto si prepara nella pagina e si scarica
     assert.strictEqual(await p.page.inputValue('#mb-occasione'), 'natale', 'l’occasione già scelta è il Natale');
     /* a Natale l’abete al posto dell’albero tondo, già scelto (Elias, 9.11) */
     const tavole = await p.page.$$eval(BIGLIETTO + ' input[name="immagine"]:not([data-foto])', l => l.map(x => x.value));
-    assert.deepStrictEqual(tavole, ['abete', 'candela', 'fiore', 'rosa'], 'a Natale il biglietto ha l’abete al posto dell’albero tondo: ' + tavole);
+    /* e i sei disegni di Natale di Dacia (25.11), dopo l’abete e prima della candela */
+    assert.deepStrictEqual(tavole, ['abete', 'presepe', 'renna', 'babbo-natale', 'neve', 'stella-di-natale', 'orsetto', 'candela', 'fiore', 'rosa'],
+                           'a Natale il biglietto ha l’abete al posto dell’albero tondo e i disegni di Natale: ' + tavole);
+    await p.page.waitForFunction(s => [...document.querySelectorAll(s + ' input[name="immagine"] + img')].every(i => i.complete && i.naturalWidth > 0), BIGLIETTO);
     assert.strictEqual(await p.page.inputValue(BIGLIETTO + ' input[name="immagine"]:checked'), 'abete', 'a Natale l’immagine già scelta è l’abete');
     await p.page.fill('#mb-per', 'Anna');
     await p.page.fill('#mb-da', 'Marco');
@@ -1425,6 +1428,269 @@ controllo('il biglietto in ricordo di una persona: il suo nome, una donazione in
     assert.deepStrictEqual(p.allo, [], 'niente deve partire verso lo script del foglio');
     assert.deepStrictEqual(p.fuori, [], 'niente deve partire verso altri siti');
     assert.deepStrictEqual(p.errori, []);
+  } finally { await p.chiudi(); }
+});
+
+/* i biglietti delle feste (Dacia, 25.11.2026): oltre al Natale, «Buone feste» e «Felice anno nuovo», subito dopo, con l’abete */
+controllo('i biglietti delle feste: Buone feste e Felice anno nuovo, con l’abete del Natale', async () => {
+  const p = await apri(REGALO);
+  try {
+    await p.page.locator(BIGLIETTO).waitFor({ state: 'visible', timeout: 5000 });
+    const occasioni = await p.page.$$eval('#mb-occasione option', l => l.map(o => o.value));
+    assert.deepStrictEqual(occasioni.slice(0, 3), ['natale', 'feste', 'anno-nuovo'], 'dopo il Natale vengono le feste e l’anno nuovo: ' + occasioni);
+    for (const [occasione, saluto] of [['feste', 'Buone feste'], ['anno-nuovo', 'Felice anno nuovo']]) {
+      await p.page.selectOption('#mb-occasione', occasione);
+      await p.page.waitForFunction(([s, v]) => document.querySelector(s + ' canvas').getAttribute('aria-label').includes(v), [BIGLIETTO, saluto]);
+      assert.strictEqual(await p.page.inputValue(BIGLIETTO + ' input[name="immagine"]:checked'), 'abete',
+                         'per «' + saluto + '» l’abete resta scelto');
+      const detto = await dettoDalBiglietto(p.page);
+      assert.ok(detto.startsWith('Anteprima del biglietto: ' + saluto + '.'), 'il saluto è «' + saluto + '»: ' + detto);
+      assert.ok(detto.includes('Questo regalo è una donazione'), detto);
+    }
+    await p.page.selectOption('#mb-occasione', 'compleanno');
+    await p.page.waitForFunction(s => /Buon compleanno/.test(document.querySelector(s + ' canvas').getAttribute('aria-label')), BIGLIETTO);
+    assert.strictEqual(await p.page.inputValue(BIGLIETTO + ' input[name="immagine"]:checked'), 'candela',
+                       'per un compleanno l’abete lascia il posto alla candela');
+    /* così anche gli altri disegni di Natale (Dacia, 25.11): l’orsetto col cappello non va per un compleanno */
+    for (const disegno of ['presepe', 'renna', 'babbo-natale', 'neve', 'stella-di-natale', 'orsetto']) {
+      await p.page.selectOption('#mb-occasione', 'natale');
+      await p.page.check(BIGLIETTO + ' input[name="immagine"][value="' + disegno + '"]', { force: true });
+      await p.page.selectOption('#mb-occasione', 'feste');
+      assert.strictEqual(await p.page.inputValue(BIGLIETTO + ' input[name="immagine"]:checked'), disegno, 'per le feste resta ' + disegno);
+      await p.page.selectOption('#mb-occasione', 'compleanno');
+      assert.strictEqual(await p.page.inputValue(BIGLIETTO + ' input[name="immagine"]:checked'), 'candela',
+                         'per un compleanno ' + disegno + ' lascia il posto alla candela');
+    }
+    assert.deepStrictEqual(p.errori, []);
+  } finally { await p.chiudi(); }
+});
+
+/* il biglietto di soli auguri, senza donazione (Dacia, 25.11.2026: «ci servono per pubblicità»): tutto uguale, ma al posto della
+   frase sulla donazione l’indirizzo del sito e il codice QR che porta ai progetti, con «Scopri i nostri progetti».
+   Il codice QR si disegna senza sfumature, in oro scuro pieno come «Per Anna» (Elias, 25.11): si contano i pixel di quell’oro
+   nella metà destra del biglietto (le lettere, con i bordi sfumati, ne hanno pochi) */
+async function oroNellaTela(page) {
+  return page.evaluate(s => {
+    const t = document.querySelector(s + ' canvas'), d = t.getContext('2d').getImageData(t.width / 2, 0, t.width / 2, t.height).data;
+    let n = 0;
+    for (let i = 0; i < d.length; i += 4) if (Math.abs(d[i] - 141) <= 4 && Math.abs(d[i + 1] - 110) <= 4 && Math.abs(d[i + 2] - 42) <= 4) n++;
+    return n;
+  }, BIGLIETTO);
+}
+
+controllo('il biglietto di soli auguri, senza donazione: l’indirizzo del sito e il codice QR dei progetti al posto della frase sul dono', async () => {
+  const p = await apri(REGALO);
+  try {
+    await p.page.locator(BIGLIETTO).waitFor({ state: 'visible', timeout: 5000 });
+    assert.ok(await p.page.isChecked(BIGLIETTO + ' input[name="tipo"][value="dono"]'), 'il biglietto già scelto è quello della donazione');
+    await p.page.fill('#mb-per', 'Anna');
+    await p.page.fill('#mb-da', 'Marco');
+    await p.page.fill('#mb-messaggio', 'Un abbraccio');
+    await p.page.waitForFunction(s => /Marco/.test(document.querySelector(s + ' canvas').getAttribute('aria-label')), BIGLIETTO);
+    const oroDono = await oroNellaTela(p.page);
+    /* la scelta in cima al modulo può stare sotto la testata fissa: si sceglie come farebbe la tastiera, senza mirare col mouse */
+    await p.page.$eval(BIGLIETTO + ' input[name="tipo"][value="auguri"]', e => e.click());
+    await p.page.waitForFunction(s => /Scopri i nostri progetti/.test(document.querySelector(s + ' canvas').getAttribute('aria-label')), BIGLIETTO);
+    const qr = p.page.locator(BIGLIETTO + ' img.qr');
+    assert.ok(await qr.evaluate(i => i.complete && i.naturalWidth > 0), 'l’immagine del codice QR non si carica');
+    await p.page.waitForTimeout(300);
+    let detto = await dettoDalBiglietto(p.page);
+    for (const parte of ['Buon Natale', 'Per Anna', 'Un abbraccio', 'Marco', 'Scopri i nostri progetti', 'www.larosadoro.org', 'codice QR', 'Fondazione La Rosa d’Oro'])
+      assert.ok(detto.includes(parte), 'il biglietto di auguri non dice «' + parte + '»: ' + detto);
+    assert.ok(!/donazione|regalo/i.test(detto), 'il biglietto di soli auguri non parla di donazione né di regalo: ' + detto);
+    assert.strictEqual(detto.split('larosadoro.org').length - 1, 1, 'l’indirizzo del sito una volta sola: ' + detto);
+    assert.ok(await oroNellaTela(p.page) > oroDono + 6000, 'il codice QR non è disegnato sul biglietto');
+    const pdf = await scarica(p.page, BIGLIETTO + ' button[type="submit"]');
+    assert.strictEqual(pdf.nome, 'auguri-per-anna.pdf');
+    assert.strictEqual(pdf.dati.toString('latin1').match(/\/Title \(([^)]*)\)/)[1], 'Biglietto di auguri');
+    const jpg = await scarica(p.page, BIGLIETTO + ' button[data-formato="jpg"]');
+    assert.strictEqual(jpg.nome, 'auguri-per-anna.jpg');
+    /* per le feste e l’anno nuovo lo stesso; in ricordo di una persona no: la scelta sparisce e torna la donazione in memoria */
+    await p.page.selectOption('#mb-occasione', 'anno-nuovo');
+    await p.page.waitForFunction(s => /Felice anno nuovo/.test(document.querySelector(s + ' canvas').getAttribute('aria-label')), BIGLIETTO);
+    assert.ok((await dettoDalBiglietto(p.page)).includes('Scopri i nostri progetti'), 'anche il biglietto dell’anno nuovo può essere di soli auguri');
+    await p.page.selectOption('#mb-occasione', 'ricordo');
+    await p.page.locator(BIGLIETTO + ' fieldset.tipo').waitFor({ state: 'hidden', timeout: 2000 });
+    assert.ok(await p.page.isChecked(BIGLIETTO + ' input[name="tipo"][value="dono"]'), 'in ricordo di una persona il biglietto è una donazione in memoria');
+    await p.page.waitForFunction(s => /donazione in memoria/.test(document.querySelector(s + ' canvas').getAttribute('aria-label')), BIGLIETTO);
+    detto = await dettoDalBiglietto(p.page);
+    assert.ok(!detto.includes('Scopri i nostri progetti'), 'il biglietto in ricordo non porta il codice dei progetti: ' + detto);
+    await p.page.selectOption('#mb-occasione', 'natale');
+    await p.page.locator(BIGLIETTO + ' fieldset.tipo').waitFor({ state: 'visible', timeout: 2000 });
+    assert.deepStrictEqual(p.allo, [], 'niente deve partire verso lo script del foglio');
+    assert.deepStrictEqual(p.fuori, [], 'niente deve partire verso altri siti');
+    assert.deepStrictEqual(p.errori, []);
+    assert.deepStrictEqual(await p.violazioni(), [], 'il biglietto di auguri viola la regola di sicurezza della pagina');
+  } finally { await p.chiudi(); }
+});
+
+/* il biglietto anche da piegare e quattro per foglio (Elias, 25.11.2026: «il buone feste si stampa in A4, possibile anche in
+   formato biglietto auguri classico?», poi «dare anche più scelte»). Il PDF da piegare è un A4 verticale da stampare su un lato
+   solo e piegare in quattro: in basso a destra la facciata davanti (l’immagine e il saluto), in basso a sinistra il retro (il
+   nome della Fondazione), in alto, capovolto, l’interno: a destra le parole, a sinistra uno spazio libero per scrivere a mano.
+   Quello con quattro per foglio è un A4 orizzontale con il biglietto quattro volte e le linee dove tagliare, come la pergamena */
+
+/* l’immagine JPEG dentro un PDF del sito */
+function jpegDelPdf(dati) {
+  const testo = dati.toString('latin1');
+  const inizio = testo.indexOf('stream\n', testo.indexOf('/Subtype /Image')) + 7;
+  const fine = testo.indexOf('\nendstream', inizio);
+  return dati.subarray(inizio, fine);
+}
+/* le quattro facce del foglio da piegare: quanto è stampato in ognuna (pixel non bianchi) e dove sta l’oro scuro pieno
+   (quello del codice QR) fra la metà di sopra e quella di sotto della faccia */
+async function facceDelFoglio(page, jpg) {
+  return page.evaluate(async byte => {
+    const immagine = await createImageBitmap(new Blob([new Uint8Array(byte)], { type: 'image/jpeg' }));
+    const t = document.createElement('canvas');
+    t.width = immagine.width; t.height = immagine.height;
+    const c = t.getContext('2d');
+    c.drawImage(immagine, 0, 0);
+    const l = t.width / 2, a = t.height / 2, facce = {};
+    for (const [nome, x, y] of [['interno-destra', 0, 0], ['interno-sinistra', l, 0], ['retro', 0, a], ['davanti', l, a]]) {
+      const d = c.getImageData(x, y, l, a).data;
+      let stampato = 0, oroSopra = 0, oroSotto = 0;
+      for (let i = 0; i < d.length; i += 4) {
+        if (d[i] + d[i + 1] + d[i + 2] < 690) stampato++;
+        if (Math.abs(d[i] - 141) <= 14 && Math.abs(d[i + 1] - 110) <= 14 && Math.abs(d[i + 2] - 42) <= 16) {
+          if ((i / 4) / l < a / 2) oroSopra++; else oroSotto++;
+        }
+      }
+      facce[nome] = { stampato: stampato / (l * a), oroSopra, oroSotto };
+    }
+    return facce;
+  }, Array.from(jpg));
+}
+
+controllo('il biglietto anche da piegare e quattro per foglio: due fogli A4, con le facce al posto giusto', async () => {
+  const p = await apri(REGALO);
+  try {
+    await p.page.locator(BIGLIETTO).waitFor({ state: 'visible', timeout: 5000 });
+    await p.page.fill('#mb-per', 'Anna');
+    await p.page.fill('#mb-da', 'Marco');
+    await p.page.fill('#mb-messaggio', 'Un abbraccio');
+    await p.page.selectOption('#mb-occasione', 'feste');
+    await p.page.waitForFunction(s => /Buone feste/.test(document.querySelector(s + ' canvas').getAttribute('aria-label')), BIGLIETTO);
+    const nota = (await p.page.textContent(BIGLIETTO + ' p.nota.formati')).replace(/\s+/g, ' ');
+    assert.ok(/un lato solo/.test(nota) && /pieg/.test(nota) && /tagli/.test(nota), 'manca la riga che dice come stampare, piegare e tagliare: ' + nota);
+
+    /* da piegare: un A4 verticale */
+    const piegato = await scarica(p.page, BIGLIETTO + ' button[data-formato="piegato"]');
+    assert.strictEqual(piegato.nome, 'regalo-solidale-per-anna-da-piegare.pdf');
+    let testo = piegato.dati.toString('latin1');
+    assert.ok(testo.startsWith('%PDF-1.') && testo.trimEnd().endsWith('%%EOF'), 'il PDF da piegare non è un PDF intero');
+    assert.ok(testo.includes('/MediaBox [0 0 595.28 841.89]'), 'il foglio da piegare non è un A4 verticale');
+    const [, largo, alto] = testo.match(/\/Width (\d+) \/Height (\d+)/).map(Number);
+    assert.ok(largo >= 1600 && Math.abs(alto / largo - 297 / 210) < 0.01, 'l’immagine del foglio da piegare non è un A4: ' + largo + '×' + alto);
+    let facce = await facceDelFoglio(p.page, jpegDelPdf(piegato.dati));
+    assert.ok(facce['interno-sinistra'].stampato < 0.002, 'dentro, a sinistra, lo spazio per scrivere a mano deve restare libero: ' + JSON.stringify(facce));
+    assert.ok(facce.davanti.stampato > 0.01, 'davanti mancano l’immagine e il saluto: ' + JSON.stringify(facce));
+    assert.ok(facce['interno-destra'].stampato > 0.01, 'dentro, a destra, mancano le parole: ' + JSON.stringify(facce));
+    assert.ok(facce.retro.stampato > 0 && facce.retro.stampato < facce['interno-destra'].stampato, 'sul retro solo il nome della Fondazione: ' + JSON.stringify(facce));
+
+    /* di soli auguri: il codice QR è dentro, in fondo alle parole; nel foglio l’interno è capovolto, quindi il codice sta in alto */
+    await p.page.$eval(BIGLIETTO + ' input[name="tipo"][value="auguri"]', e => e.click());
+    await p.page.waitForFunction(s => /Scopri i nostri progetti/.test(document.querySelector(s + ' canvas').getAttribute('aria-label')), BIGLIETTO);
+    const auguri = await scarica(p.page, BIGLIETTO + ' button[data-formato="piegato"]');
+    assert.strictEqual(auguri.nome, 'auguri-per-anna-da-piegare.pdf');
+    facce = await facceDelFoglio(p.page, jpegDelPdf(auguri.dati));
+    const dentro = facce['interno-destra'];
+    assert.ok(dentro.oroSopra + dentro.oroSotto > 6000, 'dentro manca il codice QR: ' + JSON.stringify(facce));
+    assert.ok(dentro.oroSopra > 2 * dentro.oroSotto, 'l’interno deve essere capovolto, perché si legga dopo le due pieghe: ' + JSON.stringify(facce));
+    assert.ok(facce['interno-sinistra'].stampato < 0.002 && facce.davanti.oroSopra + facce.davanti.oroSotto < 6000,
+              'il codice QR va soltanto dentro: ' + JSON.stringify(facce));
+
+    /* quattro per foglio: un A4 orizzontale con il biglietto quattro volte e le linee dove tagliare */
+    const quattro = await scarica(p.page, BIGLIETTO + ' button[data-formato="quattro"]');
+    assert.strictEqual(quattro.nome, 'auguri-per-anna-quattro-per-foglio.pdf');
+    testo = quattro.dati.toString('latin1');
+    assert.ok(testo.includes('/MediaBox [0 0 841.89 595.28]'), 'il foglio con quattro biglietti non è un A4 orizzontale');
+    assert.strictEqual(testo.split('/Im1 Do').length - 1, 4, 'sul foglio ci vogliono quattro biglietti');
+    assert.strictEqual((testo.match(/ re\b/g) || []).length, 4, 'mancano le linee dove tagliare');
+    const [, l4, a4] = testo.match(/\/Width (\d+) \/Height (\d+)/).map(Number);
+    assert.ok(Math.abs(l4 / a4 - 210 / 148) < 0.01, 'ogni biglietto del foglio è il biglietto di sempre: ' + l4 + '×' + a4);
+
+    assert.deepStrictEqual(p.allo, [], 'niente deve partire verso lo script del foglio');
+    assert.deepStrictEqual(p.fuori, [], 'niente deve partire verso altri siti');
+    assert.deepStrictEqual(p.errori, []);
+    assert.deepStrictEqual(await p.violazioni(), [], 'i biglietti da piegare e da tagliare violano la regola di sicurezza della pagina');
+  } finally { await p.chiudi(); }
+  /* la cartolina di condoglianze dei funerali resta com’è: per molte copie c’è la pergamena */
+  const f = await apri(FUNERALI);
+  try {
+    await f.page.locator(BIGLIETTO).waitFor({ state: 'visible', timeout: 5000 });
+    assert.strictEqual(await f.page.locator(BIGLIETTO + ' [data-formato="piegato"], ' + BIGLIETTO + ' [data-formato="quattro"]').count(), 0,
+                       'la cartolina dei funerali non ha i formati dei biglietti');
+  } finally { await f.chiudi(); }
+});
+
+/* la cartolina di condoglianze dei funerali non ha la scelta dei soli auguri: è sempre una donazione in memoria */
+controllo('la cartolina di condoglianze non diventa mai un biglietto di soli auguri', async () => {
+  const p = await apri(FUNERALI);
+  try {
+    await p.page.locator(BIGLIETTO).waitFor({ state: 'visible', timeout: 5000 });
+    assert.strictEqual(await p.page.locator(BIGLIETTO + ' input[name="tipo"]').count(), 0, 'ai funerali la scelta dei soli auguri non c’è');
+    assert.ok(!(await dettoDalBiglietto(p.page)).includes('Scopri i nostri progetti'));
+    assert.deepStrictEqual(p.errori, []);
+  } finally { await p.chiudi(); }
+});
+
+/* ---- il pulsante di Natale nella home (Dacia, 25.11.2026): porta ai regali solidali e ai biglietti; le palline dell’abete
+        si accendono quando si apre la pagina, luccicano piano per una dozzina di secondi (Dacia le voleva sempre accese,
+        Elias: «12 secondi come via di mezzo», 25.11) e poi si fermano da sole (mai elementi insistenti: Elias, 4.11), di nuovo
+        quando ci si passa sopra; mai più di un luccichio al secondo per pallina; per chi chiede al telefono o al computer meno
+        movimento, niente luccichio ---- */
+const HOME = 'index.html';
+
+controllo('il pulsante di Natale in home: porta ai regali solidali, luccica piano una dozzina di secondi e si ferma da solo, e sul telefono sta nello schermo', async () => {
+  for (const schermo of [{ width: 320, height: 640 }, { width: 390, height: 844 }, { width: 1280, height: 800 }]) {
+    const p = await apri(HOME, { schermo });
+    try {
+      const pulsante = p.page.locator('a.natale');
+      assert.strictEqual(await pulsante.count(), 1, 'in home ci vuole un pulsante di Natale');
+      assert.ok(/(^|\/)dona\/regali-solidali\/(index\.html)?$/.test(await pulsante.getAttribute('href')), 'il pulsante porta ai regali solidali');
+      assert.ok(/Natale/.test(await pulsante.textContent()), 'il pulsante parla di Natale');
+      assert.ok(await pulsante.isVisible(), schermo.width + ' px: il pulsante non si vede');
+      const m = await p.page.evaluate(() => {
+        const r = document.querySelector('a.natale').getBoundingClientRect();
+        const animazioni = document.querySelector('a.natale').getAnimations({ subtree: true }).map(a => {
+          const t = a.effect.getComputedTiming();
+          return { fine: t.endTime, volte: t.iterations, giro: t.duration };
+        });
+        return { largo: document.documentElement.scrollWidth, basso: r.bottom, alto: r.height, animazioni };
+      });
+      assert.ok(m.largo <= schermo.width, schermo.width + ' px: la pagina si allarga a ' + m.largo);
+      assert.ok(m.basso <= schermo.height, schermo.width + ' px: il pulsante non si vede appena si apre la pagina (finisce a ' + Math.round(m.basso) + ' px)');
+      assert.ok(m.alto >= 44, schermo.width + ' px: il pulsante è troppo piccolo da toccare');
+      assert.ok(m.animazioni.length > 0, 'le palline dell’abete non luccicano');
+      for (const a of m.animazioni) {
+        assert.ok(Number.isFinite(a.volte) && Number.isFinite(a.fine), 'il luccichio non si deve ripetere all’infinito');
+        assert.ok(a.fine <= 12500, 'il luccichio deve finire entro una dozzina di secondi, non dura ' + a.fine + ' ms');
+        if (a.volte > 1) assert.ok(a.giro >= 1000, 'una pallina luccica più di una volta al secondo (un giro dura ' + a.giro + ' ms)');
+      }
+      assert.ok(Math.max(...m.animazioni.map(a => a.fine)) >= 10000, 'le palline devono luccicare per una dozzina di secondi, non soltanto mentre si accendono');
+      if (schermo.width === 1280) {
+        await p.page.waitForTimeout(5200);
+        const accese = await p.page.evaluate(() => document.querySelector('a.natale .palline').getAnimations({ subtree: true }).filter(a => a.playState === 'running').length);
+        assert.ok(accese > 0, 'dopo cinque secondi le palline luccicano ancora');
+        await p.page.waitForTimeout(7500);
+        const ferme = await p.page.evaluate(() => document.querySelector('a.natale').getAnimations({ subtree: true }).filter(a => a.playState === 'running').length);
+        assert.strictEqual(ferme, 0, 'dopo una dozzina di secondi il luccichio è ancora acceso');
+        await pulsante.hover();
+        const ancora = await p.page.evaluate(() => document.querySelector('a.natale').getAnimations({ subtree: true }).filter(a => a.playState === 'running').length);
+        assert.ok(ancora > 0, 'passandoci sopra, le palline luccicano di nuovo');
+      }
+      assert.deepStrictEqual(p.errori, []);
+      assert.deepStrictEqual(await p.violazioni(), [], 'il pulsante di Natale viola la regola di sicurezza della pagina');
+    } finally { await p.chiudi(); }
+  }
+  /* chi ha chiesto meno movimento vede l’abete fermo */
+  const p = await apri(HOME);
+  try {
+    await p.page.emulateMedia({ reducedMotion: 'reduce' });
+    await p.page.reload();
+    const n = await p.page.evaluate(() => document.querySelector('a.natale').getAnimations({ subtree: true }).length);
+    assert.strictEqual(n, 0, 'con «riduci il movimento» l’abete non luccica');
   } finally { await p.chiudi(); }
 });
 

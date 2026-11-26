@@ -145,6 +145,21 @@ Prima di tutto leggi `LEGGIMI.txt` e `REGOLE-DI-QUALITA.txt`.
   nuovo (un video, una mappa, uno script) va aggiunto lì, sennò il browser lo blocca in silenzio. `controlla.py` verifica la
   regola in ogni pagina e `controlla-moduli.js` che i moduli, Turnstile, le dediche, la musica e la pagina «non trovata» non
   la violino. frame-ancestors e X-Content-Type-Options non si possono dare da GitHub Pages: restano fuori.
+- Natale (Dacia ed Elias, 25.11.2026): con `NATALE` acceso in `costruisci.py`, la home ha prima di «Benvenuti» il pulsante
+  dell’abete verso i Regali solidali (`PULSANTE_NATALE`): le palline si accendono e luccicano piano per una dozzina di secondi,
+  poi si fermano (Dacia voleva il lampeggio continuo, Elias «12 secondi come via di mezzo»), ferme con «riduci il movimento».
+  Un compito di Claude spegne `NATALE` la mattina del 10 gennaio e lo riaccende il 3 novembre. Il biglietto dei Regali solidali
+  può essere di soli auguri, senza donazione: al posto della frase sul dono il codice QR di `sito/img/qr-progetti.svg`
+  (`sorgenti/qr-progetti.py`, verso /progetti/, in oro scuro). Oltre al PDF A5 si scarica «da piegare» (un A4 su un lato,
+  piegato in quattro: 10,5 × 14,8 cm, l’interno capovolto sul foglio) e «quattro per foglio», come la pergamena; la cartolina
+  dei funerali no. Lo controlla `controlla-moduli.js`, anche guardando dove cadono le facce del foglio da piegare.
+  A Natale, dopo l’abete, il biglietto offre i sei disegni di Natale chiesti da Dacia (presepe, renna, Babbo Natale, fiocco
+  di neve, stella di Natale, orsetto, 25.11), incisi come l’abete; sono in `DISEGNI_DELLE_FESTE` e per un’occasione che non è
+  delle feste lasciano il posto alla candela. Si rifanno con `/mnt/project-files/natale-2026/disegni/disegna.py`.
+- «Sostieni» per progetto (Dacia ed Elias, 25.11): nei «Progetti da sostenere» `{stripe-progetto:nome}` porta allo stesso
+  link Stripe di Dona con `client_reference_id=sito-progetto-<nome>` (`SEGNO_PROGETTO`); `{senza-stripe}` mostra il bonifico
+  quando `STRIPE` è vuoto. Lux porta al suo sito. LUX riconosce queste donazioni dal Payment Link: ricevuta e foglio dello
+  studio come Dona, ma senza il nome del progetto (25.11). `controlla.py` verifica i segni ammessi.
 - L’immagine delle condivisioni (`sito/img/condivisione.jpg`) si rifà da
   `sorgenti/condivisione.html` con `node sorgenti/fotografa.js`.
 

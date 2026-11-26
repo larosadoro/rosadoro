@@ -722,7 +722,7 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
     if (senza) senza.hidden = true;
     modulo.hidden = false;
 
-    var L = tela.width, A = tela.height;
+    var L = tela.width, A = tela.height, largoTesto = 900;
     var AVORIO = '#FAF6EE', ANTRACITE = '#1C1C1C', ORO = '#B88F3D', ORO_SCURO = '#8D6E2A';
     /* i caratteri e l’altezza delle loro righe; la pergamena si stampa più piccola (quattro per foglio), e ha il corpo più grande */
     var STILE = pergamena
@@ -731,7 +731,8 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
           firma: ['italic 400 60px "Cormorant Garamond"', 70], piede: ['500 24px "Instrument Sans"', 0] }
       : { saluto: ['300 italic 112px "Cormorant Garamond"', 118], per: ['400 66px "Cormorant Garamond"', 76],
           corpo: ['400 35px "Instrument Sans"', 54], messaggio: ['italic 400 %px "Cormorant Garamond"', 0],
-          firma: ['italic 400 60px "Cormorant Garamond"', 70], piede: ['500 21px "Instrument Sans"', 0] };
+          firma: ['italic 400 60px "Cormorant Garamond"', 70], piede: ['500 21px "Instrument Sans"', 0],
+          invito: ['italic 400 54px "Cormorant Garamond"', 60], sito: ['500 32px "Instrument Sans"', 40] };
     var el = modulo.elements;
     var esito = modulo.querySelector('.esito');
     var occasione = el.occasione;
@@ -739,6 +740,10 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
     var ricordo = el.ricordo, etichettaRicordo = modulo.querySelector('label[for="mb-ricordo"]');
     function opzione() { return occasione.options[occasione.selectedIndex]; }
     function inRicordo() { return !pergamena && opzione().hasAttribute('data-saluto-nome'); }
+    /* il biglietto di soli auguri, senza donazione (Dacia, 25.11.2026): al posto della frase sulla donazione «Scopri i nostri
+       progetti», l’indirizzo del sito e il codice QR della pagina dei progetti. In ricordo di una persona non si sceglie */
+    var sceltaTipo = modulo.querySelector('fieldset.tipo'), qr = modulo.querySelector('img.qr');
+    function soloAuguri() { return !!sceltaTipo && !inRicordo() && scelto('tipo') === 'auguri'; }
 
     /* l’apostrofo tipografico anche in ciò che scrive chi prepara il cartoncino (regole di qualità, punto 1) */
     function pulito(v) {
@@ -771,13 +776,15 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
       var corpo = voi ? 'data-corpo-voi' : 'data-corpo-te';
       var per = minuscola(pulito(el.per.value).replace(/^per\s+/i, ''));
       var nome = inRicordo() ? pulito(ricordo.value) : '';
+      var auguri = soloAuguri();
       return {
         saluto: nome ? o.getAttribute('data-saluto-nome').replace('{nome}', nome) : o.getAttribute('data-saluto').replace('{te}', voi ? 'voi' : 'te'),
         per: per ? 'Per ' + per : '',
-        corpo: o.getAttribute(corpo) || modulo.getAttribute(corpo),
+        corpo: auguri ? '' : o.getAttribute(corpo) || modulo.getAttribute(corpo),
+        auguri: auguri ? { riga: modulo.getAttribute('data-auguri-riga'), sito: modulo.getAttribute('data-auguri-sito') } : null,
         messaggio: pulito(el.messaggio.value),
         firma: pulito(el.da.value),
-        piede: modulo.getAttribute('data-piede')
+        piede: modulo.getAttribute(auguri ? 'data-auguri-piede' : 'data-piede')
       };
     }
 
@@ -807,6 +814,27 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
       }
     }
 
+    /* il codice QR (img/qr-progetti.svg, un quadratino per modulo) con un numero intero di pixel per modulo, così resta nitido
+       anche stampato o mandato come immagine compressa; accanto, «Scopri i nostri progetti» e l’indirizzo del sito */
+    var QR_MODULO = 6, QR_LATO = 29 * QR_MODULO;
+    function codiceQR(a, x, y) {
+      if (qr && qr.complete && qr.naturalWidth) {
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(qr, x, y, QR_LATO, QR_LATO);
+        ctx.imageSmoothingEnabled = true;
+      }
+      var tx = x + QR_LATO + 44;
+      ctx.textBaseline = 'alphabetic';
+      ctx.font = STILE.invito[0]; ctx.fillStyle = ANTRACITE;
+      var parole = righe(a.riga, largoTesto - QR_LATO - 44);
+      var alto = parole.length * STILE.invito[1] + 22 + STILE.sito[1];
+      var ty = y + (QR_LATO - alto) / 2;
+      parole.forEach(function (r) { ctx.fillText(r, tx, ty + STILE.invito[1] * 0.78); ty += STILE.invito[1]; });
+      ty += 22;
+      ctx.font = STILE.sito[0]; ctx.fillStyle = ORO_SCURO;
+      spaziato(a.sito, tx, ty + STILE.sito[1] * 0.78, 2);
+    }
+
     function disegna() {
       var t = testi();
       ctx.fillStyle = AVORIO;
@@ -833,7 +861,7 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
         ctx.drawImage(immagine, 380 - w * scala / 2, A / 2 - h * scala / 2, w * scala, h * scala);
       }
       /* il testo, a destra: si misura, poi si centra in altezza */
-      var x = 790, largo = 900, blocchi = [];
+      var x = 790, largo = largoTesto, blocchi = [];
       function aggiungi(nome, testo, colore) {
         ctx.font = STILE[nome][0];
         righe(testo, largo).forEach(function (r) { blocchi.push({ font: STILE[nome][0], colore: colore, testo: r, alto: STILE[nome][1] }); });
@@ -864,7 +892,11 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
         blocchi.push({ spazio: 34 });
         aggiungi('firma', t.firma, ORO_SCURO);
       }
-      if (primaFrase) {
+      if (primaFrase && t.auguri) {
+        /* il biglietto di soli auguri: il codice QR, e accanto «Scopri i nostri progetti» e l’indirizzo del sito */
+        blocchi.push({ spazio: t.messaggio || t.firma ? 50 : 0 });
+        blocchi.push({ qr: true, alto: QR_LATO });
+      } else if (primaFrase) {
         blocchi.push({ spazio: t.messaggio || t.firma ? 44 : 0 });
         aggiungi('corpo', t.corpo, 'rgba(28,28,28,.8)');
       }
@@ -873,6 +905,7 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
       ctx.textBaseline = 'alphabetic';
       blocchi.forEach(function (b) {
         if (b.spazio) { y += b.spazio; return; }
+        if (b.qr) { codiceQR(t.auguri, x, Math.round(y)); y += b.alto; return; }
         ctx.font = b.font; ctx.fillStyle = b.colore;
         ctx.fillText(b.testo, x, y + b.alto * 0.78);
         y += b.alto;
@@ -880,8 +913,9 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
       ctx.font = STILE.piede[0]; ctx.fillStyle = ORO_SCURO;
       spaziato(t.piede.toUpperCase(), x, A - 112, 3);
       /* per chi usa un lettore di schermo, il cartoncino in parole */
+      var invito = t.auguri ? t.auguri.riga + ': ' + t.auguri.sito + ', con il codice QR della pagina dei progetti' : '';
       tela.setAttribute('aria-label', (pergamena ? 'Anteprima della pergamena: ' : 'Anteprima del biglietto: ') +
-        (primaFrase ? [t.saluto, t.per, t.messaggio, t.firma, t.corpo, t.piede] : [t.saluto, t.per, t.corpo, t.messaggio, t.firma, t.piede])
+        (primaFrase ? [t.saluto, t.per, t.messaggio, t.firma, t.corpo || invito, t.piede] : [t.saluto, t.per, t.corpo, t.messaggio, t.firma, t.piede])
         .filter(Boolean).map(function (s) { return /[.!?…»]$/.test(s) ? s : s + '.'; }).join(' '));
     }
 
@@ -892,12 +926,19 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
       (window.requestAnimationFrame || setTimeout)(function () { inAttesa = false; disegna(); });
     }
     if (!pergamena) {
-      var campoRicordo = function () { ricordo.hidden = etichettaRicordo.hidden = !inRicordo(); };
+      var campoRicordo = function () {
+        ricordo.hidden = etichettaRicordo.hidden = !inRicordo();
+        if (sceltaTipo) {
+          sceltaTipo.hidden = inRicordo();
+          if (inRicordo()) modulo.querySelector('input[name="tipo"][value="dono"]').checked = true;
+        }
+      };
       occasione.addEventListener('change', function () {
         if (opzione().getAttribute('data-persone') === 'voi') modulo.querySelector('input[name="persone"][value="voi"]').checked = true;
-        /* l’abete è del Natale (9.11): per un’altra occasione, se era già scelto, lascia il posto alla candela */
-        var abete = modulo.querySelector('input[name="immagine"][value="abete"]');
-        if (abete && abete.checked && occasione.value !== 'natale') modulo.querySelector('input[name="immagine"][value="candela"]').checked = true;
+        /* l’abete e gli altri disegni di Natale (data-feste) sono delle feste (Natale 9.11; le feste e l’anno nuovo, Dacia
+           25.11): per un’altra occasione, se uno era già scelto, lascia il posto alla candela */
+        var scelta = modulo.querySelector('input[name="immagine"]:checked');
+        if (scelta && scelta.hasAttribute('data-feste') && !opzione().hasAttribute('data-abete')) modulo.querySelector('input[name="immagine"][value="candela"]').checked = true;
         campoRicordo();
       });
       campoRicordo();
@@ -910,6 +951,7 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
       Promise.all(Object.keys(STILE).map(function (k) { return document.fonts.load(STILE[k][0].replace('%', '50')); }))
         .then(ridisegna, ridisegna);
     }
+    if (qr && !qr.complete) qr.addEventListener('load', ridisegna);
     var tavole = modulo.querySelectorAll('.immagine img');
     for (var i = 0; i < tavole.length; i++) if (!tavole[i].complete) tavole[i].addEventListener('load', ridisegna);
 
@@ -928,9 +970,10 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
         return opzione().getAttribute('data-file') + (nome ? '-di-' + nome : '') + '.' + estensione;
       }
       var per = corto(pulito(el.per.value).replace(/^per\s+/i, ''));
-      return 'regalo-solidale' + (per ? '-per-' + per : '') + '.' + estensione;
+      return (soloAuguri() ? modulo.getAttribute('data-auguri-file') : 'regalo-solidale') + (per ? '-per-' + per : '') + '.' + estensione;
     }
     function titolo() {
+      if (soloAuguri()) return modulo.getAttribute('data-auguri-titolo');
       return (pergamena ? modulo : opzione()).getAttribute('data-titolo') || 'Regalo solidale';
     }
     function jpeg() {
@@ -940,11 +983,130 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
         catch (e) { errore(e); }
       });
     }
+    /* il biglietto da piegare (Elias, 25.11.2026: «formato biglietto auguri classico»): un A4 verticale di 1800 × 2546 pixel,
+       da stampare su un lato solo e piegare in quattro (prima a metà portando dietro la parte di sopra, poi ancora a metà con
+       l’immagine davanti). Quattro facce di 900 × 1273 pixel, 10,5 × 14,8 cm: in basso a destra la facciata davanti
+       (l’immagine e il saluto), in basso a sinistra il retro (il nome della Fondazione), in alto l’interno, capovolto perché
+       dopo le due pieghe si legga diritto: a destra le parole di chi regala e la frase sul dono (o il codice QR dei progetti),
+       a sinistra lo spazio per scrivere a mano. Il fondo resta il bianco della carta, e tutto sta ad almeno 9 mm dai bordi,
+       dove anche le stampanti di casa arrivano. Si disegna in una tela che non si vede; con la stessa misura dei caratteri
+       del biglietto (8,57 pixel per millimetro in tutti e due) */
+    var PL = 900, PA = 1273, telaPiegata = null;
+    function faccia(x, y, capovolta, disegno) {
+      ctx.save();
+      if (capovolta) { ctx.translate(x + PL, y + PA); ctx.rotate(Math.PI); } else ctx.translate(x, y);
+      disegno();
+      ctx.restore();
+    }
+    function spaziatoCentrato(testo, cx, y, spazio) {
+      var w = 0;
+      for (var i = 0; i < testo.length; i++) w += ctx.measureText(testo[i]).width + (i ? spazio : 0);
+      ctx.textAlign = 'left';
+      spaziato(testo, cx - w / 2, y, spazio);
+    }
+    function davanti(t) {
+      ctx.fillStyle = AVORIO;                      /* dentro la cornice l’avorio del biglietto, come le tavole incise */
+      ctx.fillRect(78, 78, PL - 156, PA - 156);
+      ctx.strokeStyle = ORO;
+      ctx.globalAlpha = 0.75; ctx.lineWidth = 2; ctx.strokeRect(78, 78, PL - 156, PA - 156);
+      ctx.globalAlpha = 0.35; ctx.lineWidth = 1; ctx.strokeRect(92, 92, PL - 184, PA - 184);
+      ctx.globalAlpha = 1;
+      var immagine = modulo.querySelector('input[name="immagine"]:checked + img');
+      var foto = immagine && immagine.previousElementSibling && immagine.previousElementSibling.hasAttribute('data-foto');
+      if (!foto && immagine && immagine.complete && immagine.naturalWidth) {
+        var w = Number(immagine.getAttribute('width')), h = Number(immagine.getAttribute('height'));
+        var scala = Math.min(520 / w, 600 / h);
+        ctx.drawImage(immagine, PL / 2 - w * scala / 2, 500 - h * scala / 2, w * scala, h * scala);
+      }
+      ctx.font = STILE.saluto[0]; ctx.fillStyle = ANTRACITE; ctx.textAlign = 'center';
+      var r = righe(t.saluto, 660), y = 1000 - (r.length - 1) * STILE.saluto[1] / 2;
+      r.forEach(function (riga) { ctx.fillText(riga, PL / 2, y); y += STILE.saluto[1]; });
+    }
+    function retro(t) {
+      ctx.font = STILE.piede[0]; ctx.fillStyle = ORO_SCURO;
+      var parti = t.piede.toUpperCase().split(' · '), y = PA - 160 - (parti.length - 1) * 36;
+      parti.forEach(function (parte) { spaziatoCentrato(parte, PL / 2, y, 3); y += 36; });
+    }
+    function dentro(t) {
+      var cx = PL / 2, largo = 660, blocchi = [];
+      function aggiungi(nome, testo, colore) {
+        ctx.font = STILE[nome][0];
+        righe(testo, largo).forEach(function (r) { blocchi.push({ font: STILE[nome][0], colore: colore, testo: r, alto: STILE[nome][1] }); });
+      }
+      if (t.per) aggiungi('per', t.per, ORO_SCURO);
+      if (t.messaggio) {
+        var corpo = 52, fatte;
+        do {
+          ctx.font = STILE.messaggio[0].replace('%', corpo);
+          fatte = righe(t.messaggio, largo);
+          corpo -= 4;
+        } while (fatte.length > 5 && corpo >= 36);
+        if (blocchi.length) blocchi.push({ spazio: 36 });
+        fatte.slice(0, 6).forEach(function (r) { blocchi.push({ font: ctx.font, colore: ANTRACITE, testo: r, alto: Math.round((corpo + 4) * 1.22) }); });
+      }
+      if (t.firma) {
+        if (blocchi.length) blocchi.push({ spazio: 34 });
+        aggiungi('firma', t.firma, ORO_SCURO);
+      }
+      /* le parole di chi regala, al centro della parte di sopra */
+      var totale = blocchi.reduce(function (s, b) { return s + (b.spazio || b.alto); }, 0);
+      var y = 130 + Math.max(0, (660 - totale) / 2);
+      ctx.textAlign = 'center';
+      blocchi.forEach(function (b) {
+        if (b.spazio) { y += b.spazio; return; }
+        ctx.font = b.font; ctx.fillStyle = b.colore;
+        ctx.fillText(b.testo, cx, y + b.alto * 0.78);
+        y += b.alto;
+      });
+      /* in fondo, la frase sul dono; nel biglietto di soli auguri il codice QR, «Scopri i nostri progetti» e l’indirizzo */
+      if (t.auguri) {
+        var qy = 850;
+        if (qr && qr.complete && qr.naturalWidth) {
+          ctx.imageSmoothingEnabled = false;
+          ctx.drawImage(qr, cx - QR_LATO / 2, qy, QR_LATO, QR_LATO);
+          ctx.imageSmoothingEnabled = true;
+        }
+        ctx.font = STILE.invito[0]; ctx.fillStyle = ANTRACITE;
+        ctx.fillText(t.auguri.riga, cx, qy + QR_LATO + 66);
+        ctx.font = STILE.sito[0]; ctx.fillStyle = ORO_SCURO;
+        spaziatoCentrato(t.auguri.sito, cx, qy + QR_LATO + 118, 2);
+      } else if (t.corpo) {
+        ctx.font = STILE.corpo[0];
+        var r = righe(t.corpo, 620), ry = PA - 150 - (r.length - 1) * STILE.corpo[1];
+        ctx.strokeStyle = ORO; ctx.globalAlpha = 0.6; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(cx - 40, ry - STILE.corpo[1] - 22); ctx.lineTo(cx + 40, ry - STILE.corpo[1] - 22); ctx.stroke();
+        ctx.globalAlpha = 1; ctx.fillStyle = 'rgba(28,28,28,.8)';
+        r.forEach(function (riga) { ctx.fillText(riga, cx, ry); ry += STILE.corpo[1]; });
+      }
+    }
+    function disegnaPiegato() {
+      var t = testi(), principale = ctx;
+      if (!telaPiegata) {
+        telaPiegata = document.createElement('canvas');
+        telaPiegata.width = 2 * PL; telaPiegata.height = 2 * PA;
+      }
+      ctx = telaPiegata.getContext('2d');
+      try {
+        ctx.fillStyle = '#FFFFFF';                 /* la carta */
+        ctx.fillRect(0, 0, 2 * PL, 2 * PA);
+        ctx.textBaseline = 'alphabetic';
+        faccia(PL, PA, false, function () { davanti(t); });
+        faccia(0, PA, false, function () { retro(t); });
+        faccia(0, 0, true, function () { dentro(t); });
+      } finally { ctx = principale; }
+      return new Promise(function (fatto, errore) {
+        try { telaPiegata.toBlob(function (b) { if (b) fatto(b); else errore(new Error('vuoto')); }, 'image/jpeg', 0.9); }
+        catch (e) { errore(e); }
+      });
+    }
+
     /* il foglio e il disegno che ci stende l’immagine. Il biglietto: un A5 orizzontale (595,28 × 419,53 punti), tutto.
-       La pergamena: un A4 orizzontale (841,89 × 595,28) con quattro copie, un margine di 8 mm che ogni stampante lascia
-       e le linee grigie dove tagliare */
-    function foglio() {
-      if (!pergamena) return { misura: '595.28 419.53', disegno: 'q 595.28 0 0 419.53 0 0 cm /Im1 Do Q' };
+       La pergamena, e il biglietto «quattro per foglio» (Elias, 25.11): un A4 orizzontale (841,89 × 595,28) con quattro copie,
+       un margine di 8 mm che ogni stampante lascia e le linee grigie dove tagliare. Il biglietto da piegare: un A4 verticale
+       (595,28 × 841,89), tutto, con l’immagine del foglio disegnato da disegnaPiegato */
+    function foglio(come) {
+      if (come === 'piegato') return { misura: '595.28 841.89', disegno: 'q 595.28 0 0 841.89 0 0 cm /Im1 Do Q', largo: 2 * PL, alto: 2 * PA };
+      if (!pergamena && come !== 'quattro') return { misura: '595.28 419.53', disegno: 'q 595.28 0 0 419.53 0 0 cm /Im1 Do Q' };
       var margine = 22.68, alto = (595.28 - 2 * margine) / 2, largo = alto * L / A, x0 = (841.89 - 2 * largo) / 2;
       var copie = [], linee = [];
       function n(v) { return v.toFixed(2); }
@@ -956,7 +1118,7 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
       return { misura: '841.89 595.28', disegno: copie.join('\n') + '\nq 0.75 G 0.4 w ' + linee.join(' ') + ' S Q' };
     }
     /* il PDF: catalogo, pagine, una pagina, l’immagine, il disegno che la stende e le informazioni sul documento */
-    function pdf(immagine) {
+    function pdf(immagine, come) {
       return immagine.arrayBuffer().then(function (dati) {
         var parti = [], scritti = 0, dove = [];
         function aggiungi(x) {
@@ -964,14 +1126,14 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
           parti.push(b); scritti += b.length;
         }
         function oggetto(n, testo) { dove[n] = scritti; aggiungi(n + ' 0 obj\n' + testo + '\nendobj\n'); }
-        var jpg = new Uint8Array(dati), f = foglio();
+        var jpg = new Uint8Array(dati), f = foglio(come), largo = f.largo || L, alto = f.alto || A;
         aggiungi('%PDF-1.4\n');
         aggiungi(new Uint8Array([37, 226, 227, 207, 211, 10]));   /* la riga che dice ai programmi che il file contiene dati binari */
         oggetto(1, '<< /Type /Catalog /Pages 2 0 R >>');
         oggetto(2, '<< /Type /Pages /Kids [3 0 R] /Count 1 >>');
         oggetto(3, '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ' + f.misura + '] /Resources << /XObject << /Im1 4 0 R >> >> /Contents 5 0 R >>');
         dove[4] = scritti;
-        aggiungi('4 0 obj\n<< /Type /XObject /Subtype /Image /Width ' + L + ' /Height ' + A +
+        aggiungi('4 0 obj\n<< /Type /XObject /Subtype /Image /Width ' + largo + ' /Height ' + alto +
                  ' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ' + jpg.length + ' >>\nstream\n');
         aggiungi(jpg);
         aggiungi('\nendstream\nendobj\n');
@@ -1001,6 +1163,16 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
       e.preventDefault();
       esito.hidden = true;
       jpeg().then(pdf).then(function (b) { scarica(b, nomeFile('pdf')); }, nonRiesce);
+    });
+    /* il biglietto da piegare e quello quattro per foglio (Elias, 25.11): «regalo-solidale-per-anna-da-piegare.pdf» */
+    [['piegato', disegnaPiegato], ['quattro', jpeg]].forEach(function (c) {
+      var pulsante = modulo.querySelector('[data-formato="' + c[0] + '"]');
+      if (!pulsante) return;
+      pulsante.addEventListener('click', function () {
+        esito.hidden = true;
+        c[1]().then(function (b) { return pdf(b, c[0]); })
+          .then(function (b) { scarica(b, nomeFile('pdf').replace(/\.pdf$/, pulsante.getAttribute('data-file') + '.pdf')); }, nonRiesce);
+      });
     });
     modulo.querySelector('[data-formato="jpg"]').addEventListener('click', function () {
       esito.hidden = true;
