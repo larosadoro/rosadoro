@@ -157,7 +157,7 @@ Prima di tutto leggi `LEGGIMI.txt` e `REGOLE-DI-QUALITA.txt`.
   di neve, stella di Natale, orsetto, 25.11) e altri tre (26.11: la volpe e la cicogna, l’albero dei pianeti, cioè l’albero di
   Natale di Steiner con i suoi segni e i pianeti su una mezza lemniscata, «Happy New Year» con pigne, melograni, dodecaedro e pentacolo), incisi come l’abete; sono in `DISEGNI_DELLE_FESTE` e
   per un’occasione che non è delle feste lasciano il posto alla candela. Si rifanno con `disegna.py` e `disegna2.py` in
-  `/mnt/project-files/natale-2026/disegni/` (con `albero.py`, `volpe.py` e `pezzi.py`; in «Happy New Year» le lettere sono tracciati presi dal Cormorant del sito).
+  `/mnt/project-files/natale-2026/disegni/` (con `albero.py`, `volpe.py` con `volpe_profilo.py` e `pezzi.py`; in «Happy New Year» le lettere sono tracciati presi dal Cormorant del sito).
 - «Sostieni» per progetto (Dacia ed Elias, 25.11): nei «Progetti da sostenere» `{stripe-progetto:nome}` porta allo stesso
   link Stripe di Dona con `client_reference_id=sito-progetto-<nome>` (`SEGNO_PROGETTO`); `{senza-stripe}` mostra il bonifico
   quando `STRIPE` è vuoto. Lux porta al suo sito. LUX riconosce queste donazioni dal Payment Link: ricevuta e foglio dello
