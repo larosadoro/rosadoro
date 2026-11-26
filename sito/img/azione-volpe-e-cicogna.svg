@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" role="img" aria-label="Una volpe seduta nella neve guarda una cicogna in cima a un abete, inciso">
+  <rect width="200" height="240" fill="#FAF6EE"/>
+  <g fill="#B88F3D" opacity=".75"><circle cx="22" cy="30" r="1.6"/><circle cx="48" cy="18" r="1.1"/><circle cx="74" cy="34" r="1.1"/><circle cx="100" cy="20" r="1.6"/><circle cx="30" cy="62" r="1.1"/><circle cx="56" cy="70" r="1.1"/><circle cx="112" cy="30" r="1.6"/><circle cx="178" cy="26" r="1.1"/><circle cx="188" cy="62" r="1.1"/><circle cx="176" cy="104" r="1.6"/><circle cx="18" cy="104" r="1.1"/><circle cx="104" cy="64" r="1.1"/><circle cx="190" cy="150" r="1.6"/><circle cx="16" cy="150" r="1.1"/><circle cx="166" cy="30" r="1.1"/></g>
+  <g transform="translate(144 98) scale(.72) translate(-100 -50)" stroke="#1C1C1C" fill="#FAF6EE" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2">
+    <path d="M100 50c-6 16-14 30-26 44q13 6 26 0q13 6 26 0c-12-14-20-28-26-44"/>
+    <path d="M82 94c-6 14-12 26-24 40q15 7 30 0q12 7 24 0q15 7 30 0c-12-14-18-26-24-40"/>
+    <path d="M70 136c-6 14-14 26-28 40q15 7 30 0q14 7 28 0q14 7 28 0q15 7 30 0c-14-14-22-26-28-40"/>
+    <path d="M95 182v10M105 182v10" fill="none"/>
+  </g>
+  <g transform="translate(144 98) scale(.72) translate(-100 -50)" stroke="#8D6E2A" fill="none" stroke-linecap="round" stroke-width="1.2" opacity=".5">
+    <path d="M98 66l-6 9M108 76l-7 10M90 104l-8 11M120 106l-7 10M104 110l-8 12M80 148l-9 12M134 150l-8 11M112 148l-9 13M96 150l-8 12"/>
+  </g>
+  <g stroke="#B88F3D" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+    <path d="M147 76L145.5 87L144 97.5"/>
+    <path d="M152 75L158 85L149 88"/>
+    <path d="M140 98H148M144 97.5L141 100" stroke-width="1.2"/>
+  </g>
+  <g stroke="#1C1C1C" fill="#FAF6EE" stroke-linejoin="round" stroke-linecap="round" stroke-width="1.4">
+    <path d="M135 70C136 62 146 58 157 60L174 63L178 67L168 70C160 77 144 79 135 70z"/>
+  </g>
+  <path d="M152 61.5C160 61 168 62 178 67L168 70C162 73 156 73 151 71C153 68 153 64 152 61.5z" fill="#1C1C1C"/>
+  <g stroke="#FAF6EE" fill="none" stroke-linecap="round" stroke-width=".7"><path d="M160 64.5l7 2.5M158 68l8 0.6"/></g>
+  <g stroke="#1C1C1C" fill="#FAF6EE" stroke-linejoin="round" stroke-linecap="round" stroke-width="1.4">
+    <path d="M137 68C131 63 128 56 128.6 49.5L133.4 48.6C133.4 54 135.4 59 141 62.6"/>
+    <circle cx="130.4" cy="45.6" r="4.6"/>
+  </g>
+  <path d="M127 44.4L106.5 57L127.6 48.4z" fill="#B88F3D" stroke="#8D6E2A" stroke-width=".8" stroke-linejoin="round"/>
+  <circle cx="129.6" cy="44.2" r="1" fill="#1C1C1C"/>
+  <g stroke="#1C1C1C" fill="#FAF6EE" stroke-linejoin="round" stroke-linecap="round" stroke-width="1.5">
+    <path d="M70 120C60 133 51 150 48 168C45 186 49 199 60 205H97C100 188 103 168 101 151C100 138 98 129 93 120z"/>
+  </g>
+  <path d="M53 174C60 166 74 168 78 180C79.6 186 79 192 77 196" stroke="#1C1C1C" fill="none" stroke-width="1.3" stroke-linecap="round"/>
+  <path d="M91 124C87 136 86 150 90 166" stroke="#8D6E2A" fill="none" stroke-width="1" stroke-linecap="round" opacity=".8"/>
+  <g stroke="#8D6E2A" fill="none" stroke-linecap="round" stroke-width=".9" opacity=".6">
+    <path d="M64 132l5 3M58 142l5 3M54 153l6 3M51 165l6 2M50 177l5 1M58 180l4 4M63 188l5 3M84 132l-3 4M83 146l-3 3"/>
+  </g>
+  <g stroke="#1C1C1C" fill="#FAF6EE" stroke-linejoin="round" stroke-linecap="round" stroke-width="1.5">
+    <path d="M47 178C33 188 34 207 50 213C70 220 98 218 112 209C117 206 118 200 113 197.5C106 199.5 98 203 88 204.5C72 206.5 58 204 53 196C51 190 51 184 53 178z"/>
+  </g>
+  <g stroke="#8D6E2A" fill="none" stroke-linecap="round" stroke-width=".9" opacity=".6">
+    <path d="M42 190l5 2M42 199l6 2M48 207l6 1M57 211l7 0M67 213l7-.5M78 212l7-1M88 210l6-1M47 183l4 3"/>
+  </g>
+  <path d="M101 215L104.4 211L101.6 208L104.8 205L102.6 202.2" stroke="#1C1C1C" fill="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+  <g stroke="#1C1C1C" fill="#FAF6EE" stroke-linejoin="round" stroke-linecap="round" stroke-width="1.5">
+    <path d="M84.5 176C84.5 186 84 195 84 201C84 205 92 205.5 93 202.5C92.4 195 92.4 186 92.6 178"/>
+    <path d="M92 174C92.6 184 92.6 193 92.6 201C92.6 205.5 102.4 205.5 103 202C101.6 194 100.4 182 100.2 170"/>
+  </g>
+  <g stroke="#1C1C1C" fill="#FAF6EE" stroke-linejoin="round" stroke-linecap="round" stroke-width="1.5">
+    <path d="M68 108C64 98 61 88 61 78C69 84 75 90 79 98z"/>
+    <path d="M76 101C75 92 75 83 78 74C84 80 89 88 91 98z"/>
+    <path d="M70 116C66 112 66 104 70 100C74 96 80 96 86 96C90 96 93 96 96 95L111 88.4C114 87.6 115.6 90 114.6 92.4C113.4 95 110 96.6 106 98.6L100 104C98 110 96 114 93 118L90 123L87 119L84 124L80 119L76 124L74 118z"/>
+  </g>
+  <g stroke="#8D6E2A" fill="none" stroke-linecap="round" stroke-width=".9" opacity=".75">
+    <path d="M69 99L64 84M80 96L79 81"/>
+  </g>
+  <g stroke="#8D6E2A" fill="none" stroke-linecap="round" stroke-width=".9" opacity=".6">
+    <path d="M75 103l3 3M80 101l3 3M71 108l3 3"/>
+  </g>
+  <path d="M93 101.6q2.8-2.6 5.8-1.6" stroke="#1C1C1C" fill="none" stroke-width="1.3" stroke-linecap="round"/>
+  <circle cx="96.2" cy="101.4" r=".95" fill="#1C1C1C"/>
+  <circle cx="113" cy="90" r="2.1" fill="#1C1C1C"/>
+  <path d="M106 98.6C104 99.6 101.6 100.2 100 100" stroke="#1C1C1C" fill="none" stroke-width=".9" stroke-linecap="round"/>
+  <g stroke="#1C1C1C" fill="none" stroke-linecap="round" stroke-width="1.2" opacity=".7">
+    <path d="M22 215C34 213 40 216 44 216M122 208C140 205 162 210 184 206"/>
+  </g>
+  <g stroke="#8D6E2A" stroke-width=".8" opacity=".5" stroke-linecap="round"><path d="M40 224h12M66 222h10M92 225h16M126 222h10M150 224h12"/></g>
+</svg>
