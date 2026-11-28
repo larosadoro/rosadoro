@@ -1382,6 +1382,56 @@ controllo('il regalo solidale: il biglietto si prepara nella pagina e si scarica
   } finally { await p.chiudi(); }
 });
 
+/* la cifra sul biglietto (Dacia, 28.11): con «regalo-donazione» chi vuole la scrive, chi la lascia vuota ha il biglietto di prima;
+   con «biglietto di auguri», in ricordo di una persona e nella cartolina dei funerali la cifra non c’è */
+async function aspettaDetto(page, parte, assente) {
+  await page.waitForFunction(([s, parte, assente]) => {
+    const a = (document.querySelector(s + ' canvas').getAttribute('aria-label') || '').replace(/\s+/g, ' ');
+    return a.includes(parte) && !(assente && a.includes(assente));
+  }, [BIGLIETTO, parte, assente || ''], { timeout: 3000 });
+}
+controllo('il regalo-donazione: chi vuole scrive la cifra sul biglietto, chi no la lascia vuota (Dacia, 28.11)', async () => {
+  const p = await apri(REGALO);
+  try {
+    await p.page.locator(BIGLIETTO).waitFor({ state: 'visible', timeout: 5000 });
+    const voci = await p.page.$$eval(BIGLIETTO + ' fieldset.tipo label span', l => l.map(x => x.textContent.trim()));
+    assert.deepStrictEqual(voci, ['regalo-donazione', 'biglietto di auguri'], 'le due scelte con i nomi di Dacia: ' + voci);
+    await p.page.locator('#mb-cifra').waitFor({ state: 'visible', timeout: 2000 });
+    assert.strictEqual(await p.page.inputValue('#mb-cifra'), '', 'la cifra parte vuota');
+    await aspettaDetto(p.page, 'Questo regalo è una donazione alla Fondazione');
+    for (const [scritto, atteso] of [['50', '50 euro'], ['1000', '1.000 euro'], ['25,5', '25,50 euro'], ['€ 30', '30 euro'],
+                                     ['100 euro', '100 euro'], ['2.500', '2.500 euro'], ['12.5', '12,50 euro']]) {
+      await p.page.fill('#mb-cifra', scritto);
+      await aspettaDetto(p.page, 'Questo regalo è una donazione di ' + atteso + ' alla Fondazione');
+    }
+    await p.page.fill('#mb-cifra', 'tanto');
+    await aspettaDetto(p.page, 'Questo regalo è una donazione alla Fondazione');
+    assert.ok(!(await dettoDalBiglietto(p.page)).includes('tanto'), 'una cifra che non è un numero non va sul biglietto');
+    await p.page.fill('#mb-cifra', '0');
+    await aspettaDetto(p.page, 'Questo regalo è una donazione alla Fondazione');
+    await p.page.fill('#mb-cifra', '50');
+    await p.page.check(BIGLIETTO + ' input[name="persone"][value="voi"]');
+    await aspettaDetto(p.page, 'una donazione di 50 euro alla Fondazione La Rosa d’Oro, fatta pensando a voi');
+    await p.page.$eval(BIGLIETTO + ' input[name="tipo"][value="auguri"]', e => e.click());
+    await p.page.locator('#mb-cifra').waitFor({ state: 'hidden', timeout: 2000 });
+    await aspettaDetto(p.page, 'Scopri i nostri progetti', '50 euro');
+    await p.page.$eval(BIGLIETTO + ' input[name="tipo"][value="dono"]', e => e.click());
+    await p.page.locator('#mb-cifra').waitFor({ state: 'visible', timeout: 2000 });
+    await aspettaDetto(p.page, 'una donazione di 50 euro alla Fondazione');
+    await p.page.selectOption('#mb-occasione', 'ricordo');
+    await p.page.locator('#mb-cifra').waitFor({ state: 'hidden', timeout: 2000 });
+    await aspettaDetto(p.page, 'donazione in memoria', 'euro');
+    assert.deepStrictEqual(p.allo, [], 'niente deve partire verso lo script del foglio');
+    assert.deepStrictEqual(p.errori, []);
+  } finally { await p.chiudi(); }
+  const f = await apri('in-memoria/funerali/index.html');
+  try {
+    await f.page.locator(BIGLIETTO).waitFor({ state: 'visible', timeout: 5000 });
+    assert.strictEqual(await f.page.$('#mb-cifra'), null, 'nella cartolina dei funerali la cifra non c’è');
+    assert.deepStrictEqual(f.errori, []);
+  } finally { await f.chiudi(); }
+});
+
 controllo('il biglietto parla a più persone con il «voi», cambia con l’occasione e senza nomi resta giusto', async () => {
   const p = await apri(REGALO);
   try {
@@ -1586,7 +1636,7 @@ controllo('il biglietto anche da piegare e quattro per foglio: due fogli A4, con
     await p.page.selectOption('#mb-occasione', 'feste');
     await p.page.waitForFunction(s => /Buone feste/.test(document.querySelector(s + ' canvas').getAttribute('aria-label')), BIGLIETTO);
     const nota = (await p.page.textContent(BIGLIETTO + ' p.nota.formati')).replace(/\s+/g, ' ');
-    assert.ok(/un lato solo/.test(nota) && /pieg/.test(nota) && /tagli/.test(nota), 'manca la riga che dice come stampare, piegare e tagliare: ' + nota);
+    assert.ok(/su un unico lato/.test(nota) && /pieg/.test(nota) && /tagli/.test(nota), 'manca la riga che dice come stampare, piegare e tagliare: ' + nota);
 
     /* da piegare: un A4 verticale */
     const piegato = await scarica(p.page, BIGLIETTO + ' button[data-formato="piegato"]');

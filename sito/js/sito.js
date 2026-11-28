@@ -744,6 +744,22 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
        progetti», l’indirizzo del sito e il codice QR della pagina dei progetti. In ricordo di una persona non si sceglie */
     var sceltaTipo = modulo.querySelector('fieldset.tipo'), qr = modulo.querySelector('img.qr');
     function soloAuguri() { return !!sceltaTipo && !inRicordo() && scelto('tipo') === 'auguri'; }
+    /* la cifra, se chi dona la scrive (Dacia, 28.11.2026): «50», «1000», «25,5», «€ 30» diventano « di 50 euro», « di 1.000 euro»,
+       « di 25,50 euro», « di 30 euro» nella frase sulla donazione; vuota, zero o non un numero, la frase resta senza cifra.
+       Solo con «regalo-donazione»: con «biglietto di auguri» e in ricordo di una persona il campo si nasconde */
+    var campoCifra = el.cifra, etichettaCifra = modulo.querySelector('label[for="mb-cifra"]');
+    function conCifra() { return !!campoCifra && !soloAuguri() && !inRicordo(); }
+    function cifra() {
+      if (!conCifra()) return '';
+      var v = String(campoCifra.value || '').replace(/euro|eur|€/gi, '').replace(/\s+/g, ''), intero, cent, m;
+      if ((m = /^(\d{1,3}(?:\.\d{3})+|\d+)(?:,(\d{1,2}))?$/.exec(v))) { intero = m[1].replace(/\./g, ''); cent = m[2] || ''; }
+      else if ((m = /^(\d+)\.(\d{1,2})$/.exec(v))) { intero = m[1]; cent = m[2]; }
+      else return '';
+      intero = intero.replace(/^0+(?=\d)/, '');
+      if (cent.length === 1) cent += '0';
+      if (intero.length > 7 || (+intero === 0 && !+cent)) return '';
+      return ' di ' + intero.replace(/\B(?=(\d{3})+(?!\d))/g, '.') + (+cent ? ',' + cent : '') + ' euro';
+    }
 
     /* l’apostrofo tipografico anche in ciò che scrive chi prepara il cartoncino (regole di qualità, punto 1) */
     function pulito(v) {
@@ -780,7 +796,7 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
       return {
         saluto: nome ? o.getAttribute('data-saluto-nome').replace('{nome}', nome) : o.getAttribute('data-saluto').replace('{te}', voi ? 'voi' : 'te'),
         per: per ? 'Per ' + per : '',
-        corpo: auguri ? '' : o.getAttribute(corpo) || modulo.getAttribute(corpo),
+        corpo: auguri ? '' : (o.getAttribute(corpo) || modulo.getAttribute(corpo)).replace('{cifra}', cifra()),
         auguri: auguri ? { riga: modulo.getAttribute('data-auguri-riga'), sito: modulo.getAttribute('data-auguri-sito') } : null,
         messaggio: pulito(el.messaggio.value),
         firma: pulito(el.da.value),
@@ -934,13 +950,16 @@ function daCollegamento(riquadro, parametro, foglio, indirizzo, seNonRiesce, qua
       (window.requestAnimationFrame || setTimeout)(function () { inAttesa = false; disegna(); });
     }
     if (!pergamena) {
+      var mostraCifra = function () { if (campoCifra) campoCifra.hidden = etichettaCifra.hidden = !conCifra(); };
       var campoRicordo = function () {
         ricordo.hidden = etichettaRicordo.hidden = !inRicordo();
         if (sceltaTipo) {
           sceltaTipo.hidden = inRicordo();
           if (inRicordo()) modulo.querySelector('input[name="tipo"][value="dono"]').checked = true;
         }
+        mostraCifra();
       };
+      if (sceltaTipo) sceltaTipo.addEventListener('change', mostraCifra);
       occasione.addEventListener('change', function () {
         if (opzione().getAttribute('data-persone') === 'voi') modulo.querySelector('input[name="persone"][value="voi"]').checked = true;
         /* l’abete e gli altri disegni di Natale (data-feste) sono delle feste (Natale 9.11; le feste e l’anno nuovo, Dacia
