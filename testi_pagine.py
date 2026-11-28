@@ -1512,7 +1512,9 @@ BIGLIETTO = dict(
     corpo_te="Questo regalo è una donazione{cifra} alla Fondazione La\u00a0Rosa\u00a0d’Oro, fatta pensando a te. Diventerà terra coltivata, cura, accompagnamento.",
     corpo_voi="Questo regalo è una donazione{cifra} alla Fondazione La\u00a0Rosa\u00a0d’Oro, fatta pensando a voi. Diventerà terra coltivata, cura, accompagnamento.",
     # il campo della cifra, facoltativo, solo con «regalo-donazione»: mai in ricordo di una persona né nei funerali (Claude, 28.11)
-    cifra=dict(campo="La cifra che doni", segnaposto="Per esempio: 50"),
+    # le parole del campo sono di Dacia (28.11), con la spiegazione in piccolo al posto di «facoltativo»
+    cifra=dict(campo="La cifra che doni e che vuoi appaia sul biglietto", nota="se non vuoi che appaia, non scrivere niente",
+               segnaposto="Per esempio: 50"),
     piede="Fondazione La Rosa d’Oro ETS · larosadoro.org",
 )
 

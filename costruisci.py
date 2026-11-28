@@ -804,9 +804,9 @@ def biglietto(da, in_ricordo=False):
         # la cifra sul biglietto, se chi dona la vuole scrivere (Dacia, 28.11): sito.js la mette nella frase sulla donazione
         # («una donazione di 50 euro alla Fondazione…») e nasconde il campo con «biglietto di auguri» e in ricordo di una persona
         c = BIGLIETTO["cifra"]
-        tipo += ('<label for="mb-cifra">%s <span>facoltativo</span></label>\n'
+        tipo += ('<label for="mb-cifra">%s <span>%s</span></label>\n'
                  '<input id="mb-cifra" name="cifra" type="text" inputmode="decimal" maxlength="12" autocomplete="off" placeholder="%s">\n'
-                 % (sfuggi(c["campo"]), sfuggi(c["segnaposto"])))
+                 % (sfuggi(c["campo"]), sfuggi(c["nota"]), sfuggi(c["segnaposto"])))
         dati_auguri = (' data-auguri-riga="%s" data-auguri-sito="%s" data-auguri-piede="%s" data-auguri-file="%s" data-auguri-titolo="%s"'
                        % tuple(sfuggi(a[k]) for k in ("riga", "sito", "piede", "file", "titolo")))
     return """<p class="nota" id="biglietto-senza-js">Per preparare %s serve un browser con JavaScript acceso.</p>
