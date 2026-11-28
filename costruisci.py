@@ -795,14 +795,18 @@ def biglietto(da, in_ricordo=False):
         nota_formati = '<p class="nota formati">%s</p>\n' % sfuggi(f["nota"])
         r = BIGLIETTO["auguri"]["ricambia"]       # la frase di Dacia sui biglietti di soli auguri (25.11)
         nota_formati += '<p class="nota">%s<a class="link" href="%s">%s</a>%s</p>\n' % (sfuggi(r[0]), verso(da, "dona"), sfuggi(r[1]), sfuggi(r[2]))
-        g = BIGLIETTO["auguri"]["logo"]           # il logo di un’azienda o di un’istituzione sul biglietto (Elias, 26.11)
-        nota_formati += '<p class="nota">%s<a class="link" href="mailto:%s">%s</a>%s</p>\n' % (sfuggi(g[0]), sfuggi(g[1]), sfuggi(g[1]), sfuggi(g[2]))
     if not in_ricordo:
         tipo = ('<fieldset class="scelta tipo"><legend>%s</legend>'
                 '<label class="consenso"><input type="radio" name="tipo" value="dono" checked> <span>%s</span></label>'
                 '<label class="consenso"><input type="radio" name="tipo" value="auguri"> <span>%s</span></label>'
                 '</fieldset>\n<img class="qr" src="%s" alt="" width="29" height="29" hidden>\n'
                 % (sfuggi(a["domanda"]), sfuggi(a["dono"]), sfuggi(a["solo"]), risorsa(da, "img/qr-progetti.svg")))
+        # la cifra sul biglietto, se chi dona la vuole scrivere (Dacia, 28.11): sito.js la mette nella frase sulla donazione
+        # («una donazione di 50 euro alla Fondazione…») e nasconde il campo con «biglietto di auguri» e in ricordo di una persona
+        c = BIGLIETTO["cifra"]
+        tipo += ('<label for="mb-cifra">%s <span>%s</span></label>\n'
+                 '<input id="mb-cifra" name="cifra" type="text" inputmode="decimal" maxlength="12" autocomplete="off" placeholder="%s">\n'
+                 % (sfuggi(c["campo"]), sfuggi(c["nota"]), sfuggi(c["segnaposto"])))
         dati_auguri = (' data-auguri-riga="%s" data-auguri-sito="%s" data-auguri-piede="%s" data-auguri-file="%s" data-auguri-titolo="%s"'
                        % tuple(sfuggi(a[k]) for k in ("riga", "sito", "piede", "file", "titolo")))
     return """<p class="nota" id="biglietto-senza-js">Per preparare %s serve un browser con JavaScript acceso.</p>
@@ -835,7 +839,7 @@ def biglietto(da, in_ricordo=False):
                "La cartolina" if in_ricordo else "Il biglietto", "" if in_ricordo else " checked", " checked" if in_ricordo else "",
                formati, nota_formati,
                "Sulla cartolina non c’è la cifra. La prepara il tuo browser: i nomi e le parole che scrivi non arrivano a noi."
-               if in_ricordo else "Sul biglietto non c’è la cifra. Lo prepara il tuo browser: i nomi e le parole che scrivi non arrivano a noi.")
+               if in_ricordo else "Sul biglietto la cifra c’è solo se la scrivi tu. Lo prepara il tuo browser: i nomi e le parole che scrivi non arrivano a noi.")
 
 def pergamena(da, in_ricordo=False):
     """la pergamena delle bomboniere solidali (7.11.2026) e, con in_ricordo, quella al posto dei fiori nella pagina dei funerali:

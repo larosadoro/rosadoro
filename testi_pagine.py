@@ -1355,7 +1355,8 @@ TESTI["dona"] = dict(
 </ul>
 """)
 
-# ------------------------------------------------------------ I regali solidali (bozza di Claude del 6.11, da approvare con Elias)
+# ------------------------------------------------------------ I regali solidali (bozza di Claude del 6.11; la parte di Natale, i passi e
+# «Per ogni occasione» li ha riscritti Dacia il 28.11, con Dickens in oro e la frase del logo in cima a «Per le aziende»: sì di Elias, 28.11)
 # La pagina fissa dentro Dona, che non si spegne mai (Elias, 6.11): fuori stagione cambia solo il testo, con NATALE in costruisci.py
 # ({se-natale}…{/se-natale}, {senza-natale}…{/senza-natale}). Si dona con lo stesso link di Stripe di «Dona una volta», segnato
 # «sito-regalo» ({stripe-regalo}), oppure con il bonifico; poi il biglietto si prepara nella pagina ({biglietto}): lo disegna il
@@ -1364,40 +1365,44 @@ TESTI["dona/regali-solidali"] = dict(
     sotto="Un regalo che diventa terra coltivata, cura, accompagnamento.",
     musica_natale="tannenbaum",   # da novembre all’Epifania il pulsante «Ascolta · O Tannenbaum» (Dacia, 14.11)
     corpo="""
-{se-natale}<p>Giunge l’atmosfera di Natale. Il fuoco scoppiettante nel camino, le risate, il profumo di arancia e cannella… anche i cuori più freddi divengono caldi. Il desiderio di donare agli altri si fa più forte. Ascolta quel richiamo del donare… non correre per negozi, sosta e scrivi.</p>
-<p>E allora… dona, scalda e accendi il Natale con un biglietto della Fondazione La Rosa d’Oro. Scegli il biglietto con una candela, o un abete o una rosa, o un altro fiore.</p>
-<p>Accendilo per te, per credere concretamente in un futuro migliore.</p>
-<p>Accendilo per un amico o un’amica, perché possa vedere che c’è altro oltre la materia.</p>
-<p>Accendilo per il mondo.</p>
-<p>Piccole cifre, grandi sogni.</p>
+{se-natale}<p>Giunge l’atmosfera di Natale. Il fuoco scoppiettante nel camino, il profumo di arancia e cannella, le risate, il brillante cielo d’inverno… anche i cuori più freddi si scaldano e si risveglia in noi il desiderio di donare agli altri.</p>
+<p>È tempo di ascoltare quel richiamo a donare… non correre per negozi a comprare per chi ami qualcosa di materiale, respira, sosta e scrivi.</p>
+<p>Qui sotto troverai dei simpatici o eleganti biglietti di Natale personalizzabili e anche la possibilità di un regalo solidale attraverso una donazione che fa bene al mondo.</p>
+<p>Scegli un regalo diverso quest’anno, per credere concretamente in un futuro migliore e migliorare qualcosa vicino a te.</p>
+<p>Sceglilo per il mondo.</p>
+<p>Sceglilo per un amico o un’amica, perché possa essere contagiata dalla cultura del dono. Puoi scriverle la cifra che doni, o lasciarla alla sua immaginazione.</p>
+<p>Niente pacchi e niente spedizioni, un dono che scalda il cuore.</p>
+<p><strong>Hai due possibilità: un biglietto di auguri oppure una donazione come regalo solidale.</strong></p>
+<p class="citazione lunga">«Onorerò il Natale nel mio cuore e cercherò di conservarlo tutto l’anno. Vivrò nel Passato, nel Presente e nel Futuro. Gli Spiriti di tutti e tre lotteranno dentro di me, ma io non chiuderò la porta alle lezioni che insegnano.»<span class="fonte">Charles Dickens, «Canto di Natale», 1843</span></p>
 <p>Fai un <strong>dono solidale</strong> alla Fondazione La Rosa d’Oro pensando a una persona. Prepara qui sotto un biglietto con il suo nome e un pensiero: puoi stamparlo e metterlo sotto l’albero, oppure inviarlo via email o per messaggio.</p>
-<p>E se proprio non sai cosa scrivere? <a class="link" href="{→contatti}">Contattaci</a>: abbiamo anime dalla penna d’oro che possono scrivere per te.</p>
-<p>Niente pacchi e niente spedizioni. Un regalo di luce è ciò che la tua donazione fa crescere.</p>
 <p>Se puoi, ricordati anche di quella zia anziana che vive lontano, a cui non scrivi mai, o di quell’amica che hai perso di vista. Ricevere il biglietto della Fondazione La Rosa d’Oro la farà sorridere.</p>
+<p>E se proprio non sai cosa scrivere? <a class="link" href="{→contatti}">Contattaci</a>: abbiamo anime dalla penna d’oro che possono scrivere per te. Possiamo addirittura scriverti una poesia o una fiaba.</p>
 {/se-natale}{senza-natale}<p>Per un compleanno, una nascita, un matrimonio, una laurea o un anniversario puoi regalare una donazione. Doni alla Fondazione La Rosa d’Oro pensando a una persona, prepari qui sotto un biglietto con il suo nome e glielo dai, stampato oppure per email o per messaggio. Niente pacchi e niente spedizioni: il regalo è ciò che la tua donazione fa crescere. Il regalo di Natale torna a novembre.</p>
 {/senza-natale}<h3>Come si fa</h3>
 <ol class="passi">
-<li><strong>Doni</strong> con la carta, PayPal, Apple Pay o Google Pay sulla pagina di Stripe, oppure con un bonifico. La cifra la scegli tu. Il nome di chi riceve il regalo lì non serve.</li>
+<li><strong>Doni</strong> con la carta, tramite PayPal, Apple Pay o Google Pay sulla pagina di Stripe, oppure con un bonifico. Scegli tu la cifra (il nome di chi riceve il regalo lì non serve).</li>
 <li><strong>Prepari il biglietto</strong> qui sotto: scegli l’occasione e l’immagine, scrivi i nomi e, se vuoi, due righe tue.</li>
-<li><strong>Lo regali.</strong> Lo scarichi in PDF da stampare, o come immagine da mandare.</li>
+<li><strong>Lo scarichi</strong> in PDF da stampare, o come immagine da mandare via mail.</li>
 </ol>
+<p>Il regalo è una donazione alla Fondazione: la impiegheremo dove più occorre, oppure nell’ambito che scegli tu (sulla pagina di pagamento) tra la medicina e la cura, l’agricoltura, il sociale e il fine vita. Nella <a class="link" href="{→progetti/da-sostenere}">pagina dei progetti</a> trovi ciò che già è in corso e cerca sostegno.</p>
 {se-stripe}<p><a class="invia" href="{stripe-regalo}" target="_blank" rel="noopener">Dona con la carta o con PayPal</a></p>
 <p class="nota">Sulla pagina di pagamento la cifra va da 5 a 5.000 euro. Se vuoi, lì scegli anche l’ambito e aggiungi il codice fiscale, per trovare la donazione nella dichiarazione precompilata.</p>
 {/se-stripe}<p>Per il bonifico usa le coordinate della pagina <a class="link" href="{→dona}">Dona</a>, con la causale «Regalo solidale».</p>
 <h3 id="biglietto">Il biglietto</h3>
-<p>Vuoi mandare solo gli auguri, senza donare? Scegli «solo auguri»: al posto della frase sulla donazione il biglietto porta l’indirizzo del sito e un codice QR per scoprire i nostri progetti.</p>
+<p>Vuoi mandare solo gli auguri, senza donare? Scegli «biglietto di auguri»: al posto della frase sulla donazione il biglietto porta l’indirizzo del sito e un codice QR per scoprire i nostri progetti.</p>
 {biglietto}
 <h3>Che cosa diventa il tuo regalo</h3>
-<p>La Fondazione La Rosa d’Oro è un ente del Terzo settore nato a Milano il 26 febbraio 2026, per coltivare la terra, curare le persone e accompagnarle fino alla fine della vita. Tra i primi progetti avviati ci sono <a class="link" href="{→eventi-e-formazione/formazione-accompagnamento}#quietude-italia-2027">Quietude Italia</a>, la formazione per accompagnare nel fine vita, e <a class="link" href="https://lux.larosadoro.org/" rel="noopener">Lux</a>, per un rapporto consapevole con il digitale.</p>
-<p>Il regalo è una donazione alla Fondazione: la impieghiamo dove c’è più bisogno, oppure nell’ambito che scegli sulla pagina di pagamento, tra la medicina e la cura, l’agricoltura, il sociale e il fine vita.</p>
+<p>La Fondazione La Rosa d’Oro è un ente del Terzo settore nato a Milano il 26 febbraio 2026, per coltivare la terra, curare le persone e accompagnarle fino alla fine della vita. Tra i primi progetti avviati ci sono <a class="link" href="{→eventi-e-formazione/formazione-accompagnamento}#quietude-italia-2027">Quietude Italia</a>, la formazione per accompagnare nel fine vita, <a class="link" href="https://lux.larosadoro.org/" rel="noopener">Lux</a>, il <a class="link" href="{→progetti/da-sostenere}#ponte-arcobaleno">Ponte Arcobaleno</a> e <a class="link" href="{→progetti/da-sostenere}#la-via-delle-erbe">La Via delle Erbe</a>.</p>
 <h3>Per le aziende</h3>
+<p>Sei un’azienda o un’istituzione? Vuoi aggiungere il tuo logo al biglietto? Scrivici a <a class="link" href="mailto:segreteria@larosadoro.org">segreteria@larosadoro.org</a>.</p>
 <p>Al posto dei regali ai clienti o ai collaboratori, la tua azienda può fare una sola donazione e mandare a tutti lo stesso biglietto: scegli «a più persone», scrivi per esempio «i nostri clienti» e firma con il nome dell’azienda.</p>
 <p>Per avere la ricevuta intestata all’azienda, dona con un bonifico dal conto dell’azienda e <a class="link" href="{→contatti}">scrivici</a> con la ragione sociale, la sede e il codice fiscale. L’azienda la deduce dal reddito fino al 10%, come ogni donazione a un ente del Terzo settore (art. 83 del Codice del Terzo settore). Il biglietto dice soltanto che l’azienda ha donato: per usare il nome della Fondazione nella pubblicità o sulle confezioni serve un accordo, come spiega la pagina <a class="link" href="{→aziende-e-istituzioni/aziende}">Per le aziende</a>.</p>
 <h3>La ricevuta</h3>
 <p>La ricevuta per la dichiarazione dei redditi è di chi dona, non di chi riceve il biglietto. {se-ricevute}Se doni con la carta o con PayPal ti arriva per email 37 giorni dopo, all’indirizzo che scrivi sulla pagina di Stripe. Se doni con il bonifico e ti serve{/se-ricevute}{senza-ricevute}Se ti serve{/senza-ricevute} una ricevuta della Fondazione, <a class="link" href="{→contatti}">scrivici</a> con nome, indirizzo e codice fiscale. Detrazioni e deduzioni sono spiegate nella pagina <a class="link" href="{→dona}">Dona</a>.</p>
 <h3>Per ogni occasione</h3>
-<p>Il biglietto va bene tutto l’anno: per un compleanno, una nascita, un matrimonio, una laurea, un anniversario, San Valentino, la festa della mamma o del papà, o senza un’occasione. Per dare a ogni invitato una pergamena al posto della bomboniera ci sono le <a class="link" href="{→dona/bomboniere-solidali}">bomboniere solidali</a>.</p>
-<p>Si può fare anche in ricordo di una persona che non c’è più: scegli «In ricordo di una persona», scrivi il suo nome e dai il biglietto alla sua famiglia. Per un ricordo che resta nel tempo ci sono il <a class="link" href="{→in-memoria/fondo-di-memoria}">fondo di memoria</a> e il <a class="link" href="{→in-memoria/giardino-dei-ricordi}">giardino dei ricordi</a>.</p>
+<p>Il biglietto non è solo per Natale, è adatto per occasioni in tutto l’anno: per un compleanno, una nascita, un matrimonio, una laurea, un anniversario, San Valentino, la festa della mamma o del papà, o senza un’occasione. Celebrare è importante, porta una luce su un momento, mostra la tua sensibilità all’altro.</p>
+<p>Trovi anche le <a class="link" href="{→dona/bomboniere-solidali}">bomboniere solidali</a>, per dare a ogni invitato una pergamena al posto della bomboniera.</p>
+<p>Un biglietto è anche un modo di ricordare una persona che non c’è più: scegli «In ricordo di una persona», scrivi il suo nome e dai il biglietto alla sua famiglia. Per un ricordo che resta nel tempo leggi sul sito il <a class="link" href="{→in-memoria/fondo-di-memoria}">fondo di memoria</a> e il <a class="link" href="{→in-memoria/giardino-dei-ricordi}">giardino dei ricordi</a>.</p>
 """)
 
 # ------------------------------------------------------------ Bomboniere solidali (bozza di Claude del 7.11, da approvare con Elias)
@@ -1483,8 +1488,8 @@ BIGLIETTO = dict(
     # la scelta non c’è: quel biglietto è sempre una donazione in memoria
     auguri=dict(
         domanda="Il biglietto",
-        dono="accompagna una donazione",
-        solo="solo auguri, senza donazione",
+        dono="regalo-donazione",                    # i nomi delle due scelte sono di Dacia (28.11)
+        solo="biglietto di auguri",
         riga="Scopri i nostri progetti",
         sito="www.larosadoro.org",
         piede="Fondazione La Rosa d’Oro ETS",
@@ -1493,8 +1498,6 @@ BIGLIETTO = dict(
         # sotto il biglietto, la frase di Dacia (25.11): «una piccola donazione» porta a Dona
         ricambia=("I biglietti di soli auguri sono gratuiti. Se vuoi, puoi fare anche ", "una piccola donazione",
                   " alla Fondazione, della cifra che vuoi, di riconoscenza."),
-        # e sotto, per le aziende e le istituzioni che vogliono il loro logo sul biglietto (Elias, 26.11): lo aggiunge la segreteria
-        logo=("Sei un’azienda o un’istituzione? Vuoi aggiungere il tuo logo al biglietto? Scrivici a ", "segreteria@larosadoro.org", "."),
     ),
     # il biglietto anche da piegare e quattro per foglio (Elias, 25.11.2026: «formato biglietto auguri classico», «dare anche più
     # scelte»), accanto a «Scarica il PDF»; non nella cartolina dei funerali, dove per molte copie c’è la pergamena
@@ -1503,10 +1506,15 @@ BIGLIETTO = dict(
         quattro="PDF quattro per foglio",
         file_piegato="-da-piegare",
         file_quattro="-quattro-per-foglio",
-        nota="Il PDF da piegare si stampa su un foglio A4, su un lato solo: piegalo a metà portando dietro la parte di sopra, poi ancora a metà con l’immagine davanti, e diventa un biglietto di 10,5\u00a0×\u00a014,8\u00a0cm, per una busta piccola (C6). Se vuoi scriverci dentro a mano, lascia vuoti «Per chi è», «Da parte di» e «Due righe tue». Il PDF con quattro biglietti per foglio si taglia lungo le linee grigie.",
+        nota="Il PDF da piegare si stampa su un foglio A4, su un unico lato: piegalo a metà portando dietro la parte di sopra, poi ancora a metà con l’immagine davanti, e otterrai un biglietto di 10,5\u00a0×\u00a014,8\u00a0cm, per una busta piccola (C6). Se vuoi scrivere a mano gli auguri, lascia vuoti «Per chi è», «Da parte di» e «Due righe tue». Il PDF con quattro biglietti per foglio va tagliato lungo le linee grigie.",
     ),
-    corpo_te="Questo regalo è una donazione alla Fondazione La\u00a0Rosa\u00a0d’Oro, fatta pensando a te. Diventerà terra coltivata, cura, accompagnamento.",
-    corpo_voi="Questo regalo è una donazione alla Fondazione La\u00a0Rosa\u00a0d’Oro, fatta pensando a voi. Diventerà terra coltivata, cura, accompagnamento.",
+    # {cifra}: la cifra, se chi dona la scrive («una donazione di 50 euro alla Fondazione…», Dacia 28.11); vuota, non c’è
+    corpo_te="Questo regalo è una donazione{cifra} alla Fondazione La\u00a0Rosa\u00a0d’Oro, fatta pensando a te. Diventerà terra coltivata, cura, accompagnamento.",
+    corpo_voi="Questo regalo è una donazione{cifra} alla Fondazione La\u00a0Rosa\u00a0d’Oro, fatta pensando a voi. Diventerà terra coltivata, cura, accompagnamento.",
+    # il campo della cifra, facoltativo, solo con «regalo-donazione»: mai in ricordo di una persona né nei funerali (Claude, 28.11)
+    # le parole del campo sono di Dacia (28.11), con la spiegazione in piccolo al posto di «facoltativo»
+    cifra=dict(campo="La cifra che doni e che vuoi appaia sul biglietto", nota="se non vuoi che appaia, non scrivere niente",
+               segnaposto="Per esempio: 50"),
     piede="Fondazione La Rosa d’Oro ETS · larosadoro.org",
 )
 
